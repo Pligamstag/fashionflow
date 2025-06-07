@@ -1,10 +1,191 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="refresh" content="0; URL=HTML/index.html" />
-    <title>Redirection...</title>
-  </head>
-  <body>
-    Si vous n'êtes pas redirigé automatiquement, <a href="html/index.html">cliquez ici</a>.
-  </body>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FashionFlow - Bientôt disponible</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ffdde1, #ee9ca7);
+      color: #333;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    img.logo {
+      width: 150px;
+      margin: 30px auto 5px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1em;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .email-form {
+      margin-top: 30px;
+    }
+
+    .email-form form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    input[type="email"] {
+      padding: 12px;
+      width: 90%;
+      max-width: 300px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    input[type="submit"] {
+      padding: 12px 24px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .notification {
+      margin-top: 15px;
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: none;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 0.95em;
+    }
+
+    .coming-soon {
+      margin-top: 40px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #990000;
+    }
+
+    .footer-text {
+      margin-top: 20px;
+    }
+
+    .donation {
+      margin-top: 60px;
+    }
+
+    .donation button {
+      padding: 12px 25px;
+      background-color: #ff5e78;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .separator {
+      margin: 60px auto;
+      width: 80%;
+      height: 2px;
+      background: #d14b6d;
+    }
+
+    .watsup-section {
+      margin-top: 30px;
+    }
+
+    .watsup-section h2 {
+      color: #d14b6d;
+      font-size: 1.5em;
+    }
+
+    .watsup-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    @media (min-width: 600px) {
+      .email-form form {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👗 FashionFlow</h1>
+  <p>Swipe ton style. L’appli qui rend ton shopping aussi fun que Tinder et intelligent comme TikTok.</p>
+
+  <div class="email-form">
+    <p>Sois le premier à découvrir l’appli à sa sortie :</p>
+    <form onsubmit="handleSubmit(event)">
+      <input type="email" placeholder="Ton email" required id="emailInput">
+      <input type="submit" value="Me prévenir">
+    </form>
+    <div id="notification" class="notification">
+      ✅ Fonctionnalité en cours de développement. Merci pour ton intérêt !<br>
+      👉 En attendant, <a href="wiki.html" style="color: #0b5e34; font-weight: bold; text-decoration: underline;">visite le Wiki de FashionFlow</a> 📚
+    </div>
+  </div>
+
+  <div class="coming-soon">
+    📲 Application en cours de développement. Lancement prévu très bientôt.
+  </div>
+
+  <div class="footer-text">
+    <p><em>Une nouvelle façon de shopper, créée par des jeunes, pour les jeunes.</em></p>
+  </div>
+
+  <div class="donation">
+    <p><strong>🙏 Soutiens le projet FashionFlow</strong></p>
+    <p>Ton don nous aide à développer une appli stylée, rapide et gratuite pour tous 🛍️✨</p>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC" target="_blank">
+      <button>Faire un don 💖</button>
+    </a>
+  </div>
+
+  <!-- Trait séparateur -->
+  <div class="separator"></div>
+
+  <!-- Section What's Up -->
+  <div class="watsup-section">
+    <h2>📢 What's Up - Dernières Infos</h2>
+    <p>Retrouve toutes les mises à jour et l’évolution du projet FashionFlow.</p>
+    <a href="whatsup.html" class="watsup-link">🔗 Voir les dernières nouveautés</a>
+  </div>
+
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      const notif = document.getElementById("notification");
+      notif.style.display = "block";
+      setTimeout(() => {
+        notif.style.display = "none";
+      }, 5000);
+    }
+  </script>
+</body>
 </html>
