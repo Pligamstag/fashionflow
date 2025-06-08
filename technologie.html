@@ -1,73 +1,108 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>6. Technologie et plan de développement - FashionFlow</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>6. Technologie et Plan de Développement - FashionFlow</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      background-color: #f9f9f9;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #ffdde1, #ee9ca7);
       color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     h1, h2 {
-      color: #c71585;
-    }
-    ul {
-      margin-top: 5px;
+      color: #d14b6d;
     }
     section {
-      background-color: #fff;
-      border-radius: 8px;
+      margin-bottom: 30px;
+      background-color: #fafafa;
       padding: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+    ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+    a.back {
+      display: block;
+      width: max-content;
+      margin: 30px auto 0;
+      background: #000;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 8px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>6. Technologie et Plan de Développement</h1>
 
-  <h1>6. Technologie et plan de développement</h1>
+    <section>
+      <h2>Langages de programmation</h2>
+      <ul>
+        <li><strong>JavaScript</strong> : pour la logique globale de l'application.</li>
+        <li><strong>React Native</strong> : pour développer une application mobile multiplateforme (Android et iOS).</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>Langages de programmation</h2>
-    <ul>
-      <li><strong>JavaScript</strong> : pour la logique globale de l'application.</li>
-      <li><strong>React Native</strong> : pour développer une application mobile multiplateforme (Android et iOS).</li>
-    </ul>
-  </section>
+    <section>
+      <h2>Base de données</h2>
+      <ul>
+        <li><strong>Firebase</strong> : pour l’authentification, le stockage des données utilisateur (profils, préférences, historique), et la gestion en temps réel des interactions.</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>Base de données</h2>
-    <ul>
-      <li><strong>Firebase</strong> : pour l’authentification, le stockage des données utilisateur (profils, préférences, historique), et la gestion en temps réel des interactions.</li>
-    </ul>
-  </section>
+    <section>
+      <h2>Backend (si nécessaire)</h2>
+      <ul>
+        <li><strong>Node.js avec Express</strong> : pour la gestion des requêtes API et la logique serveur.</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>Backend (si nécessaire)</h2>
-    <ul>
-      <li><strong>Node.js avec Express</strong> : pour la gestion des requêtes API et la logique serveur.</li>
-    </ul>
-  </section>
+    <section>
+      <h2>Outils supplémentaires</h2>
+      <ul>
+        <li><strong>Expo</strong> : pour simplifier le développement et le déploiement.</li>
+        <li><strong>Git/GitHub</strong> : pour la gestion du code source et la collaboration.</li>
+      </ul>
+    </section>
 
-  <section>
-    <h2>Outils supplémentaires</h2>
-    <ul>
-      <li><strong>Expo</strong> : pour simplifier le développement et le déploiement.</li>
-      <li><strong>Git/GitHub</strong> : pour la gestion du code source et la collaboration.</li>
-    </ul>
-  </section>
+    <section>
+      <h2>Plateformes visées</h2>
+      <ul>
+        <li><strong>Android</strong></li>
+        <li><strong>iOS</strong></li>
+      </ul>
+      <p>Grâce à <strong>React Native</strong>, une seule base de code sera utilisée pour cibler les deux systèmes d'exploitation mobiles.</p>
+    </section>
 
-  <section>
-    <h2>Plateformes visées</h2>
-    <ul>
-      <li><strong>Android</strong></li>
-      <li><strong>iOS</strong></li>
-    </ul>
-    <p>Grâce à <strong>React Native</strong>, une seule base de code sera utilisée pour cibler les deux systèmes d'exploitation mobiles.</p>
-  </section>
+    <section>
+      <h2>Planning de développement</h2>
+      <ul>
+        <li><strong>Phase 1 (Semaine 1-2)</strong> : Design de l’interface et création des maquettes.</li>
+        <li><strong>Phase 2 (Semaine 3-4)</strong> : Développement du front-end (React Native).</li>
+        <li><strong>Phase 3 (Semaine 5-6)</strong> : Intégration de Firebase (authentification, base de données).</li>
+        <li><strong>Phase 4 (Semaine 7)</strong> : Tests utilisateurs & ajustements.</li>
+        <li><strong>Phase 5 (Semaine 8)</strong> : Déploiement et publication sur les stores (Google Play, App Store).</li>
+      </ul>
+    </section>
 
+    <a href="index.html" class="back">⬅️ Retour au sommaire</a>
+  </div>
 </body>
 </html>
