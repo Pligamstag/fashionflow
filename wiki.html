@@ -4,173 +4,485 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wiki - FashionFlow</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* Règles globales */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to right, #ffdde1, #ee9ca7);
-      color: #333;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
     }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
-    header {
-      text-align: center;
-      margin-bottom: 40px;
+    
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     }
-    header h1 {
-      color: #d14b6d;
-      margin-bottom: 10px;
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
-    .categories {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    
+    .glass-effect-light {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
-    .category {
-      padding: 15px 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #fafafa;
+    
+    .category-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
     }
-    .category h2 {
-      color: #d14b6d;
-      margin-bottom: 5px;
-      font-size: 1.3em;
+    
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.15), transparent);
+      transition: left 0.6s;
+    }
+    
+    .category-card:hover::before {
+      left: 100%;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px -12px rgba(102, 126, 234, 0.3);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%);
+    }
+    
+    .category-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2rem;
+      filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.5));
+    }
+    
+    .category-number {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
-    .category p {
-      font-size: 1.1em;
-      text-align: justify;
-      margin: 5px 0 10px;
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      position: relative;
+      overflow: hidden;
     }
-    .category a {
-      color: #d14b6d;
-      text-decoration: underline;
-      font-weight: bold;
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
     }
-    /* Adaptation mobile */
-    @media (max-width: 600px) {
-      .container {
-        padding: 10px;
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+    
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .floating-element {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-element:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+    
+    .floating-element:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      top: 60%;
+      right: 15%;
+      animation-delay: 2s;
+    }
+    
+    .floating-element:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+      margin-top: 1rem;
+      transform-origin: left;
+      animation: progressLoad 2s ease-out;
+    }
+    
+    @keyframes progressLoad {
+      0% { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+    
+    .status-indicator {
+      position: relative;
+    }
+    
+    .status-indicator::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -30px;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: translateY(-50%) scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: translateY(-50%) scale(1);
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: translateY(-50%) scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
       }
     }
-    .back {
-      display: block;
-      width: max-content;
-      margin: 30px auto 0;
-      background: #000;
-      color: white;
-      padding: 10px 15px;
-      text-decoration: none;
-      border-radius: 8px;
-      text-align: center;
+    
+    .text-primary {
+      color: #e2e8f0;
+    }
+    
+    .text-secondary {
+      color: #cbd5e1;
+    }
+    
+    .text-muted {
+      color: #94a3b8;
+    }
+    
+    .mesh-gradient {
+      background: 
+        radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+    }
+    
+    .animated-bg {
+      background: linear-gradient(-45deg, #0f0f23, #1a1a2e, #16213e, #0f1419);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Wiki de FashionFlow</h1>
-      <p>Projet d'Application Mobile – Sommaire Détaillé</p>
-    </header>
-
-    <div class="categories">
-      <!-- 1. Introduction -->
-      <div class="category" id="introduction">
-        <h2>📌 Introduction</h2>
-        <p>
-          Posez les bases du projet en expliquant le contexte dans lequel l'application a été imaginée, l'inspiration derrière l'idée
-          et les objectifs généraux (répondre à un besoin, faciliter un usage, innover).
+<body class="animated-bg min-h-screen text-primary">
+  <!-- Header avec gradient et éléments flottants -->
+  <header class="gradient-bg hero-pattern text-white relative overflow-hidden">
+    <div class="floating-elements">
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+    </div>
+    
+    <div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+      <div class="text-center">
+        <div class="status-indicator inline-block mb-4">
+          <span class="bg-white bg-opacity-20 text-sm px-4 py-2 rounded-full font-medium">
+            📚 Documentation Complète
+          </span>
+        </div>
+        <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+          Wiki FashionFlow
+        </h1>
+        <p class="text-xl opacity-90 max-w-2xl mx-auto leading-relaxed">
+          Découvrez tous les aspects de notre projet d'application mobile révolutionnaire
         </p>
-        <a href="introduction.html">Voir plus</a>
+        <div class="progress-bar max-w-md mx-auto"></div>
       </div>
+    </div>
+  </header>
 
-      <!-- 2. Présentation des Fondateurs -->
-      <div class="category" id="fondateurs">
-        <h2>👥 Présentation des Fondateurs</h2>
-        <p>
-          Découvrez le profil de Samy, Lucie et des autres membres clés. Présentez vos motivations, compétences et le rôle de chacun dans le projet.
-        </p>
-        <a href="fondateurs.html">Voir plus</a>
+  <!-- Contenu principal -->
+  <main class="max-w-7xl mx-auto px-6 py-16 mesh-gradient">
+    <!-- Statistiques rapides -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="glass-effect-light rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">9</div>
+        <div class="text-secondary font-medium">Sections détaillées</div>
       </div>
-
-      <!-- 3. Problématique ou Besoin Identifié -->
-      <div class="category" id="problematique">
-        <h2>❓ Problématique ou Besoin Identifié</h2>
-        <p>
-          Identifiez les problèmes que rencontre le public aujourd'hui et comment FashionFlow peut y répondre en proposant une expérience personnalisée et intuitive.
-        </p>
-        <a href="problematique.html">Voir plus</a>
+      <div class="glass-effect-light rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">100%</div>
+        <div class="text-secondary font-medium">Documentation complète</div>
       </div>
-
-      <!-- 4. Description de l'Application -->
-      <div class="category" id="description">
-        <h2>📝 Description de l’Application</h2>
-        <p>
-          Présentez les fonctionnalités clés de FashionFlow : le swipe façon Tinder, l'algorithme inspiré de TikTok, l'organisation de l'interface
-          et les options de personnalisation disponibles.
-        </p>
-        <a href="description.html">Voir plus</a>
-      </div>
-
-      <!-- 5. Maquette / Prototype -->
-      <div class="category" id="maquette">
-        <h2>🎨 Maquette / Prototype</h2>
-        <p>
-          Affichez la maquette réalisée (même sur papier) pour illustrer le parcours utilisateur, incluant la page d'accueil, le profil et la fiche produit.
-        </p>
-        <a href="maquette.html">Voir plus</a>
-      </div>
-
-      <!-- 6. Technologie et Plan de Développement -->
-      <div class="category" id="technologie">
-        <h2>💻 Technologie et Plan de Développement</h2>
-        <p>
-          Détaillez les outils et langages utilisés (JavaScript, React Native…), les plateformes visées (Android/iOS) et le planning (prototype, tests, lancement).
-        </p>
-        <a href="technologie.html">Voir plus</a>
-      </div>
-
-      <!-- 7. Modèle Économique (Facultatif) -->
-      <div class="category" id="modele">
-        <h2>💰 Modèle Économique (Facultatif)</h2>
-        <p>
-          Présentez les stratégies de monétisation envisagées : affiliation, vente d’articles personnalisés, abonnements premium, publicité, etc.
-        </p>
-        <a href="modele.html">Voir plus</a>
-      </div>
-
-      <!-- 8. Objectifs et Perspectives -->
-      <div class="category" id="objectifs">
-        <h2>🎯 Objectifs et Perspectives</h2>
-        <p>
-          Exposez les ambitions à court et long terme de FashionFlow, les innovations à venir, le développement futur et l'expansion internationale.
-        </p>
-        <a href="objectifs.html">Voir plus</a>
-      </div>
-
-      <!-- 9. Conclusion -->
-      <div class="category" id="conclusion">
-        <h2>✅ Conclusion</h2>
-        <p>
-          Synthétisez les points forts du projet, la vision globale et l'impact potentiel de FashionFlow dans le domaine du shopping en ligne.
-        </p>
-        <a href="conclusion.html">Voir plus</a>
+      <div class="glass-effect-light rounded-2xl p-6 text-center">
+        <div class="text-3xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent">2025</div>
+        <div class="text-secondary font-medium">Année de lancement</div>
       </div>
     </div>
 
-    <a href="index.html" class="back">⬅️ Retour à l’accueil</a>
-  </div>
+    <!-- Grille des catégories -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <!-- 1. Introduction -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">1</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">📌</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Introduction
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Découvrez le contexte, l'inspiration et les objectifs généraux du projet FashionFlow
+            </p>
+          </div>
+        </div>
+        <a href="introduction.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 2. Fondateurs -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">2</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">👥</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Présentation des Fondateurs
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Rencontrez Samy, Lucie et l'équipe derrière cette innovation
+            </p>
+          </div>
+        </div>
+        <a href="fondateurs.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 3. Problématique -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">3</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">❓</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Problématique Identifiée
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Les défis du shopping moderne et notre solution innovante
+            </p>
+          </div>
+        </div>
+        <a href="problematique.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 4. Description -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">4</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">📝</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Description de l'Application
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Fonctionnalités clés, swipe et algorithme intelligent
+            </p>
+          </div>
+        </div>
+        <a href="description.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 5. Maquette -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">5</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">🎨</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Maquette / Prototype
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Visualisez l'interface et le parcours utilisateur
+            </p>
+          </div>
+        </div>
+        <a href="maquette.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 6. Technologie -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">6</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">💻</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Technologie & Développement
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Stack technique et planning de développement
+            </p>
+          </div>
+        </div>
+        <a href="technologie.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 7. Modèle Économique -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">7</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">💰</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Modèle Économique
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Stratégies de monétisation et business model
+            </p>
+          </div>
+        </div>
+        <a href="modele.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 8. Objectifs -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">8</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">🎯</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Objectifs & Perspectives
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Vision à court et long terme, expansion future
+            </p>
+          </div>
+        </div>
+        <a href="objectifs.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+
+      <!-- 9. Conclusion -->
+      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+        <div class="category-number">9</div>
+        <div class="flex items-start space-x-4 mb-6">
+          <span class="category-icon">✅</span>
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+              Conclusion
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Synthèse et impact potentiel de FashionFlow
+            </p>
+          </div>
+        </div>
+        <a href="conclusion.html" class="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+          Explorer →
+        </a>
+      </div>
+    </div>
+
+    <!-- Call to action -->
+    <div class="text-center mt-16">
+      <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
+        <h3 class="text-2xl font-bold text-primary mb-4">Prêt à découvrir FashionFlow ?</h3>
+        <p class="text-secondary mb-6">Explorez chaque section pour comprendre notre vision révolutionnaire du shopping mobile</p>
+        <a href="index.html" class="btn-primary text-white font-semibold py-4 px-8 rounded-xl inline-flex items-center space-x-2 text-lg">
+          <span>⬅</span>
+          <span>Retour à l'accueil</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass-effect border-t border-gray-700 mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="text-center text-secondary">
+        <p class="font-medium">© 2025 FashionFlow - Documentation Wiki</p>
+        <p class="text-sm mt-2 text-muted">Dernière mise à jour : 15 juin 2025</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
