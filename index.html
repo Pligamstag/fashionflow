@@ -5,298 +5,557 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FashionFlow</title>
   <style>
-    /* 1) RESET & BASE */
-    *, *::before, *::after { box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap');
+    
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+      --text-light: #ffffff;
+      --text-dark: #1a1a2e;
+      --shadow: 0 20px 40px rgba(0,0,0,0.1);
+      --glow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+
     html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #050511; color: #eee;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark-gradient);
+      color: var(--text-light);
       overflow: hidden;
     }
 
-    /* 2) SCROLL CONTAINER */
-    #scroll-container {
-      height: 100vh; width: 100vw;
-      overflow-y: scroll;
+    /* Particules flottantes */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, #667eea, transparent);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+    }
+
+    /* Container principal */
+    .main-container {
+      height: 100vh;
+      overflow-y: auto;
       scroll-snap-type: y mandatory;
       scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
-    /* 3) SECTIONS */
+    .main-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Sections */
     .section {
-      height: 100vh; width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       scroll-snap-align: start;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      padding: 0 2rem; text-align: center;
-      opacity: 0.4; transform: scale(0.95);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .section.active {
-      opacity: 1; transform: scale(1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* 4) DÉGRADÉS PAR SECTION */
-    #accueil   { background: linear-gradient(135deg,#ff758c 0%,#ff7eb3 100%); color:#222; }
-    #wiki      { background: linear-gradient(135deg,#667eea,#764ba2); color:#f0f0f0; }
-    #dev       { background: linear-gradient(135deg,#11998e,#38ef7d); color:#111; }
-    #soutiens  { background: linear-gradient(135deg,#f7971e,#ffd200); color:#222; }
-    #whatsup   { background: linear-gradient(135deg,#43cea2,#185a9d); color:#ddd; }
-    #mon-contenu { background: linear-gradient(135deg,#8a2387,#e94057,#f27121); color:#fff; }
-
-    /* 5) TYPO */
-    h1,h2 {
-      margin-bottom: .3em;
-      text-shadow: 0 1px 5px rgba(0,0,0,0.3);
-      display: flex; align-items: center; gap:10px;
-    }
-    h1 { font-size:4rem; font-weight:900; }
-    h2 { font-size:3rem; font-weight:700; }
-    p  {
-      font-size:1.3rem; max-width:600px; font-weight:500;
+    .section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
     }
 
-    /* 6) BOUTONS */
-    button {
-      margin-top:1.2em; padding:14px 48px;
-      font-size:1.2rem; font-weight:700;
-      border:none; border-radius:30px; cursor:pointer;
-      box-shadow:0 5px 15px rgba(0,0,0,0.2);
-      transition: background-color .3s, box-shadow .3s;
-      user-select:none;
-      background: #eee; color:#222;
-    }
-    #wiki button     { background:#5a4a9a; color:#fff; }
-    #wiki button:hover   { background:#3e2f71; }
-    #soutiens button{ background:#e07b00; color:#fff; }
-    #soutiens button:hover{ background:#c36c00; }
-    #mon-contenu button { background:#e94057; color:#fff; }
-    #mon-contenu button:hover { background:#c12745; }
-
-    /* 7) EMOJI ANIMÉ */
-    .emoji-animated {
-      display:inline-block;
-      animation:pulse 2.5s ease-in-out infinite;
-    }
     @keyframes pulse {
-      0%,100%{ transform:scale(1) }
-      50%{ transform:scale(1.25) }
+      0%, 100% { transform: scale(1); opacity: 0.1; }
+      50% { transform: scale(1.1); opacity: 0.2; }
     }
 
-    /* 8) ICÔNES ANIMÉES */
-    #rocket {
-      width:130px; height:200px;
-      background:url('https://cdn-icons-png.flaticon.com/512/3163/3163536.png')no-repeat center/contain;
-      margin:15px auto 30px;
-      animation:float 3s ease-in-out infinite alternate;
-      filter:drop-shadow(0 0 10px #0ff);
-      transition:filter .3s;
-    }
-    #rocket:hover { filter:drop-shadow(0 0 20px #0ff); }
-    @keyframes float {
-      0%{ transform:translateY(0) scale(1) }
-      100%{ transform:translateY(-15px) scale(1.05) }
-    }
-    #book {
-      width:120px; height:140px;
-      background:url('https://cdn-icons-png.flaticon.com/128/7323/7323969.png')no-repeat center/contain;
-      animation:bookFlip 4s infinite;
-    }
-    @keyframes bookFlip {
-      0%,100%{ transform:rotateY(0) }
-      50%{ transform:rotateY(20deg) }
-    }
-    #money {
-      width:150px; height:90px;
-      background:url('https://cdn-icons-png.flaticon.com/128/17116/17116131.png')no-repeat center/contain;
-      animation:moneyWave 3.5s ease-in-out infinite alternate;
-      filter:drop-shadow(0 0 8px #bfb800);
-    }
-    @keyframes moneyWave {
-      0%{ transform:translateX(0) rotate(0) }
-      100%{ transform:translateX(15px) rotate(5deg) }
-    }
-    #news {
-      width:140px; height:130px;
-      background:url('https://cdn-icons-png.flaticon.com/128/5395/5395579.png')no-repeat center/contain;
-      animation:newsFlip 4.5s ease-in-out infinite alternate;
-      filter:drop-shadow(0 0 12px #33b5e5);
-    }
-    @keyframes newsFlip {
-      0%{ transform:rotateX(0) }
-      100%{ transform:rotateX(12deg) }
+    /* Styles spécifiques par section */
+    .hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
     }
 
-    /* 9) STARFIELD */
-    #starfield {
-      position:fixed; top:0; left:0;
-      width:100vw; height:100vh; z-index:-1;
-      background: radial-gradient(circle at center,#0a0a20,#000);
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* 10) OVERLAY CHOIX UTILISATEUR */
-    #user-type-overlay {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.95); z-index:10000;
-      display:flex; flex-direction:column;
-      justify-content:center; align-items:center; gap:30px;
-      font-size:1.7rem; font-weight:700; color:#fff;
-    }
-    #user-type-overlay button {
-      background:#fff; color:#222;
-      box-shadow:0 6px 15px rgba(240,98,146,0.5);
-    }
-    #user-type-overlay button:hover {
-      background:#f06292; color:#fff;
-      box-shadow:0 8px 20px rgba(240,98,146,0.9);
+    .wiki-section {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     }
 
-    /* 11) RESPONSIVE */
-    @media (max-width:600px) {
-      h1{ font-size:2.8rem }
-      h2{ font-size:2rem }
-      p{ font-size:1rem; max-width:90vw; padding:0 1rem }
-      button{ font-size:1rem; padding:12px 36px }
-      #rocket,#book,#money,#news{ width:100px; height:auto }
+    .dev-section {
+      background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
+    }
+
+    .support-section {
+      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+    }
+
+    .news-section {
+      background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+    }
+
+    /* Contenu des sections */
+    .section-content {
+      text-align: center;
+      max-width: 800px;
+      padding: 2rem;
+      z-index: 2;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .section-subtitle {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      font-weight: 400;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    /* Icônes animées */
+    .icon-container {
+      width: 150px;
+      height: 150px;
+      margin: 2rem auto;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .icon-container:hover {
+      transform: scale(1.1);
+    }
+
+    .fashion-icon {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      animation: rotate 10s linear infinite;
+      box-shadow: var(--glow);
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .book-icon {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      60% { transform: translateY(-10px); }
+    }
+
+    .rocket-icon {
+      background: linear-gradient(45deg, #4facfe, #00f2fe);
+      animation: rocket 3s ease-in-out infinite;
+    }
+
+    @keyframes rocket {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(10deg); }
+    }
+
+    .money-icon {
+      background: linear-gradient(45deg, #f7971e, #ffd200);
+      animation: money 2.5s ease-in-out infinite;
+    }
+
+    @keyframes money {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(5deg); }
+    }
+
+    .news-icon {
+      background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+      animation: wave 3s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
+    }
+
+    /* Boutons modernes */
+    .modern-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      margin: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modern-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .modern-button:hover::before {
+      left: 100%;
+    }
+
+    .modern-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Indicateur de scroll */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollHint 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollHint {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
+    }
+
+    /* Popup moderne */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .popup-overlay.show .popup-content {
+      transform: scale(1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .section-content {
+        padding: 1rem;
+      }
+      
+      .icon-container {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .fashion-icon {
+        font-size: 3rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Particules flottantes -->
+  <div class="particles" id="particles"></div>
 
-  <!--  starfield -->
-  <canvas id="starfield"></canvas>
-
-  <!-- contenu scrollable -->
-  <div id="scroll-container">
-    <section id="accueil" class="section active">
-      <h1>👗 FashionFlow</h1>
-      <p>Swipe ton style ✨ L’appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
-      <p>swip vers le haut pour coninuer</p>
+  <!-- Container principal -->
+  <div class="main-container" id="mainContainer">
+    
+    <!-- Section Hero -->
+    <section class="section hero-section">
+      <div class="section-content">
+        <h1 class="section-title">FashionFlow</h1>
+        <p class="section-subtitle">Swipe ton style ✨ L'appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
+        <div class="icon-container">
+          <div class="fashion-icon">👗</div>
+        </div>
+        <div class="scroll-indicator">
+          <div style="font-size: 2rem;">⬇️</div>
+          <div style="font-size: 0.9rem; margin-top: 0.5rem;">Swipe vers le haut</div>
+        </div>
+      </div>
     </section>
 
-    <section id="wiki" class="section">
-      <h2><span class="emoji-animated" aria-label="Livre">📚</span> WikiFashion</h2>
-      <div id="book" role="img" aria-label="Livre animé"></div>
-      <p>Le wiki de FashionFlow !!</p>
-      <button id="goToWiki" aria-label="Le Wiki !!"> Le Wiki !!</button>
-
-<script>
-  document.getElementById("goToWiki").addEventListener("click", function() {
-    window.location.href = "wiki.html";
-  });
-</script>
-
+    <!-- Section Wiki -->
+    <section class="section wiki-section">
+      <div class="section-content">
+        <h2 class="section-title">WikiFashion</h2>
+        <p class="section-subtitle">Le wiki de FashionFlow !!</p>
+        <div class="icon-container">
+          <div class="fashion-icon book-icon">📚</div>
+        </div>
+        <button class="modern-button" onclick="goToWiki()">Le Wiki !!</button>
+      </div>
     </section>
 
-    <section id="dev" class="section">
-      <h2>Développement</h2>
-      <div id="rocket" role="img" aria-label="Fusée animée"></div>
-      <p>Avez-vous des idées au sujet de FashionFLow ??</p>
-      <button id="popupButton">Déposez-les ici</button>
-
-<div id="popupMessage" style="display: none;">
-    <p>Désolé, fonctionnalité désactivée temporairement.</p>
-    <button onclick="closePopup()">Fermer</button>
-</div>
-
-<script>
-    document.getElementById("popupButton").addEventListener("click", function() {
-        document.getElementById("popupMessage").style.display = "block";
-    });
-
-    function closePopup() {
-        document.getElementById("popupMessage").style.display = "none";
-    }
-</script>
-
+    <!-- Section Développement -->
+    <section class="section dev-section">
+      <div class="section-content">
+        <h2 class="section-title">Développement</h2>
+        <p class="section-subtitle">Avez-vous des idées au sujet de FashionFlow ??</p>
+        <div class="icon-container">
+          <div class="fashion-icon rocket-icon">🚀</div>
+        </div>
+        <button class="modern-button" onclick="showPopup()">Déposez-les ici</button>
+      </div>
     </section>
 
-   <section id="soutiens" class="section">
-  <h2>Soutiens</h2>
-  <div id="money" role="img" aria-label="Billet animé"></div>
-  <p>Un peu d'argent suffit pour nous faire évoluer !</p>
-  <button id="donateButton" aria-label="Faire un don">Faire un don PayPal !</button>
-</section>
-
-<script>
-  document.getElementById("donateButton").addEventListener("click", function () {
-    const confirmation = window.confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
-    if (confirmation) {
-      window.open("https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC", "_blank");
-    }
-  });
-</script>
-
-
-    <section id="whatsup" class="section">
-      <h2>What's Up ?</h2>
-      <div id="news" role="img" aria-label="Journal animé"></div>
-      <p>Restez informés des dernières nouveautés et événements à venir.</p>
-      <button id="goToNews" aria-label="Voir les news">Voir les news</button>
-
-<script>
-  document.getElementById("goToNews").addEventListener("click", function() {
-    window.location.href = "whatsup.html";
-  });
-</script>
+    <!-- Section Soutiens -->
+    <section class="section support-section">
+      <div class="section-content">
+        <h2 class="section-title">Soutiens</h2>
+        <p class="section-subtitle">Un peu d'argent suffit pour nous faire évoluer !</p>
+        <div class="icon-container">
+          <div class="fashion-icon money-icon">💰</div>
+        </div>
+        <button class="modern-button" onclick="donate()">Faire un don PayPal !</button>
+      </div>
     </section>
+
+    <!-- Section What's Up -->
+    <section class="section news-section">
+      <div class="section-content">
+        <h2 class="section-title">What's Up ?</h2>
+        <p class="section-subtitle">Restez informés des dernières nouveautés et événements à venir.</p>
+        <div class="icon-container">
+          <div class="fashion-icon news-icon">📰</div>
+        </div>
+        <button class="modern-button" onclick="goToNews()">Voir les news</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Popup -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-content">
+      <h3 style="margin-bottom: 1rem;">Information</h3>
+      <p>Désolé, fonctionnalité désactivée temporairement.</p>
+      <button class="modern-button" onclick="closePopup()" style="margin-top: 1rem;">Fermer</button>
+    </div>
   </div>
 
   <script>
-    // 1) Overlay : choix & stockage
-    const overlay = document.getElementById('user-type-overlay');
-    overlay.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const type = btn.dataset.type;
-        localStorage.setItem('userType', type);
-        overlay.style.display = 'none';
-        alert(`Bienvenue ${type} !`);
+    // Génération des particules
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Observer pour les animations de scroll
+    const observerOptions = {
+      threshold: 0.3,
+      rootMargin: '0px 0px -20% 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Fonctions de navigation
+    function goToWiki() {
+      // Simulation de navigation
+      console.log('Navigation vers wiki.html');
+      alert('Navigation vers le Wiki (fonctionnalité à implémenter)');
+    }
+
+    function goToNews() {
+      // Simulation de navigation
+      console.log('Navigation vers whatsup.html');
+      alert('Navigation vers les News (fonctionnalité à implémenter)');
+    }
+
+    function donate() {
+      const confirmation = confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
+      if (confirmation) {
+        window.open("https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC", "_blank");
+      }
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popupOverlay');
+      popup.style.display = 'flex';
+      setTimeout(() => popup.classList.add('show'), 10);
+    }
+
+    function closePopup() {
+      const popup = document.getElementById('popupOverlay');
+      popup.classList.remove('show');
+      setTimeout(() => popup.style.display = 'none', 300);
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      
+      // Observer toutes les sections
+      document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+      });
+
+      // Smooth scroll pour les liens internes
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Gestion du scroll avec la molette
+      let isScrolling = false;
+      document.getElementById('mainContainer').addEventListener('wheel', (e) => {
+        if (isScrolling) return;
+        
+        isScrolling = true;
+        setTimeout(() => isScrolling = false, 1000);
+        
+        if (e.deltaY > 0) {
+          // Scroll vers le bas
+          const nextSection = document.querySelector('.section:nth-child(' + (getCurrentSection() + 1) + ')');
+          if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else {
+          // Scroll vers le haut
+          const prevSection = document.querySelector('.section:nth-child(' + (getCurrentSection() - 1) + ')');
+          if (prevSection) {
+            prevSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
       });
     });
-    if (localStorage.getItem('userType')) overlay.style.display = 'none';
 
-    // 2) Sections : IntersectionObserver
-    const container = document.getElementById('scroll-container');
-    const sections = container.querySelectorAll('.section');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => e.target.classList.toggle('active', e.isIntersecting));
-    }, { root: container, threshold: 0.5 });
-    sections.forEach(s => obs.observe(s));
-
-    // 3) Starfield
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let w, h, stars;
-    function setup() {
-      w = canvas.width  = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      stars = Array.from({length:150}, () => ({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        z: Math.random()*w,
-        o: Math.random()
-      }));
-    }
-    function draw() {
-      ctx.fillStyle = '#050511'; ctx.fillRect(0,0,w,h);
-      ctx.fillStyle = '#fff';
-      for (let s of stars) {
-        s.z -= 2;
-        if (s.z <= 0) {
-          s.x = Math.random()*w; s.y = Math.random()*h; s.z = w;
+    function getCurrentSection() {
+      const sections = document.querySelectorAll('.section');
+      const scrollTop = document.getElementById('mainContainer').scrollTop;
+      
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        
+        if (scrollTop >= sectionTop - 100 && scrollTop < sectionTop + sectionHeight - 100) {
+          return i + 1;
         }
-        const sx = (s.x - w/2)*(w/s.z)+w/2;
-        const sy = (s.y - h/2)*(w/s.z)+h/2;
-        const r  = (1 - s.z/w)*2;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, 2*Math.PI);
-        ctx.fillStyle = `rgba(255,255,255,${s.o})`;
-        ctx.fill();
       }
-      requestAnimationFrame(draw);
+      return 1;
     }
-    window.addEventListener('resize', setup);
-    setup(); draw();
+
+    // Gestion des touches clavier
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        const nextSection = document.querySelector('.section:nth-child(' + (getCurrentSection() + 1) + ')');
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevSection = document.querySelector('.section:nth-child(' + (getCurrentSection() - 1) + ')');
+        if (prevSection) {
+          prevSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
   </script>
 </body>
 </html>
