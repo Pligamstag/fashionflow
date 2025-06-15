@@ -1,229 +1,308 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="2EMHPpggxuAXaqEcfjyaIe7qC1xDxAO6ocThibF5BYI" />
-  <title>FashionFlow - Bientôt disponible</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FashionFlow - Xiaomi style</title>
   <style>
-    body {
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      background: linear-gradient(to right, #ffe6ec, #f7bacf);
-      color: #222;
-      text-align: center;
-      padding: 40px 20px;
-      margin: 0;
+    /* 1) RESET & BASE */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #050511; color: #eee;
+      overflow: hidden;
     }
 
-    img.logo {
-      width: 140px;
-      margin: 30px auto 10px;
-      display: block;
+    /* 2) SCROLL CONTAINER */
+    #scroll-container {
+      height: 100vh; width: 100vw;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
     }
 
-    h1 {
-      font-size: 2.7em;
-      color: #000;
-      margin-bottom: 10px;
+    /* 3) SECTIONS */
+    .section {
+      height: 100vh; width: 100vw;
+      scroll-snap-align: start;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 0 2rem; text-align: center;
+      opacity: 0.4; transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .section.active {
+      opacity: 1; transform: scale(1);
     }
 
-    p {
-      font-size: 1.1em;
-      max-width: 600px;
-      margin: 0 auto;
+    /* 4) DÉGRADÉS PAR SECTION */
+    #accueil   { background: linear-gradient(135deg,#ff758c 0%,#ff7eb3 100%); color:#222; }
+    #wiki      { background: linear-gradient(135deg,#667eea,#764ba2); color:#f0f0f0; }
+    #dev       { background: linear-gradient(135deg,#11998e,#38ef7d); color:#111; }
+    #soutiens  { background: linear-gradient(135deg,#f7971e,#ffd200); color:#222; }
+    #whatsup   { background: linear-gradient(135deg,#43cea2,#185a9d); color:#ddd; }
+    #mon-contenu { background: linear-gradient(135deg,#8a2387,#e94057,#f27121); color:#fff; }
+
+    /* 5) TYPO */
+    h1,h2 {
+      margin-bottom: .3em;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      display: flex; align-items: center; gap:10px;
+    }
+    h1 { font-size:4rem; font-weight:900; }
+    h2 { font-size:3rem; font-weight:700; }
+    p  {
+      font-size:1.3rem; max-width:600px; font-weight:500;
     }
 
-    .email-form {
-      margin-top: 40px;
+    /* 6) BOUTONS */
+    button {
+      margin-top:1.2em; padding:14px 48px;
+      font-size:1.2rem; font-weight:700;
+      border:none; border-radius:30px; cursor:pointer;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+      transition: background-color .3s, box-shadow .3s;
+      user-select:none;
+      background: #eee; color:#222;
+    }
+    #wiki button     { background:#5a4a9a; color:#fff; }
+    #wiki button:hover   { background:#3e2f71; }
+    #soutiens button{ background:#e07b00; color:#fff; }
+    #soutiens button:hover{ background:#c36c00; }
+    #mon-contenu button { background:#e94057; color:#fff; }
+    #mon-contenu button:hover { background:#c12745; }
+
+    /* 7) EMOJI ANIMÉ */
+    .emoji-animated {
+      display:inline-block;
+      animation:pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100%{ transform:scale(1) }
+      50%{ transform:scale(1.25) }
     }
 
-    .email-form p {
-      margin-bottom: 10px;
+    /* 8) ICÔNES ANIMÉES */
+    #rocket {
+      width:130px; height:200px;
+      background:url('https://cdn-icons-png.flaticon.com/512/3163/3163536.png')no-repeat center/contain;
+      margin:15px auto 30px;
+      animation:float 3s ease-in-out infinite alternate;
+      filter:drop-shadow(0 0 10px #0ff);
+      transition:filter .3s;
+    }
+    #rocket:hover { filter:drop-shadow(0 0 20px #0ff); }
+    @keyframes float {
+      0%{ transform:translateY(0) scale(1) }
+      100%{ transform:translateY(-15px) scale(1.05) }
+    }
+    #book {
+      width:120px; height:140px;
+      background:url('https://cdn-icons-png.flaticon.com/128/7323/7323969.png')no-repeat center/contain;
+      animation:bookFlip 4s infinite;
+    }
+    @keyframes bookFlip {
+      0%,100%{ transform:rotateY(0) }
+      50%{ transform:rotateY(20deg) }
+    }
+    #money {
+      width:150px; height:90px;
+      background:url('https://cdn-icons-png.flaticon.com/128/17116/17116131.png')no-repeat center/contain;
+      animation:moneyWave 3.5s ease-in-out infinite alternate;
+      filter:drop-shadow(0 0 8px #bfb800);
+    }
+    @keyframes moneyWave {
+      0%{ transform:translateX(0) rotate(0) }
+      100%{ transform:translateX(15px) rotate(5deg) }
+    }
+    #news {
+      width:140px; height:130px;
+      background:url('https://cdn-icons-png.flaticon.com/128/5395/5395579.png')no-repeat center/contain;
+      animation:newsFlip 4.5s ease-in-out infinite alternate;
+      filter:drop-shadow(0 0 12px #33b5e5);
+    }
+    @keyframes newsFlip {
+      0%{ transform:rotateX(0) }
+      100%{ transform:rotateX(12deg) }
     }
 
-    .email-form form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
+    /* 9) STARFIELD */
+    #starfield {
+      position:fixed; top:0; left:0;
+      width:100vw; height:100vh; z-index:-1;
+      background: radial-gradient(circle at center,#0a0a20,#000);
     }
 
-    input[type="email"] {
-      padding: 14px;
-      width: 90%;
-      max-width: 320px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 1em;
+    /* 10) OVERLAY CHOIX UTILISATEUR */
+    #user-type-overlay {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.95); z-index:10000;
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center; gap:30px;
+      font-size:1.7rem; font-weight:700; color:#fff;
+    }
+    #user-type-overlay button {
+      background:#fff; color:#222;
+      box-shadow:0 6px 15px rgba(240,98,146,0.5);
+    }
+    #user-type-overlay button:hover {
+      background:#f06292; color:#fff;
+      box-shadow:0 8px 20px rgba(240,98,146,0.9);
     }
 
-    input[type="submit"] {
-      padding: 14px 28px;
-      background: #000;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    input[type="submit"]:hover {
-      background: #333;
-    }
-
-    .notification {
-      margin-top: 20px;
-      background-color: #d4edda;
-      color: #155724;
-      padding: 12px 20px;
-      border-radius: 10px;
-      display: none;
-      animation: fadeIn 0.4s ease-in-out;
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 0.95em;
-    }
-
-    .notification a {
-      color: #0b5e34;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .coming-soon {
-      margin-top: 50px;
-      font-size: 1.25em;
-      font-weight: bold;
-      color: #990000;
-    }
-
-    .footer-text {
-      margin-top: 25px;
-      font-style: italic;
-    }
-
-    .donation {
-      margin-top: 60px;
-    }
-
-    .donation button {
-      padding: 13px 26px;
-      background-color: #ff5e78;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .donation button:hover {
-      background-color: #ff2c53;
-    }
-
-    .separator {
-      margin: 60px auto;
-      width: 80%;
-      height: 2px;
-      background: #d14b6d;
-    }
-
-    .watsup-section {
-      margin-top: 30px;
-    }
-
-    .watsup-section h2 {
-      color: #d14b6d;
-      font-size: 1.6em;
-    }
-
-    .watsup-link {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 13px 26px;
-      background: #000;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 1em;
-      transition: background 0.3s ease;
-    }
-
-    .watsup-link:hover {
-      background: #333;
-    }
-
-    @media (min-width: 600px) {
-      .email-form form {
-        flex-direction: row;
-        justify-content: center;
-      }
-
-      input[type="email"] {
-        margin-right: 10px;
-        margin-bottom: 0;
-      }
+    /* 11) RESPONSIVE */
+    @media (max-width:600px) {
+      h1{ font-size:2.8rem }
+      h2{ font-size:2rem }
+      p{ font-size:1rem; max-width:90vw; padding:0 1rem }
+      button{ font-size:1rem; padding:12px 36px }
+      #rocket,#book,#money,#news{ width:100px; height:auto }
     }
   </style>
 </head>
 <body>
 
-  <h1>👗 FashionFlow</h1>
-  <p>Swipe ton style ✨ L’appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
+  <!--  starfield -->
+  <canvas id="starfield"></canvas>
 
-  <div class="email-form">
-    <p>🚀 Laisse ton email pour être le premier au courant !</p>
-    <form onsubmit="handleSubmit(event)">
-      <input type="email" placeholder="Ton email" required id="emailInput">
-      <input type="submit" value="Me prévenir">
-    </form>
-    <div id="notification" class="notification">
-      ✅ Merci ! Tu seras informé dès la sortie 📨<br>
-      👉 En attendant, <a href="wiki.html">explore le Wiki de FashionFlow</a> 📚
-    </div>
+  <!-- overlay choix -->
+  <div id="user-type-overlay" role="dialog" aria-modal="true">
+    <div>Quel type d'utilisateur es-tu ?</div>
+    <button data-type="Visiteur">Visiteur</button>
+    <button data-type="Membre">Membre</button>
   </div>
 
-  <div class="coming-soon">
-    📲 Application en développement... Lancement très bientôt !
-  </div>
+  <!-- contenu scrollable -->
+  <div id="scroll-container">
+    <section id="accueil" class="section active">
+      <h1>👗 FashionFlow</h1>
+      <p>Swipe ton style ✨ L’appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
+    </section>
 
-  <div class="footer-text">
-    <p>Une appli mode 100% pensée par des jeunes, pour les jeunes.</p>
-  </div>
+    <section id="wiki" class="section">
+      <h2><span class="emoji-animated" aria-label="Livre">📚</span> WikiFashion</h2>
+      <div id="book" role="img" aria-label="Livre animé"></div>
+      <p>Le wiki de FashionFlow !!</p>
+      <button id="goToWiki" aria-label="Le Wiki !!"> Le Wiki !!</button>
 
-  <div class="donation">
-    <p><strong>🙏 Soutiens le projet FashionFlow</strong></p>
-    <p>Chaque don nous aide à créer une app stylée, rapide et gratuite pour tous 🛍️</p>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC" target="_blank">
-      <button>Faire un don 💖</button>
-    </a>
-  </div>
+<script>
+  document.getElementById("goToWiki").addEventListener("click", function() {
+    window.location.href = "wiki.html";
+  });
+</script>
 
-  <div class="separator"></div>
+    </section>
 
-  <div class="watsup-section">
-    <h2>📢 What's Up ?</h2>
-    <p>Découvre les dernières nouvelles et l’évolution du projet.</p>
-    <a href="whatsup.html" class="watsup-link">🔗 Voir les nouveautés</a>
+    <section id="dev" class="section">
+      <h2>Développement</h2>
+      <div id="rocket" role="img" aria-label="Fusée animée"></div>
+      <p>Avez-vous des idées au sujet de FashionFLow ??</p>
+      <button id="popupButton">Déposez-les ici</button>
+
+<div id="popupMessage" style="display: none;">
+    <p>Désolé, fonctionnalité désactivée temporairement.</p>
+    <button onclick="closePopup()">Fermer</button>
+</div>
+
+<script>
+    document.getElementById("popupButton").addEventListener("click", function() {
+        document.getElementById("popupMessage").style.display = "block";
+    });
+
+    function closePopup() {
+        document.getElementById("popupMessage").style.display = "none";
+    }
+</script>
+
+    </section>
+
+   <section id="soutiens" class="section">
+  <h2>Soutiens</h2>
+  <div id="money" role="img" aria-label="Billet animé"></div>
+  <p>Un peu d'argent suffit pour nous faire évoluer !</p>
+  <button id="donateButton" aria-label="Faire un don">Faire un don PayPal !</button>
+</section>
+
+<script>
+  document.getElementById("donateButton").addEventListener("click", function () {
+    const confirmation = window.confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
+    if (confirmation) {
+      window.open("https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC", "_blank");
+    }
+  });
+</script>
+
+
+    <section id="whatsup" class="section">
+      <h2>What's Up ?</h2>
+      <div id="news" role="img" aria-label="Journal animé"></div>
+      <p>Restez informés des dernières nouveautés et événements à venir.</p>
+      <button id="goToNews" aria-label="Voir les news">Voir les news</button>
+
+<script>
+  document.getElementById("goToNews").addEventListener("click", function() {
+    window.location.href = "whatsup.html";
+  });
+</script>
+    </section>
   </div>
 
   <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-      const notif = document.getElementById("notification");
-      notif.style.display = "block";
-      setTimeout(() => {
-        notif.style.display = "none";
-      }, 5000);
-    }
-  </script>
+    // 1) Overlay : choix & stockage
+    const overlay = document.getElementById('user-type-overlay');
+    overlay.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        localStorage.setItem('userType', type);
+        overlay.style.display = 'none';
+        alert(`Bienvenue ${type} !`);
+      });
+    });
+    if (localStorage.getItem('userType')) overlay.style.display = 'none';
 
+    // 2) Sections : IntersectionObserver
+    const container = document.getElementById('scroll-container');
+    const sections = container.querySelectorAll('.section');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.target.classList.toggle('active', e.isIntersecting));
+    }, { root: container, threshold: 0.5 });
+    sections.forEach(s => obs.observe(s));
+
+    // 3) Starfield
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let w, h, stars;
+    function setup() {
+      w = canvas.width  = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      stars = Array.from({length:150}, () => ({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        z: Math.random()*w,
+        o: Math.random()
+      }));
+    }
+    function draw() {
+      ctx.fillStyle = '#050511'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = '#fff';
+      for (let s of stars) {
+        s.z -= 2;
+        if (s.z <= 0) {
+          s.x = Math.random()*w; s.y = Math.random()*h; s.z = w;
+        }
+        const sx = (s.x - w/2)*(w/s.z)+w/2;
+        const sy = (s.y - h/2)*(w/s.z)+h/2;
+        const r  = (1 - s.z/w)*2;
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, 2*Math.PI);
+        ctx.fillStyle = `rgba(255,255,255,${s.o})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', setup);
+    setup(); draw();
+  </script>
 </body>
 </html>
