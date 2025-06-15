@@ -1,45 +1,252 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Récapitulatif des Mises à Jour - FashionFlow</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 1.5rem;
+      width: 2px;
+      height: calc(100% - 0.5rem);
+      background: linear-gradient(to bottom, rgba(102, 126, 234, 0.3), transparent);
+    }
+    
+    .timeline-item:last-child::after {
+      display: none;
+    }
+    
+    .feature-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .status-badge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <header class="bg-black text-white p-6 shadow-md">
-    <h1 class="text-2xl font-bold">FashionFlow - Récapitulatif des Mises à Jour</h1>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+  <!-- Header avec gradient -->
+  <header class="gradient-bg text-white shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold mb-2">FashionFlow</h1>
+          <p class="text-lg opacity-90">Récapitulatif des Mises à Jour</p>
+        </div>
+        <div class="status-badge text-sm px-4 py-2 rounded-full text-white font-medium">
+          🚀 Système actif
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main class="p-6 space-y-10">
-    <!-- Section 1: Historique des Mises à Jour -->
-    <section class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">🛠️ Historique des mises à jour</h2>
-      <ul class="list-disc list-inside space-y-2">
-       <li><strong>15 juin 2025 :</strong> refonte de l'interface principale </li>
-      </ul>
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+    <!-- Section Historique des Mises à Jour -->
+    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+      <div class="flex items-center mb-8">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+          <span class="text-white text-xl">🛠️</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Historique des mises à jour</h2>
+          <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-4 border-l-4 border-red-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-red-700 bg-red-200 px-3 py-1 rounded-full">08 juin 2025</span>
+              <span class="text-xs text-red-600 font-medium">CORRECTION</span>
+            </div>
+            <p class="text-gray-800 font-medium">Bug d'affichage dans la section Introduction et Technologie (wiki)</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">07 juin 2025</span>
+              <span class="text-xs text-green-600 font-medium">NOUVELLE FONCTIONNALITÉ</span>
+            </div>
+            <p class="text-gray-800 font-medium">Ajout du journal des mises à jour (What's up)</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4 border-l-4 border-yellow-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-yellow-700 bg-yellow-200 px-3 py-1 rounded-full">06 juin 2025</span>
+              <span class="text-xs text-yellow-600 font-medium">CORRECTION MAJEURE</span>
+            </div>
+            <p class="text-gray-800 font-medium">Correction d'un bug majeur lié à l'ajout du Wiki</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-l-4 border-blue-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-blue-700 bg-blue-200 px-3 py-1 rounded-full">05 juin 2025</span>
+              <span class="text-xs text-blue-600 font-medium">CONTENU</span>
+            </div>
+            <p class="text-gray-800 font-medium">Ajout du Wiki FashionFlow avec 9 sections détaillées</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Section 4: Propositions futures -->
-    <section class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">🚀 Prochaines améliorations prévues</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>Ajout d’un système de commentaires sur chaque section du Wiki.</li>
-        <li>Création d’une page "Foire aux questions (FAQ)".</li>
-        <li>Possibilité de voter pour les fonctionnalités à venir.</li>
-        <li>Ajout du système de mise à jour par WhatsApp.</li>
-        <li>Ajout d’un système de cookies.</li>
-      </ul>
+    <!-- Section Prochaines Améliorations -->
+    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+      <div class="flex items-center mb-8">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+          <span class="text-white text-xl">🚀</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Prochaines améliorations prévues</h2>
+          <p class="text-gray-600 mt-1">Fonctionnalités en développement</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">💬</span>
+            <h3 class="font-semibold text-gray-800">Système de commentaires</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout d'un système de commentaires sur chaque section du Wiki</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-xl border border-emerald-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">❓</span>
+            <h3 class="font-semibold text-gray-800">FAQ</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Création d'une page "Foire aux questions (FAQ)"</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">🗳️</span>
+            <h3 class="font-semibold text-gray-800">Système de vote</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Possibilité de voter pour les fonctionnalités à venir</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">📱</span>
+            <h3 class="font-semibold text-gray-800">WhatsApp</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout du système de mise à jour par WhatsApp</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">🍪</span>
+            <h3 class="font-semibold text-gray-800">Cookies</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout d'un système de cookies pour l'expérience utilisateur</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-xl border border-pink-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">🎨</span>
+            <h3 class="font-semibold text-gray-800">Nouvelle interface</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Refonte complète de l'interface principale</p>
+        </div>
+      </div>
     </section>
   </main>
 
-  <!-- Zone bouton + mention légale -->
-  <div class="bg-gray-200 text-center py-6 mt-10">
-    <a href="index.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-300 mb-3">
-      ← Retour à l'accueil
-    </a>
-    <p class="text-gray-800 text-base font-medium mt-2">
-      © 2025 FashionFlow - Tous droits réservés • Version 1.2.4
-    </p>
-  </div>
+  <!-- Footer avec bouton de retour -->
+  <footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-12 text-center">
+      <div class="mb-8">
+        <a href="index.html" class="btn-primary text-white font-semibold py-4 px-8 rounded-xl inline-flex items-center space-x-2 text-lg">
+          <span>←</span>
+          <span>Retour à l'accueil</span>
+        </a>
+      </div>
+      
+      <div class="border-t border-gray-200 pt-8">
+        <p class="text-gray-600 font-medium text-lg mb-2">
+          © 2025 FashionFlow - Tous droits réservés
+        </p>
+        <p class="text-gray-500">
+          Version 1.2.4 • Dernière mise à jour : 08 juin 2025
+        </p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
