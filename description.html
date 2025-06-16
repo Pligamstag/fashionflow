@@ -7,55 +7,344 @@
   <style>
     /* Styles globaux */
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to right, #ffdde1, #ee9ca7);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
       margin: 0;
       padding: 0;
       line-height: 1.6;
+      min-height: 100vh;
     }
+    
     .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: slideIn 0.8s ease-out;
     }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      position: relative;
     }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+    
     header h1 {
-      color: #d14b6d;
-      margin-bottom: 10px;
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 2.8em;
+      font-weight: 300;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    p, ul {
+    
+    .app-name {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.8em;
+      font-weight: bold;
+      margin: 20px 0;
+      text-align: center;
+      padding: 20px;
+      border: 2px solid transparent;
+      border-radius: 15px;
+      background-clip: padding-box;
+      position: relative;
+    }
+    
+    .app-name::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 15px;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: xor;
+      -webkit-mask-composite: xor;
+    }
+    
+    .feature-section {
+      margin: 30px 0;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      border-left: 5px solid #667eea;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-section:hover {
+      transform: translateY(-3px);
+    }
+    
+    .feature-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .feature-icon {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      line-height: 1;
+    }
+    
+    p {
       font-size: 1.1em;
       text-align: justify;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.8;
     }
+    
     ul {
-      list-style-type: disc;
-      margin-left: 20px;
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
     }
+    
+    li {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      padding: 15px 20px;
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    li:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateX(5px);
+    }
+    
+    li::before {
+      content: '✨';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #667eea;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+    }
+    
+    .inspiration-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+    
+    .inspiration-card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .inspiration-card:hover {
+      transform: translateY(-5px);
+      border-color: #667eea;
+      box-shadow: 0 12px 24px rgba(102, 126, 234, 0.2);
+    }
+    
+    .inspiration-icon {
+      font-size: 2em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    .inspiration-name {
+      font-weight: bold;
+      color: #667eea;
+      font-size: 0.9em;
+    }
+    
+    .shopping-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+    
+    .shopping-card {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      padding: 30px;
+      border-radius: 20px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .shopping-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    
+    .shopping-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .delivery-options {
+      display: flex;
+      justify-content: space-around;
+      margin: 30px 0;
+      gap: 20px;
+    }
+    
+    .delivery-card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .delivery-card:hover {
+      border-color: #667eea;
+      transform: translateY(-3px);
+    }
+    
+    .delivery-icon {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
     .placeholder-img {
       display: block;
-      margin: 20px auto;
-      max-width: 90%;
-      border: 2px solid #d14b6d;
-      border-radius: 5px;
-    }
-    .back {
-      display: block;
+      margin: 40px auto;
+      max-width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border: 2px dashed #667eea;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #667eea;
+      font-size: 1.2em;
       text-align: center;
-      margin: 30px auto 0;
-      background: #000;
+    }
+    
+    .back {
+      display: inline-block;
+      text-align: center;
+      margin: 40px auto 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
-      padding: 10px 15px;
+      padding: 15px 30px;
       text-decoration: none;
-      border-radius: 8px;
-      width: max-content;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    .footer-decoration {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
+      margin: 30px 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        padding: 20px;
+      }
+      
+      header h1 {
+        font-size: 2.2em;
+      }
+      
+      .app-name {
+        font-size: 1.4em;
+      }
+      
+      .inspiration-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .shopping-types {
+        grid-template-columns: 1fr;
+      }
+      
+      .delivery-options {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -64,42 +353,115 @@
     <header>
       <h1>📝 Description de l'Application</h1>
     </header>
+    
     <main>
-      <p>
-        <strong>Nom provisoire :</strong> FashionFlow – L'application shopping réinventée
-      </p>
-      <p>
-        <strong>Fonctionnalités principales :</strong>
+      <div class="app-name">
+        🌟 FashionFlow – L'application shopping réinventée 🌟
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">⚡</div>
+          Fonctionnalités principales
+        </div>
         <ul>
           <li>Swipe intuitif similaire à Tinder</li>
           <li>Filtrer et enregistrer ses articles favoris</li>
           <li>Achat direct, avec options de retrait en magasin ou livraison à domicile</li>
         </ul>
-      </p>
-      <p>
-        <strong>Organisation de l'interface utilisateur :</strong>
-        <br>
-        Les vêtements sont organisés par catégories (ex : tête, haut du corps, bas, etc.). Par exemple, dans l’onglet "Tête", on retrouve casquettes, bonnets, chapeaux, etc.
-      </p>
-      <p>
-        <strong>Style visuel et inspirations :</strong>
-        <br>
-        FashionFlow s'inspire de plateformes telles que TikTok, Tinder et Vinted pour offrir une expérience à la fois moderne et personnalisée.
-      </p>
-      <p>
-        FashionFlow est conçue pour offrir à chaque utilisateur des articles de mode parfaitement adaptés à ses goûts grâce à un système intelligent de balayage (swipe). Les articles aimés sont enregistrés dans le profil personnel pour être consultés ultérieurement. Une section de personnalisation permet également de créer des vêtements et accessoires uniques, par exemple, des sneakers, des casquettes ou des T-shirts aux couleurs spécifiques.
-      </p>
-      <p>
-        La plateforme propose deux types de shopping :<br>
-        • Neuf, avec des articles issus des dernières collections de marques renommées.<br>
-        • Seconde main, avec une interface similaire pour naviguer via des plateformes partenaires comme Vinted ou LeBonCoin.
-      </p>
-      <p>
-        Pour finaliser l'achat, FashionFlow offre deux options : récupérer l'article dans un magasin physique proche ou choisir la livraison à domicile, même pour les articles personnalisés.
-      </p>
-      <!-- Emplacement pour une capture d'écran ou illustration de l'application -->
-      <img src="path/to/description-image.jpg" alt="Illustration de l'Application" class="placeholder-img">
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">🎯</div>
+          Organisation de l'interface utilisateur
+        </div>
+        <p>
+          Les vêtements sont organisés par catégories (ex : tête, haut du corps, bas, etc.). Par exemple, dans l'onglet "Tête", on retrouve casquettes, bonnets, chapeaux, etc.
+        </p>
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">🎨</div>
+          Style visuel et inspirations
+        </div>
+        <p>
+          FashionFlow s'inspire de plateformes telles que TikTok, Tinder et Vinted pour offrir une expérience à la fois moderne et personnalisée.
+        </p>
+        <div class="inspiration-grid">
+          <div class="inspiration-card">
+            <span class="inspiration-icon">📱</span>
+            <div class="inspiration-name">TikTok</div>
+          </div>
+          <div class="inspiration-card">
+            <span class="inspiration-icon">💕</span>
+            <div class="inspiration-name">Tinder</div>
+          </div>
+          <div class="inspiration-card">
+            <span class="inspiration-icon">👗</span>
+            <div class="inspiration-name">Vinted</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">🤖</div>
+          Expérience personnalisée
+        </div>
+        <p>
+          FashionFlow est conçue pour offrir à chaque utilisateur des articles de mode parfaitement adaptés à ses goûts grâce à un système intelligent de balayage (swipe). Les articles aimés sont enregistrés dans le profil personnel pour être consultés ultérieurement. Une section de personnalisation permet également de créer des vêtements et accessoires uniques, par exemple, des sneakers, des casquettes ou des T-shirts aux couleurs spécifiques.
+        </p>
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">🛍️</div>
+          Types de shopping
+        </div>
+        <div class="shopping-types">
+          <div class="shopping-card">
+            <div class="shopping-title">
+              <span>✨</span>
+              Neuf
+            </div>
+            <p>Articles issus des dernières collections de marques renommées.</p>
+          </div>
+          <div class="shopping-card">
+            <div class="shopping-title">
+              <span>♻️</span>
+              Seconde main
+            </div>
+            <p>Interface similaire pour naviguer via des plateformes partenaires comme Vinted ou LeBonCoin.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="feature-section">
+        <div class="feature-title">
+          <div class="feature-icon">🚚</div>
+          Options de livraison
+        </div>
+        <p>
+          Pour finaliser l'achat, FashionFlow offre deux options pratiques :
+        </p>
+        <div class="delivery-options">
+          <div class="delivery-card">
+            <span class="delivery-icon">🏪</span>
+            <strong>Retrait en magasin</strong>
+            <p>Récupérer l'article dans un magasin physique proche</p>
+          </div>
+          <div class="delivery-card">
+            <span class="delivery-icon">📦</span>
+            <strong>Livraison à domicile</strong>
+            <p>Même pour les articles personnalisés</p>
+          </div>
+        </div>
+      </div>
+     <div class="footer-decoration"></div>
     </main>
+    
     <footer>
       <a href="wiki.html" class="back">⬅️ Retour au Sommaire</a>
     </footer>
