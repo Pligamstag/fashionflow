@@ -126,6 +126,12 @@
       background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
     }
 
+    .contact-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+    }
+
     /* Contenu des sections */
     .section-content {
       text-align: center;
@@ -234,6 +240,16 @@
       50% { transform: translateX(10px); }
     }
 
+    .contact-icon {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      animation: contactPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes contactPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
+    }
+
     /* Boutons modernes */
     .modern-button {
       display: inline-block;
@@ -272,6 +288,15 @@
     .modern-button:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Contact buttons layout */
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
     }
 
     /* Indicateur de scroll */
@@ -328,6 +353,16 @@
       
       .fashion-icon {
         font-size: 3rem;
+      }
+
+      .contact-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .modern-button {
+        margin: 0.5rem;
+        min-width: 200px;
       }
     }
   </style>
@@ -390,18 +425,34 @@
       </div>
     </section>
 
-   <!-- Section What's Up -->
-<section class="section news-section">
-  <div class="section-content">
-    <div class="icon-container">
-      <div class="fashion-icon news-icon">📰</div>
-    </div>
-    <h2 class="section-title">What's Up ?</h2>
-    <p class="section-subtitle">Restez informés des dernières nouveautés et événements à venir.</p>
-    <button class="modern-button" onclick="goToNews()">Voir les news</button>
-  </div>
-</section>
+    <!-- Section What's Up -->
+    <section class="section news-section">
+      <div class="section-content">
+        <div class="icon-container">
+          <div class="fashion-icon news-icon">📰</div>
+        </div>
+        <h2 class="section-title">What's Up ?</h2>
+        <p class="section-subtitle">Restez informés des dernières nouveautés et événements à venir.</p>
+        <button class="modern-button" onclick="goToNews()">Voir les news</button>
+      </div>
+    </section>
 
+    <!-- Section Nous contacter -->
+    <section class="section contact-section">
+      <div class="section-content">
+        <div class="icon-container">
+          <div class="fashion-icon contact-icon">📧</div>
+        </div>
+        <h2 class="section-title">Nous contacter</h2>
+        <p class="section-subtitle">Une question ? Une suggestion ? Contactez-nous via vos plateformes préférées !</p>
+        <div class="contact-buttons">
+          <button class="modern-button" onclick="contactEmail()">📧 Email</button>
+          <button class="modern-button" onclick="contactDiscord()">📸 Instagram</button>
+          <button class="modern-button" onclick="contactTwitter()">🐦 x (Twitter)</button>
+          <button class="modern-button" onclick="contactInstagram()">📸 Facebook</button>
+        </div>
+      </div>
+    </section>
 
   </div>
 
@@ -460,6 +511,23 @@
       if (confirmation) {
         window.open("https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC", "_blank");
       }
+    }
+
+    // Fonctions de contact
+    function contactEmail() {
+      window.location.href = 'mailto:contact@fashionflow.com?subject=Contact depuis FashionFlow';
+    }
+
+    function contactDiscord() {
+      window.open('https://discord.gg/fashionflow', '_blank');
+    }
+
+    function contactTwitter() {
+      window.open('https://twitter.com/fashionflow', '_blank');
+    }
+
+    function contactInstagram() {
+      window.open('https://instagram.com/fashionflow', '_blank');
     }
 
     function showPopup() {
