@@ -447,9 +447,9 @@
     <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous via vos plateformes préférées !</p>
     <div class="contact-buttons">
       <button class="modern-button" onclick="contactEmail()">📧 Email</button>
-      <button class="modern-button" onclick="contactDiscord()">📸 Instagram</button>
+      <button class="modern-button" onclick="contactInstagram()">📸 Instagram</button>
       <button class="modern-button" onclick="contactTwitter()">🐦 x (Twitter)</button>
-      <button class="modern-button" onclick="contactInstagram()">📸 Facebook</button>
+      <button class="modern-button" onclick="contactFacebook()">📘 Facebook</button>
       <button class="modern-button" onclick="contactFAQ()">❓ FAQ</button>
     </div>
   </div>
@@ -500,11 +500,11 @@
 
     // Fonctions de navigation
     function goToWiki() {
-      window.location.href = 'wiki.html';
+      alert('Redirection vers le wiki (remplacez par window.location.href = "wiki.html")');
     }
 
     function goToNews() {
-      window.location.href = 'whatsupp.html';
+      alert('Redirection vers les news (remplacez par window.location.href = "whatsupp.html")');
     }
 
     function donate() {
@@ -516,19 +516,23 @@
 
     // Fonctions de contact
     function contactEmail() {
-     <a href="contacte.html" class="modern-button">📧 Email</a>
+      alert('Redirection vers la page de contact (remplacez par window.location.href = "contacte.html")');
+    }
 
-
-    function contactDiscord() {
-      window.open('https://discord.gg/fashionflow', '_blank');
+    function contactInstagram() {
+      window.open('https://instagram.com/fashionflow', '_blank');
     }
 
     function contactTwitter() {
       window.open('https://twitter.com/fashionflow', '_blank');
     }
 
-    function contactInstagram() {
-      window.open('https://instagram.com/fashionflow', '_blank');
+    function contactFacebook() {
+      window.open('https://facebook.com/fashionflow', '_blank');
+    }
+
+    function contactFAQ() {
+      alert('Redirection vers la FAQ (remplacez par window.location.href = "faq.html")');
     }
 
     function showPopup() {
