@@ -353,7 +353,6 @@
             }
         }
 
-        /* Styles pour les notifications */
         .notification {
             position: fixed;
             top: 20px;
@@ -472,11 +471,21 @@
             const templateParams = {
                 from_name: formData.name,
                 from_email: formData.email,
-                to_email: 'samydefashionflow@gmail.com',
                 subject: formData.subject,
                 message: formData.message,
-                time: new Date().toLocaleString('fr-FR')
+                // Assurez-vous que ces paramètres correspondent exactement aux variables dans votre template EmailJS
+                to_name: 'FashionFlow Support',
+                reply_to: formData.email,
+                timestamp: new Date().toLocaleString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
             };
+
+            console.log('📧 Envoi des paramètres:', templateParams);
 
             return emailjs.send(
                 EMAILJS_CONFIG.serviceId,
@@ -537,14 +546,23 @@
                 let errorMessage = 'Erreur lors de l\'envoi du message. ';
                 
                 if (error.status === 400) {
-                    errorMessage += 'Vérifiez vos informations.';
+                    errorMessage += 'Vérifiez la configuration du template.';
                 } else if (error.status === 403) {
                     errorMessage += 'Service temporairement indisponible.';
+                } else if (error.status === 422) {
+                    errorMessage += 'Paramètres du template incorrects.';
                 } else {
                     errorMessage += 'Veuillez réessayer plus tard.';
                 }
                 
                 showNotification(errorMessage, 'error');
+                
+                // Log détaillé de l'erreur pour déboguer
+                console.log('Détails de l\'erreur:', {
+                    status: error.status,
+                    text: error.text,
+                    formData: formData
+                });
             } finally {
                 // Restaurer l'état du bouton
                 submitBtn.disabled = false;
@@ -673,25 +691,18 @@
             }
         }
 
-        // Animation d'entrée progressive des éléments
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
         // Message de bienvenue
         document.addEventListener('DOMContentLoaded', function() {
             console.log('📧 EmailJS configuré et prêt à l\'emploi!');
             console.log('🎨 FashionFlow - Page de contact chargée avec succès!');
+            console.log('🔧 Vérifiez que votre template EmailJS contient les variables suivantes:');
+            console.log('   - {{from_name}}');
+            console.log('   - {{from_email}}');
+            console.log('   - {{subject}}');
+            console.log('   - {{message}}');
+            console.log('   - {{to_name}}');
+            console.log('   - {{reply_to}}');
+            console.log('   - {{timestamp}}');
         });
     </script>
 </body>
