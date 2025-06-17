@@ -90,6 +90,16 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.8; }
     }
+    
+    .bug-fix {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+    
+    .new-feature {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
@@ -123,6 +133,21 @@
 
       <div class="space-y-6">
         <div class="timeline-item">
+          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">17 juin 2025</span>
+              <span class="text-xs text-green-600 font-medium new-feature px-2 py-1 rounded">AMÉLIORATION</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">Amélioration des catégories du wiki</h4>
+            <p class="text-gray-700 mb-2">Optimisation et restructuration des catégories du Wiki FashionFlow</p>
+            <div class="bg-red-50 border-l-4 border-red-400 p-3 mt-3">
+              <span class="text-xs text-red-600 font-medium bug-fix px-2 py-1 rounded mr-2">CORRECTION</span>
+              <span class="text-red-700 text-sm">Correction du bug d'affichage dans la catégorie "What's up ?"</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
           <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4 border-l-4 border-purple-400">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-semibold text-purple-700 bg-purple-200 px-3 py-1 rounded-full">15 juin 2025</span>
@@ -147,12 +172,22 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">📞</span>
+            <h3 class="font-semibold text-gray-800">Nous contacter</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout de la catégorie "Nous contacter" dans la page d'accueil</p>
+          <span class="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">En développement</span>
+        </div>
+
         <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
           <div class="flex items-center mb-3">
-            <span class="feature-icon text-2xl mr-3">📚</span>
-            <h3 class="font-semibold text-gray-800">Amélioration des catégories du wiki</h3>
+            <span class="feature-icon text-2xl mr-3">⚙️</span>
+            <h3 class="font-semibold text-gray-800">Catégorie Développement</h3>
           </div>
-          <p class="text-gray-600 text-sm">Optimisation et restructuration des catégories du Wiki FashionFlow</p>
+          <p class="text-gray-600 text-sm">Lancement de la nouvelle catégorie développement pour les ressources techniques</p>
+          <span class="inline-block mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">En préparation</span>
         </div>
 
         <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-xl border border-emerald-200">
@@ -171,7 +206,7 @@
           <p class="text-gray-600 text-sm">Création d'une page "Foire aux questions (FAQ)"</p>
         </div>
 
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+        <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-xl border border-pink-200">
           <div class="flex items-center mb-3">
             <span class="feature-icon text-2xl mr-3">🗳️</span>
             <h3 class="font-semibold text-gray-800">Système de vote</h3>
@@ -201,19 +236,12 @@
   <!-- Footer avec bouton de retour -->
   <footer class="bg-white border-t border-gray-200 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-12 text-center">
-            </div>
-      <p class="text-gray-500 text-sm">© 2025 FashionFlow. Tous droits réservés.</p>
-    </div>
-</body>
-</html>
-
-      
       <div class="border-t border-gray-200 pt-8">
         <p class="text-gray-600 font-medium text-lg mb-2">
           © 2025 FashionFlow - Tous droits réservés
         </p>
         <p class="text-gray-500">
-          Version 1.2.4 • Dernière mise à jour : 15 juin 2025
+          Version 2.3.5 • Dernière mise à jour : 17 juin 2025
         </p>
       </div>
     </div>
