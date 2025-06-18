@@ -439,42 +439,68 @@
     </section>
   </main>
 
+<!-- Bouton Archives avec protection admin -->
+<div class="flex justify-center mb-8">
+    <button class="btn-primary inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors" onclick="showArchivePopup()">
+        <i class="fas fa-archive mr-2"></i>
+        Voir les archives complètes
+    </button>
+</div>
+
+<!-- Popup pour les archives (à ajouter dans votre HTML) -->
+<div id="archivePopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content email-popup-content">
+        <h3 style="margin-bottom: 1rem;">📁 Archives Complètes</h3>
+        <p style="margin-bottom: 1rem;">Accès restreint aux administrateurs</p>
+        <p style="margin-bottom: 1rem; font-size: 0.9rem;">Entrez le mot de passe admin :</p>
+        <input type="password" class="admin-input" id="archiveAdminPassword" placeholder="Mot de passe admin">
+        <div style="margin-top: 1rem;">
+            <button class="modern-button" onclick="checkArchiveAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
+            <button class="modern-button" onclick="closeArchivePopup()" style="margin: 0.5rem;">Fermer</button>
+        </div>
+    </div>
+</div>
+
 <script>
-  // Mot de passe admin fourni par l’utilisateur
-  const ADMIN_PASSWORD = "lucie karaoui";
+// Fonction pour afficher le popup des archives
+function showArchivePopup() {
+    document.getElementById('archivePopup').style.display = 'flex';
+}
 
-  function showDevPopup() {
-    document.getElementById("devPopup").style.display = "flex";
-  }
+// Fonction pour fermer le popup des archives
+function closeArchivePopup() {
+    document.getElementById('archivePopup').style.display = 'none';
+    document.getElementById('archiveAdminPassword').value = '';
+}
 
-  function closeDevPopup() {
-    document.getElementById("devPopup").style.display = "none";
-    document.getElementById("devAdminPassword").value = "";
-  }
-
-  function checkDevAdminPassword() {
-    const val = document.getElementById("devAdminPassword").value;
-    if (val === ADMIN_PASSWORD) {
-      alert("✅ Accès admin validé — envoyez vos idées !");
-      closeDevPopup();
-      // …votre logique ici
-    }
-    else {
-      alert("❌ Mot de passe incorrect");
-    }
-  }
-
-  function checkArchivePassword(event) {
-    event.preventDefault();
-    const pwd = prompt("🔒 Entrez le mot de passe admin pour accéder aux archives :");
-    if (pwd === ADMIN_PASSWORD) {
-      window.location.href = "ArchiveMiseajour.html";
+// Fonction pour vérifier le mot de passe admin des archives
+function checkArchiveAdminPassword() {
+    const password = document.getElementById('archiveAdminPassword').value;
+    const correctPassword = 'votre_mot_de_passe_admin'; // Remplacez par votre mot de passe
+    
+    if (password === correctPassword) {
+        // Mot de passe correct, rediriger vers la page des archives
+        window.location.href = 'ArchiveMiseajour.html';
     } else {
-      alert("❌ Mot de passe incorrect");
+        alert('Mot de passe incorrect !');
+        document.getElementById('archiveAdminPassword').value = '';
     }
-  }
-</script>
+}
 
+// Fermer le popup en cliquant en dehors
+document.getElementById('archivePopup').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeArchivePopup();
+    }
+});
+
+// Permettre la validation avec la touche Entrée
+document.getElementById('archiveAdminPassword').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkArchiveAdminPassword();
+    }
+});
+</script>
   <!-- Footer avec bouton de retour -->
   <footer class="bg-white border-t border-gray-200 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-12 text-center">
