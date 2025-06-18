@@ -437,7 +437,7 @@
         <div class="icon-container">
           <div class="fashion-icon rocket-icon">🚀</div>
         </div>
-        <button class="modern-button" onclick="showPopup()">Déposez-les ici</button>
+        <button class="modern-button" onclick="showDevPopup()">Déposez-les ici</button>
       </div>
     </section>
 
@@ -504,6 +504,20 @@
       <div style="margin-top: 1rem;">
         <button class="modern-button" onclick="checkAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
         <button class="modern-button" onclick="closeEmailPopup()" style="margin: 0.5rem;">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup Développement avec authentification -->
+  <div class="popup-overlay" id="devPopupOverlay">
+    <div class="popup-content email-popup-content">
+      <h3 style="margin-bottom: 1rem;">🚀 Idées de Développement</h3>
+      <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
+      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
+      <input type="password" class="admin-input" id="devAdminPassword" placeholder="Mot de passe admin" />
+      <div style="margin-top: 1rem;">
+        <button class="modern-button" onclick="checkDevAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
+        <button class="modern-button" onclick="closeDevPopup()" style="margin: 0.5rem;">Fermer</button>
       </div>
     </div>
   </div>
@@ -582,10 +596,34 @@
       window.location.href = "faq.html";
     }
 
-    function showPopup() {
-      const popup = document.getElementById('popupOverlay');
+    function showDevPopup() {
+      const popup = document.getElementById('devPopupOverlay');
       popup.style.display = 'flex';
       setTimeout(() => popup.classList.add('show'), 10);
+      
+      // Reset le champ password
+      document.getElementById('devAdminPassword').value = '';
+    }
+
+    function closeDevPopup() {
+      const popup = document.getElementById('devPopupOverlay');
+      popup.classList.remove('show');
+      setTimeout(() => popup.style.display = 'none', 300);
+    }
+
+    function checkDevAdminPassword() {
+      const password = document.getElementById('devAdminPassword').value.trim();
+      const correctPassword = 'LucieKaraoui';
+      
+      if (password === correctPassword) {
+        alert('Mot de passe correct ! Redirection vers la page de développement...');
+        closeDevPopup();
+        // Redirection vers developpement.html
+        window.location.href = "developpement.html";
+      } else {
+        alert('Mot de passe incorrect !');
+        document.getElementById('devAdminPassword').value = '';
+      }
     }
 
     function closePopup() {
@@ -620,6 +658,12 @@
       document.getElementById('adminPassword').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           checkAdminPassword();
+        }
+      });
+      
+      document.getElementById('devAdminPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          checkDevAdminPassword();
         }
       });
     });
