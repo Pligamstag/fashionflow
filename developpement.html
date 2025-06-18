@@ -1,1 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionFlow - Votre Style, Votre Flow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: none;
+            border-radius: 50px;
+            background: #f8f9ff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .categories {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 60px;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .search-bar {
+                margin: 0;
+                max-width: none;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-section {
+                padding: 40px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element" style="width: 60px; height: 60px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="width: 80px; height: 80px; top: 20%; right: 15%; animation-delay: 2s;"></div>
+        <div class="floating-element" style="width: 40px; height: 40px; bottom: 30%; left: 20%; animation-delay: 4s;"></div>
+        <div class="floating-element" style="width: 100px; height: 100px; bottom: 10%; right: 10%; animation-delay: 1s;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">FashionFlow</div>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher des tendances, marques, styles..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+            
+            <div class="nav-icons">
+                <div class="nav-icon" onclick="toggleFavorites()" title="Favoris">
+                    ❤️
+                    <span class="badge" id="favBadge">3</span>
+                </div>
+                <div class="nav-icon" onclick="openCart()" title="Panier">
+                    🛍️
+                    <span class="badge" id="cartBadge">2</span>
+                </div>
+                <div class="nav-icon" onclick="openProfile()" title="Profil">
+                    👤
+                </div>
+            </div>
+        </header>
+
+        <div class="categories">
+            <button class="category-btn active" onclick="selectCategory('all')">
+                ✨ Tout
+            </button>
+            <button class="category-btn" onclick="selectCategory('trending')">
+                🔥 Tendances
+            </button>
+            <button class="category-btn" onclick="selectCategory('summer')">
+                ☀️ Été 2025
+            </button>
+            <button class="category-btn" onclick="selectCategory('formal')">
+                👔 Formel
+            </button>
+            <button class="category-btn" onclick="selectCategory('casual')">
+                👕 Décontracté
+            </button>
+            <button class="category-btn" onclick="selectCategory('accessories')">
+                💎 Accessoires
+            </button>
+        </div>
+
+        <section class="hero-section">
+            <h1 class="hero-title">Votre Style, Votre Flow</h1>
+            <p class="hero-subtitle">Découvrez les dernières tendances mode et créez votre style unique avec FashionFlow</p>
+            <button class="cta-btn" onclick="exploreCollection()">
+                🚀 Explorer la Collection
+            </button>
+        </section>
+
+        <div class="features-grid">
+            <div class="feature-card" onclick="openFeature('ai')">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">IA Styliste</h3>
+                <p class="feature-desc">Notre intelligence artificielle vous recommande des looks personnalisés selon vos goûts et votre morphologie.</p>
+            </div>
+            
+            <div class="feature-card" onclick="openFeature('trends')">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Tendances Live</h3>
+                <p class="feature-desc">Restez à la pointe de la mode avec nos analyses en temps réel des tendances mondiales.</p>
+            </div>
+            
+            <div class="feature-card" onclick="openFeature('virtual')">
+                <div class="feature-icon">👗</div>
+                <h3 class="feature-title">Essayage Virtuel</h3>
+                <p class="feature-desc">Testez vos tenues avant achat grâce à notre technologie d'essayage en réalité augmentée.</p>
+            </div>
+            
+            <div class="feature-card" onclick="openFeature('community')">
+                <div class="feature-icon">👥</div>
+                <h3 class="feature-title">Communauté Mode</h3>
+                <p class="feature-desc">Partagez vos looks, inspirez-vous et connectez-vous avec d'autres passionnés de mode.</p>
+            </div>
+        </div>
+
+        <section class="stats-section">
+            <div class="stat-item">
+                <span class="stat-number" id="users">50K+</span>
+                <span class="stat-label">Utilisateurs Actifs</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="brands">200+</span>
+                <span class="stat-label">Marques Partenaires</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="looks">10K+</span>
+                <span class="stat-label">Looks Créés</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="satisfaction">98%</span>
+                <span class="stat-label">Satisfaction Client</span>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Animation des statistiques
+        function animateNumbers() {
+            const stats = [
+                { id: 'users', final: 50000, suffix: 'K+' },
+                { id: 'brands', final: 200, suffix: '+' },
+                { id: 'looks', final: 10000, suffix: 'K+' },
+                { id: 'satisfaction', final: 98, suffix: '%' }
+            ];
+
+            stats.forEach(stat => {
+                let current = 0;
+                const increment = stat.final / 100;
+                const element = document.getElementById(stat.id);
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.final) {
+                        current = stat.final;
+                        clearInterval(timer);
+                    }
+                    
+                    if (stat.id === 'users' || stat.id === 'looks') {
+                        element.textContent = Math.floor(current / 1000) + stat.suffix;
+                    } else {
+                        element.textContent = Math.floor(current) + stat.suffix;
+                    }
+                }, 50);
+            });
+        }
+
+        // Sélection de catégorie
+        function selectCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log(`Catégorie sélectionnée: ${category}`);
+            showNotification(`Catégorie "${category}" sélectionnée!`);
+        }
+
+        // Fonctions interactives
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                showNotification(`Recherche: "${query}"`);
+                console.log(`Recherche pour: ${query}`);
+            }
+        }
+
+        function toggleFavorites() {
+            showNotification('Favoris ouverts!');
+        }
+
+        function openCart() {
+            showNotification('Panier ouvert!');
+        }
+
+        function openProfile() {
+            showNotification('Profil ouvert!');
+        }
+
+        function exploreCollection() {
+            showNotification('Exploration de la collection...');
+        }
+
+        function openFeature(feature) {
+            const features = {
+                'ai': 'IA Styliste activée!',
+                'trends': 'Tendances Live chargées!',
+                'virtual': 'Essayage Virtuel lancé!',
+                'community': 'Communauté Mode ouverte!'
+            };
+            showNotification(features[feature]);
+        }
+
+        // Système de notifications
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #667eea, #764ba2);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 50px;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.5s ease-out;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-out forwards';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Recherche en temps réel
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            if (e.target.value.length > 2) {
+                console.log(`Recherche en cours: ${e.target.value}`);
+            }
+        });
+
+        // Recherche par Entrée
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Ajout des styles d'animation dynamiques
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Lancement des animations au chargement
+        window.addEventListener('load', () => {
+            setTimeout(animateNumbers, 1000);
+            showNotification('Bienvenue sur FashionFlow! 🚀');
+        });
+
+        // Effets de parallaxe légers
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.hero-section');
+            const speed = scrolled * 0.5;
+            parallax.style.transform = `translateY(${speed}px)`;
+        });
+    </script>
+</body>
+</html>
