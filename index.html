@@ -1,750 +1,590 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FashionFlow</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Récapitulatif des Mises à Jour - FashionFlow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
-    *, *::before, *::after { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
-    :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
-      --text-light: #ffffff;
-      --text-dark: #1a1a2e;
-      --shadow: 0 20px 40px rgba(0,0,0,0.1);
-      --glow: 0 0 20px rgba(102, 126, 234, 0.3);
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
-
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background: var(--dark-gradient);
-      color: var(--text-light);
-      overflow: hidden;
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-
-    /* Particules flottantes */
-    .particles {
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 1.5rem;
+      width: 2px;
+      height: calc(100% - 0.5rem);
+      background: linear-gradient(to bottom, rgba(102, 126, 234, 0.3), transparent);
+    }
+    
+    .timeline-item:last-child::after {
+      display: none;
+    }
+    
+    .feature-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-back {
+      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+    }
+    
+    .btn-back:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+    }
+    
+    .status-badge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    
+    .bug-fix {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+    
+    .new-feature {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+    
+    .whatsapp-update {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+    }
+    
+    .password-modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: radial-gradient(circle, #667eea, transparent);
-      border-radius: 50%;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-      50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
-    }
-
-    /* Container principal */
-    .main-container {
-      height: 100vh;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .main-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Sections */
-    .section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      scroll-snap-align: start;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.1;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 70%);
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.1; }
-      50% { transform: scale(1.1); opacity: 0.2; }
-    }
-
-    /* Styles spécifiques par section */
-    .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 8s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .wiki-section {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    }
-
-    .dev-section {
-      background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
-    }
-
-    .support-section {
-      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
-    }
-
-    .news-section {
-      background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-    }
-
-    .contact-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 8s ease infinite;
-    }
-
-    /* Contenu des sections */
-    .section-content {
-      text-align: center;
-      max-width: 800px;
-      padding: 2rem;
-      z-index: 2;
-      position: relative;
-    }
-
-    .section-title {
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: 900;
-      margin-bottom: 1rem;
-      background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
-      text-shadow: 0 0 30px rgba(255,255,255,0.3);
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    .section-subtitle {
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
-      font-weight: 400;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    /* Icônes animées */
-    .icon-container {
-      width: 150px;
-      height: 150px;
-      margin: 2rem auto;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .icon-container:hover {
-      transform: scale(1.1);
-    }
-
-    .fashion-icon {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      animation: rotate 10s linear infinite;
-      box-shadow: var(--glow);
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .book-icon {
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      60% { transform: translateY(-10px); }
-    }
-
-    .rocket-icon {
-      background: linear-gradient(45deg, #4facfe, #00f2fe);
-      animation: rocket 3s ease-in-out infinite;
-    }
-
-    @keyframes rocket {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-30px) rotate(10deg); }
-    }
-
-    .money-icon {
-      background: linear-gradient(45deg, #f7971e, #ffd200);
-      animation: money 2.5s ease-in-out infinite;
-    }
-
-    @keyframes money {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(5deg); }
-    }
-
-    .news-icon {
-      background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-      animation: wave 3s ease-in-out infinite;
-    }
-
-    @keyframes wave {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(10px); }
-    }
-
-    .contact-icon {
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-      animation: contactPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes contactPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
-      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
-    }
-
-    /* Boutons modernes */
-    .modern-button {
-      display: inline-block;
-      padding: 1rem 2.5rem;
-      margin: 1rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
-      border-radius: 50px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .modern-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .modern-button:hover::before {
-      left: 100%;
-    }
-
-    .modern-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    /* Contact buttons layout */
-    .contact-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    /* Indicateur de scroll */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: scrollHint 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollHint {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
-      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
-    }
-
-    /* Popup moderne */
-    .popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(10px);
-      display: none;
-      align-items: center;
-      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.7);
       z-index: 1000;
+      justify-content: center;
+      align-items: center;
     }
-
-    .popup-content {
-      background: linear-gradient(135deg, #667eea, #764ba2);
+    
+    .password-content {
+      background: white;
       padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
+      border-radius: 1rem;
       max-width: 400px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      transform: scale(0.8);
-      transition: transform 0.3s ease;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.3s ease-out;
     }
-
-    .popup-overlay.show .popup-content {
-      transform: scale(1);
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Styles pour le popup email */
-    .email-popup-content {
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    
+    .password-input {
+      position: relative;
     }
-
-    .admin-input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 25px;
-      background: rgba(255,255,255,0.2);
+    
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #667eea;
+    }
+    
+    .admin-section {
+      display: none;
+    }
+    
+    .admin-badge {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
       color: white;
-      font-size: 16px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-
-    .admin-input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-
-    .admin-input:focus {
-      outline: none;
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .section-content {
-        padding: 1rem;
-      }
-      
-      .icon-container {
-        width: 120px;
-        height: 120px;
-      }
-      
-      .fashion-icon {
-        font-size: 3rem;
-      }
-
-      .contact-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .modern-button {
-        margin: 0.5rem;
-        min-width: 200px;
-      }
     }
   </style>
 </head>
-<body>
-  <!-- Particules flottantes -->
-  <div class="particles" id="particles"></div>
-
-  <!-- Container principal -->
-  <div class="main-container" id="mainContainer">
-    
-    <!-- Section Hero -->
-    <section class="section hero-section">
-      <div class="section-content">
-        <h1 class="section-title">FashionFlow</h1>
-        <p class="section-subtitle">Swipe ton style ✨ L'appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
-        <div class="icon-container">
-          <div class="fashion-icon">👗</div>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+  <!-- Header avec gradient -->
+  <header class="gradient-bg text-white shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold mb-2">FashionFlow</h1>
+          <p class="text-lg opacity-90">Récapitulatif des Mises à Jour</p>
         </div>
-        <div class="scroll-indicator">
-          <div style="font-size: 2rem;">⬇️</div>
-          <div style="font-size: 0.9rem; margin-top: 0.5rem;">Swipe vers le haut</div>
+        <div class="status-badge text-sm px-4 py-2 rounded-full text-white font-medium">
+          🚀 Système actif
+        </div>
+      </div>
+      
+      <!-- Bouton de retour -->
+      <div class="mt-6">
+        <a href="index.html" class="btn-back inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Retour à l'accueil
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+    <!-- Section Historique des Mises à Jour -->
+    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+      <div class="flex items-center mb-8">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+          <span class="text-white text-xl">🛠️</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Historique des mises à jour</h2>
+          <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-l-4 border-blue-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-blue-700 bg-blue-200 px-3 py-1 rounded-full">18 juin 2025</span>
+              <span class="text-xs text-white font-medium new-feature px-2 py-1 rounded">SÉCURITÉ</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">🔒 Système de mot de passe pour les administrateurs</h4>
+            <p class="text-gray-700 mb-2">Implémentation d'un système sécurisé de mot de passe pour accéder aux sections réservées aux administrateurs</p>
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3">
+              <div class="flex items-center">
+                <span class="text-xs text-blue-600 font-medium px-2 py-1 rounded mr-2 bg-blue-200">AJOUTÉ</span>
+                <span class="text-blue-700 text-sm">Sécurisation des sections "Nous contacter" et "Développement"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-l-4 border-blue-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-blue-700 bg-blue-200 px-3 py-1 rounded-full">17 juin 2025</span>
+              <span class="text-xs text-white font-medium bug-fix px-2 py-1 rounded">CORRECTION</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">🔧 Correction des boutons de la page d'accueil</h4>
+            <p class="text-gray-700 mb-2">Résolution du problème qui empêchait de cliquer sur les boutons de navigation de la page d'accueil</p>
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3">
+              <div class="flex items-center">
+                <span class="text-xs text-blue-600 font-medium px-2 py-1 rounded mr-2 bg-blue-200">RÉSOLU</span>
+                <span class="text-blue-700 text-sm">Navigation restaurée et fonctionnelle sur toutes les sections</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg p-4 border-l-4 border-indigo-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-indigo-700 bg-indigo-200 px-3 py-1 rounded-full">17 juin 2025</span>
+              <span class="text-xs text-indigo-600 font-medium new-feature px-2 py-1 rounded">NOUVEAU</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">🏠 Ajout du bouton retour à l'accueil</h4>
+            <p class="text-gray-700 mb-2">Intégration d'un bouton de retour vers la page d'accueil dans la section "What's up"</p>
+            <div class="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-3">
+              <div class="flex items-center">
+                <span class="text-xs text-indigo-600 font-medium new-feature px-2 py-1 rounded mr-2">AJOUTÉ</span>
+                <span class="text-indigo-700 text-sm">Navigation simplifiée entre les pages du site</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">17 juin 2025</span>
+              <span class="text-xs text-white font-medium whatsapp-update px-2 py-1 rounded">WHATSAPP</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">📱 Système de mise à jour WhatsApp</h4>
+            <p class="text-gray-700 mb-2">Lancement du système de notifications et mises à jour via WhatsApp pour la communauté FashionFlow</p>
+            <div class="bg-green-50 border-l-4 border-green-400 p-3 mt-3">
+              <div class="flex items-center">
+                <span class="text-xs text-green-600 font-medium new-feature px-2 py-1 rounded mr-2">NOUVEAU</span>
+                <span class="text-green-700 text-sm">Rejoignez notre groupe WhatsApp pour recevoir les actualités en temps réel</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">17 juin 2025</span>
+              <span class="text-xs text-green-600 font-medium new-feature px-2 py-1 rounded">AMÉLIORATION</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">Amélioration des catégories du wiki</h4>
+            <p class="text-gray-700 mb-2">Optimisation et restructuration des catégories du Wiki FashionFlow</p>
+            <div class="bg-red-50 border-l-4 border-red-400 p-3 mt-3">
+              <span class="text-xs text-red-600 font-medium bug-fix px-2 py-1 rounded mr-2">CORRECTION</span>
+              <span class="text-red-700 text-sm">Correction du bug d'affichage dans la catégorie "What's up ?"</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4 border-l-4 border-purple-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-purple-700 bg-purple-200 px-3 py-1 rounded-full">15 juin 2025</span>
+              <span class="text-xs text-purple-600 font-medium">REFONTE MAJEURE</span>
+            </div>
+            <p class="text-gray-800 font-medium">Refonte complète de l'interface d'accueil, de mise à jour et du wiki</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Section Wiki -->
-    <section class="section wiki-section">
-      <div class="section-content">
-        <h2 class="section-title">WikiFashion</h2>
-        <p class="section-subtitle">Le wiki de FashionFlow !!</p>
-        <div class="icon-container">
-          <div class="fashion-icon book-icon">📚</div>
+    <!-- Section Prochaines Améliorations -->
+    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+      <div class="flex items-center mb-8">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+          <span class="text-white text-xl">🚀</span>
         </div>
-        <button class="modern-button" onclick="goToWiki()">Le Wiki !!</button>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Prochaines améliorations prévues</h2>
+          <p class="text-gray-600 mt-1">Fonctionnalités en développement</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">📞</span>
+            <h3 class="font-semibold text-gray-800">Nous contacter</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout de la catégorie "Nous contacter" dans la page d'accueil</p>
+          <span class="inline-block mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">En développement</span>
+          
+          <!-- Section admin "Nous contacter" -->
+          <div id="contact-admin" class="admin-section mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 class="font-semibold text-blue-800 mb-2 flex items-center">
+              <i class="fas fa-lock mr-2"></i> Section Admin - Nous contacter
+            </h4>
+            <p class="text-sm text-blue-700 mb-3">Cette section est réservée aux administrateurs.</p>
+            <div class="space-y-3">
+              <div class="p-3 bg-white rounded border border-blue-100">
+                <h5 class="font-medium text-blue-900">Formulaire de contact</h5>
+                <p class="text-xs text-blue-600">Version 1.2 - En cours de test</p>
+              </div>
+              <div class="p-3 bg-white rounded border border-blue-100">
+                <h5 class="font-medium text-blue-900">Gestion des messages</h5>
+                <p class="text-xs text-blue-600">En développement</p>
+              </div>
+            </div>
+          </div>
+          
+          <button onclick="showPasswordModal('contact')" class="mt-3 w-full bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 px-4 rounded-lg transition-colors">
+            <i class="fas fa-key mr-2"></i> Accès Admin
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">⚙️</span>
+            <h3 class="font-semibold text-gray-800">Catégorie Développement</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Lancement de la nouvelle catégorie développement pour les ressources techniques</p>
+          <span class="inline-block mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">En préparation</span>
+          
+          <!-- Section admin "Développement" -->
+          <div id="dev-admin" class="admin-section mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+            <h4 class="font-semibold text-indigo-800 mb-2 flex items-center">
+              <i class="fas fa-lock mr-2"></i> Section Admin - Développement
+            </h4>
+            <p class="text-sm text-indigo-700 mb-3">Ressources techniques pour les développeurs.</p>
+            <div class="space-y-3">
+              <div class="p-3 bg-white rounded border border-indigo-100">
+                <h5 class="font-medium text-indigo-900">Documentation API</h5>
+                <p class="text-xs text-indigo-600">Version 2.4 - Mise à jour</p>
+              </div>
+              <div class="p-3 bg-white rounded border border-indigo-100">
+                <h5 class="font-medium text-indigo-900">Journal des changements</h5>
+                <p class="text-xs text-indigo-600">Accès complet</p>
+              </div>
+            </div>
+          </div>
+          
+          <button onclick="showPasswordModal('dev')" class="mt-3 w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded-lg transition-colors">
+            <i class="fas fa-key mr-2"></i> Accès Admin
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-xl border border-emerald-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">💬</span>
+            <h3 class="font-semibold text-gray-800">Système de commentaires</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout d'un système de commentaires sur chaque section du Wiki</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">❓</span>
+            <h3 class="font-semibold text-gray-800">FAQ</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Création d'une page "Foire aux questions (FAQ)"</p>
+          <span class="inline-block mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">En préparation</span>
+        </div>
+
+        <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-xl border border-pink-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">🗳️</span>
+            <h3 class="font-semibold text-gray-800">Système de vote</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Possibilité de voter pour les fonctionnalités à venir</p>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+          <div class="flex items-center mb-3">
+            <span class="feature-icon text-2xl mr-3">🍪</span>
+            <h3 class="font-semibold text-gray-800">Cookies</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Ajout d'un système de cookies pour l'expérience utilisateur</p>
+        </div>
       </div>
     </section>
+  </main>
 
-    <!-- Section Développement -->
-    <section class="section dev-section">
-      <div class="section-content">
-        <h2 class="section-title">Développement</h2>
-        <p class="section-subtitle">Avez-vous des idées au sujet de FashionFlow ??</p>
-        <div class="icon-container">
-          <div class="fashion-icon rocket-icon">🚀</div>
+  <!-- Modal de mot de passe -->
+  <div id="passwordModal" class="password-modal">
+    <div class="password-content">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-lock mr-3 text-purple-600"></i> Accès Administrateur
+      </h3>
+      <p class="text-gray-600 mb-4">Veuillez entrer le mot de passe pour accéder à cette section.</p>
+      
+      <div class="password-input mb-4">
+        <input type="password" id="adminPassword" placeholder="Mot de passe" 
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+        <span class="toggle-password" onclick="togglePasswordVisibility()">
+          <i class="fas fa-eye"></i>
+        </span>
+      </div>
+      
+      <p id="passwordError" class="text-red-500 text-sm mb-4 hidden">
+        <i class="fas fa-exclamation-circle mr-1"></i> Mot de passe incorrect
+      </p>
+      
+      <div class="flex justify-between">
+        <button onclick="hidePasswordModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+          Annuler
+        </button>
+        <button onclick="checkPassword()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+          <i class="fas fa-unlock-alt mr-2"></i> Valider
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer avec bouton de retour -->
+  <footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-12 text-center">
+      <!-- Section WhatsApp stylée -->
+      <div class="mb-8">
+        <div class="bg-gradient-to-r from-green-400 via-green-500 to-green-600 rounded-2xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden">
+          <!-- Effet de fond avec motifs -->
+          <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-4 left-4 w-16 h-16 bg-white rounded-full"></div>
+            <div class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full"></div>
+            <div class="absolute top-1/2 right-8 w-8 h-8 bg-white rounded-full"></div>
+          </div>
+                    
+          <div class="relative z-10">
+            <div class="flex items-center justify-center mb-4">
+              <!-- Logo WhatsApp SVG -->
+              <div class="bg-white rounded-full p-3 mr-4 shadow-lg">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516" fill="#25D366"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-white text-2xl">Actualités en Direct</h3>
+            </div>
+                        
+            <p class="text-green-100 text-lg mb-6 font-medium">
+              🚀 Rejoignez notre communauté WhatsApp et soyez les premiers informés !
+            </p>
+                        
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">⚡</span>
+                <span class="font-medium">Mises à jour instantanées</span>
+              </div>
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">🔔</span>
+                <span class="font-medium">Notifications exclusives</span>
+              </div>
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">👥</span>
+                <span class="font-medium">Communauté active</span>
+              </div>
+            </div>
+                        
+            <a href="https://chat.whatsapp.com/E3H2dr47fcS8A9v9W2E48i"
+                target="_blank"
+                class="inline-flex items-center bg-white text-green-600 font-bold px-8 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 hover:bg-green-50">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-3">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516"/>
+              </svg>
+              Rejoindre le Groupe
+              <span class="ml-2">→</span>
+            </a>
+                        
+            <p class="text-green-200 text-sm mt-4 opacity-90">
+              objectif atteindre les 50 membres avant la fin de l'année ✨
+            </p>
+          </div>
         </div>
-        <button class="modern-button" onclick="showDevPopup()">Déposez-les ici</button>
       </div>
-    </section>
-
-    <!-- Section Soutiens -->
-    <section class="section support-section">
-      <div class="section-content">
-        <h2 class="section-title">Soutiens</h2>
-        <p class="section-subtitle">Un peu d'argent suffit pour nous faire évoluer !</p>
-        <div class="icon-container">
-          <div class="fashion-icon money-icon">💰</div>
-        </div>
-        <button class="modern-button" onclick="donate()">Faire un don PayPal !</button>
+            
+      <!-- Bouton de retour à l'accueil -->
+      <div class="mb-8">
+        <a href="index.html" class="btn-back inline-flex items-center px-8 py-4 rounded-lg text-white font-medium hover:text-white transition-all duration-300 text-lg">
+          <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Retour à l'accueil
+        </a>
       </div>
-    </section>
 
-    <!-- Section What's Up -->
-    <section class="section news-section">
-      <div class="section-content">
-        <div class="icon-container">
-          <div class="fashion-icon news-icon">📰</div>
-        </div>
-        <h2 class="section-title">What's Up ?</h2>
-        <p class="section-subtitle">Restez informés des dernières nouveautés et événements à venir.</p>
-        <button class="modern-button" onclick="goToNews()">Voir les news</button>
-      </div>
-    </section>
-
-   <!-- Section Nous contacter -->
-<section class="section contact-section">
-  <div class="section-content">
-    <div class="icon-container">
-      <div class="fashion-icon contact-icon">📧</div>
-    </div>
-    <h2 class="section-title">Nous contacter</h2>
-    <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous via vos plateformes préférées !</p>
-    <div class="contact-buttons">
-      <button class="modern-button" onclick="contactEmail()">📧 Email</button>
-      <button class="modern-button" onclick="contactInstagram()">📸 Instagram</button>
-      <button class="modern-button" onclick="contactTwitter()">🐦 x (Twitter)</button>
-      <button class="modern-button" onclick="contactFacebook()">📘 Facebook</button>
-      <button class="modern-button" onclick="contactFAQ()">❓ FAQ</button>
-    </div>
-  </div>
-</section>
-
-  </div>
-
-  <!-- Popup générique -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-content">
-      <h3 style="margin-bottom: 1rem;">Information</h3>
-      <p>Désolé, fonctionnalité désactivée temporairement.</p>
-      <button class="modern-button" onclick="closePopup()" style="margin-top: 1rem;">Fermer</button>
-    </div>
-  </div>
-
-  <!-- Popup Email avec authentification -->
-  <div class="popup-overlay" id="emailPopupOverlay">
-    <div class="popup-content email-popup-content">
-      <h3 style="margin-bottom: 1rem;">📧 Fonction Email</h3>
-      <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
-      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
-      <input type="password" class="admin-input" id="adminPassword" placeholder="Mot de passe admin" />
-      <div style="margin-top: 1rem;">
-        <button class="modern-button" onclick="checkAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
-        <button class="modern-button" onclick="closeEmailPopup()" style="margin: 0.5rem;">Fermer</button>
+      <div class="border-t border-gray-200 pt-8">
+        <p class="text-gray-600 font-medium text-lg mb-2">
+          © 2025 FashionFlow - Tous droits réservés
+        </p>
+        <p class="text-gray-500">
+          Version 2.3.5 • Dernière mise à jour : 18 juin 2025
+        </p>
       </div>
     </div>
-  </div>
-
-  <!-- Popup Développement avec authentification -->
-  <div class="popup-overlay" id="devPopupOverlay">
-    <div class="popup-content email-popup-content">
-      <h3 style="margin-bottom: 1rem;">🚀 Idées de Développement</h3>
-      <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
-      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
-      <input type="password" class="admin-input" id="devAdminPassword" placeholder="Mot de passe admin" />
-      <div style="margin-top: 1rem;">
-        <button class="modern-button" onclick="checkDevAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
-        <button class="modern-button" onclick="closeDevPopup()" style="margin: 0.5rem;">Fermer</button>
-      </div>
-    </div>
-  </div>
+  </footer>
 
   <script>
-    // Génération des particules
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      const particleCount = 50;
-      
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        particlesContainer.appendChild(particle);
-      }
-    }
-
-    // Observer pour les animations de scroll
-    const observerOptions = {
-      threshold: 0.3,
-      rootMargin: '0px 0px -20% 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    // Fonctions de navigation
-    function goToWiki() {
-      window.location.href = "wiki.html";
-    }
-
-    function goToNews() {
-      window.location.href = "whatsupp.html";
-    }
-
-    function donate() {
-      const confirmation = confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
-      if (confirmation) {
-        window.open("https://www.paypal.com/donate/?hosted_button_id=WBK2E9QSMYDBC", "_blank");
-      }
-    }
-
-    // Fonctions de contact
-    function contactEmail() {
-      const popup = document.getElementById('emailPopupOverlay');
-      popup.style.display = 'flex';
-      setTimeout(() => popup.classList.add('show'), 10);
-      
-      // Reset le champ password
+    // Variables pour gérer la section admin actuelle
+    let currentSection = '';
+    const adminPassword = 'FashionFlow2025'; // Mot de passe admin (à changer en production)
+    
+    // Afficher le modal de mot de passe
+    function showPasswordModal(section) {
+      currentSection = section;
+      document.getElementById('passwordModal').style.display = 'flex';
       document.getElementById('adminPassword').value = '';
+      document.getElementById('passwordError').classList.add('hidden');
     }
-
-    function contactInstagram() {
-      window.open('https://instagram.com/fashionflow', '_blank');
+    
+    // Cacher le modal de mot de passe
+    function hidePasswordModal() {
+      document.getElementById('passwordModal').style.display = 'none';
     }
-
-    function contactTwitter() {
-      window.open('https://twitter.com/fashionflow', '_blank');
-    }
-
-    function contactFacebook() {
-      window.open('https://facebook.com/fashionflow', '_blank');
-    }
-
-    function contactFAQ() {
-      window.location.href = "faq.html";
-    }
-
-    function showDevPopup() {
-      const popup = document.getElementById('devPopupOverlay');
-      popup.style.display = 'flex';
-      setTimeout(() => popup.classList.add('show'), 10);
+    
+    // Vérifier le mot de passe
+    function checkPassword() {
+      const enteredPassword = document.getElementById('adminPassword').value;
       
-      // Reset le champ password
-      document.getElementById('devAdminPassword').value = '';
-    }
-
-    function closeDevPopup() {
-      const popup = document.getElementById('devPopupOverlay');
-      popup.classList.remove('show');
-      setTimeout(() => popup.style.display = 'none', 300);
-    }
-
-    function checkDevAdminPassword() {
-      const password = document.getElementById('devAdminPassword').value.trim();
-      const correctPassword = 'LucieKaraoui';
-      
-      if (password === correctPassword) {
-        alert('Mot de passe correct ! Redirection vers la page de développement...');
-        closeDevPopup();
-        // Redirection vers developpement.html
-        window.location.href = "developpement.html";
+      if (enteredPassword === adminPassword) {
+        // Afficher la section admin correspondante
+        document.getElementById(`${currentSection}-admin`).style.display = 'block';
+        hidePasswordModal();
       } else {
-        alert('Mot de passe incorrect !');
-        document.getElementById('devAdminPassword').value = '';
+        document.getElementById('passwordError').classList.remove('hidden');
       }
     }
-
-    function closePopup() {
-      const popup = document.getElementById('popupOverlay');
-      popup.classList.remove('show');
-      setTimeout(() => popup.style.display = 'none', 300);
-    }
-
-    function closeEmailPopup() {
-      const popup = document.getElementById('emailPopupOverlay');
-      popup.classList.remove('show');
-      setTimeout(() => popup.style.display = 'none', 300);
-    }
-
-    function checkAdminPassword() {
-      const password = document.getElementById('adminPassword').value.trim();
-      const correctPassword = 'LucieKaraoui';
+    
+    // Basculer la visibilité du mot de passe
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('adminPassword');
+      const toggleIcon = document.querySelector('.toggle-password i');
       
-      if (password === correctPassword) {
-        alert('Mot de passe correct ! Redirection vers la page de contact...');
-        closeEmailPopup();
-        // Rediriger vers la page de contact email
-        window.location.href = "contacte.html";
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
       } else {
-        alert('Mot de passe incorrect !');
-        document.getElementById('adminPassword').value = '';
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
       }
     }
-
-    // Permettre la validation avec Enter
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('adminPassword').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          checkAdminPassword();
-        }
-      });
-      
-      document.getElementById('devAdminPassword').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          checkDevAdminPassword();
-        }
-      });
-    });
-
-    // Initialisation
-    document.addEventListener('DOMContentLoaded', () => {
-      createParticles();
-      
-      // Observer toutes les sections
-      document.querySelectorAll('.section').forEach(section => {
-        observer.observe(section);
-      });
-
-      // Smooth scroll pour les liens internes
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        });
-      });
-
-      // Gestion du scroll avec la molette
-      let isScrolling = false;
-      document.getElementById('mainContainer').addEventListener('wheel', (e) => {
-        if (isScrolling) return;
-        
-        isScrolling = true;
-        setTimeout(() => isScrolling = false, 1000);
-        
-        if (e.deltaY > 0) {
-          // Scroll vers le bas
-          const nextSection = document.querySelector('.section:nth-child(' + (getCurrentSection() + 1) + ')');
-          if (nextSection) {
-            nextSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        } else {
-          // Scroll vers le haut
-          const prevSection = document.querySelector('.section:nth-child(' + (getCurrentSection() - 1) + ')');
-          if (prevSection) {
-            prevSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      });
-    });
-
-    function getCurrentSection() {
-      const sections = document.querySelectorAll('.section');
-      const scrollTop = document.getElementById('mainContainer').scrollTop;
-      
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        
-        if (scrollTop >= sectionTop - 100 && scrollTop < sectionTop + sectionHeight - 100) {
-          return i + 1;
-        }
+    
+    // Fermer le modal en cliquant à l'extérieur
+    document.getElementById('passwordModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        hidePasswordModal();
       }
-      return 1;
-    }
-
-    // Gestion des touches clavier
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' || e.key === ' ') {
-        e.preventDefault();
-        const nextSection = document.querySelector('.section:nth-child(' + (getCurrentSection() + 1) + ')');
-        if (nextSection) {
-          nextSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        const prevSection = document.querySelector('.section:nth-child(' + (getCurrentSection() - 1) + ')');
-        if (prevSection) {
-          prevSection.scrollIntoView({ behavior: 'smooth' });
-        }
+    });
+    
+    // Fermer le modal avec la touche ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        hidePasswordModal();
       }
     });
   </script>
