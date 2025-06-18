@@ -304,13 +304,30 @@
       </div>
     </section>
 
-    <!-- Bouton Archives -->
-    <div class="flex justify-center mb-8">
-      <a href="ArchiveMiseajour.html" class="btn-primary inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
-        <i class="fas fa-archive mr-2"></i>
-        Voir les archives complètes
-      </a>
-    </div>
+   <!-- Bouton Archives avec vérification du mot de passe -->
+<div class="flex justify-center mb-8">
+  <a href="#" onclick="checkAdminPassword()" class="btn-primary inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
+    <i class="fas fa-archive mr-2"></i>
+    Voir les archives complètes
+  </a>
+</div>
+
+<script>
+  function checkAdminPassword() {
+    const password = prompt("Entrez le mot de passe admin :");
+    
+    // Remplace "FashionAdmin123" par ton vrai mot de passe sécurisé
+    if (password === "FashionAdmin123") {
+      window.location.href = "ArchiveMiseajour.html";
+    } else if (password === null) {
+      // L'utilisateur a annulé
+      alert("Accès annulé.");
+    } else {
+      alert("Mot de passe incorrect.");
+    }
+  }
+</script>
+
 
     <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
       <div class="flex items-center mb-8">
