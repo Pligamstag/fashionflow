@@ -601,10 +601,11 @@
     }
 
     function checkAdminPassword() {
-      const password = document.getElementById('adminPassword').value;
-      const correctPassword = 'Lucie Karaoui';
+      const password = document.getElementById('adminPassword').value.trim();
+      const correctPassword = 'LucieKaraoui';
       
       if (password === correctPassword) {
+        alert('Mot de passe correct ! Redirection vers la page de contact...');
         closeEmailPopup();
         // Rediriger vers la page de contact email
         window.location.href = "contacte.html";
