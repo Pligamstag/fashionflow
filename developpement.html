@@ -75,6 +75,11 @@
             color: #333;
         }
 
+        .btn-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -112,7 +117,7 @@
 
         .editor-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
             padding-bottom: 20px;
@@ -283,6 +288,23 @@
             gap: 5px;
         }
 
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: scale(1.1);
+        }
+
         .floating-ideas {
             position: fixed;
             top: 0;
@@ -304,6 +326,42 @@
             font-size: 20px;
         }
 
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-50px); }
             to { opacity: 1; transform: translateY(0); }
@@ -317,6 +375,21 @@
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @media (max-width: 768px) {
@@ -351,6 +424,9 @@
                 <button class="btn btn-secondary" onclick="toggleView()">
                     📊 Vue Analytics
                 </button>
+                <button class="btn btn-danger" onclick="clearAllData()" title="Supprimer toutes les données">
+                    🗑️ Reset
+                </button>
                 <button class="btn btn-primary" onclick="showEditor()">
                     ✍️ Nouvelle Idée
                 </button>
@@ -361,6 +437,13 @@
             <h1 class="hero-title">Développement FashionFlow</h1>
             <p class="hero-subtitle">Partagez vos idées, concepts et innovations pour révolutionner l'app FashionFlow</p>
         </section>
+
+        <div class="stats-panel" id="statsPanel">
+            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 25px; color: #333;">📊 Statistiques du Blog</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Les stats seront générées dynamiquement -->
+            </div>
+        </div>
 
         <div class="blog-editor" id="blogEditor">
             <div class="editor-header">
@@ -416,6 +499,55 @@
         let blogPosts = [];
         let currentUser = 'Utilisateur' + Math.floor(Math.random() * 1000);
         let comments = {};
+        let showingStats = false;
+
+        // Fonctions de stockage persistant
+        function saveData() {
+            const data = {
+                blogPosts: blogPosts,
+                comments: comments,
+                currentUser: currentUser
+            };
+            localStorage.setItem('fashionflow_blog_data', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('fashionflow_blog_data');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    blogPosts = data.blogPosts || [];
+                    comments = data.comments || {};
+                    currentUser = data.currentUser || currentUser;
+                } catch (e) {
+                    console.error('Erreur lors du chargement des données:', e);
+                    blogPosts = [];
+                    comments = {};
+                }
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer toutes les données du blog ? Cette action est irréversible.')) {
+                localStorage.removeItem('fashionflow_blog_data');
+                blogPosts = [];
+                comments = {};
+                renderBlogPosts();
+                showNotification('🗑️ Toutes les données ont été supprimées');
+            }
+        }
+
+        function deletePost(postId, event) {
+            event.stopPropagation();
+            
+            if (confirm('🗑️ Êtes-vous sûr de vouloir supprimer cet article ?')) {
+                blogPosts = blogPosts.filter(post => post.id !== postId);
+                delete comments[postId];
+                saveData();
+                renderBlogPosts();
+                showNotification('🗑️ Article supprimé');
+            }
+        }
 
         function renderBlogPosts() {
             const container = document.getElementById('blogPosts');
@@ -451,7 +583,10 @@
                 postElement.innerHTML = `
                     <div class="blog-meta">
                         <span class="blog-category">${categoryIcons[post.category]} ${post.category}</span>
-                        <span class="blog-date">${formatDate(post.date)}</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="blog-date">${formatDate(post.date)}</span>
+                            <button class="delete-btn" onclick="deletePost(${post.id}, event)" title="Supprimer cet article">🗑️</button>
+                        </div>
                     </div>
                     <div class="blog-author" style="font-size: 14px; color: #888; margin-bottom: 10px;">
                         👤 Par ${post.author}
@@ -467,9 +602,45 @@
                     </div>
                 `;
 
-                postElement.addEventListener('click', () => openPost(post));
+                postElement.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('delete-btn')) {
+                        openPost(post);
+                    }
+                });
+
                 container.appendChild(postElement);
             });
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const totalPosts = blogPosts.length;
+            const totalLikes = blogPosts.reduce((sum, post) => sum + (post.likes || 0), 0);
+            const totalViews = blogPosts.reduce((sum, post) => sum + (post.views || 0), 0);
+            const totalComments = Object.values(comments).reduce((sum, postComments) => sum + postComments.length, 0);
+
+            const statsGrid = document.getElementById('statsGrid');
+            if (statsGrid) {
+                statsGrid.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${totalPosts}</div>
+                        <div class="stat-label">Articles publiés</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalLikes}</div>
+                        <div class="stat-label">Likes totaux</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalViews}</div>
+                        <div class="stat-label">Vues totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalComments}</div>
+                        <div class="stat-label">Commentaires</div>
+                    </div>
+                `;
+            }
         }
 
         function formatDate(dateString) {
@@ -495,7 +666,7 @@
             
             const title = document.getElementById('ideaTitle').value;
             const content = document.getElementById('ideaContent').value;
-            const tags = document.getElementById('ideaTags').value.split(',').map(tag => tag.trim());
+            const tags = document.getElementById('ideaTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
 
             const newPost = {
                 id: Date.now(),
@@ -511,6 +682,7 @@
 
             blogPosts.unshift(newPost);
             comments[newPost.id] = [];
+            saveData();
             renderBlogPosts();
             
             // Réinitialiser le formulaire
@@ -532,6 +704,7 @@
             const post = blogPosts.find(p => p.id === postId);
             if (post) {
                 post.likes++;
+                saveData();
                 renderBlogPosts();
                 showNotification('❤️ Idée likée!');
             }
@@ -539,6 +712,7 @@
 
         function openPost(post) {
             post.views++;
+            saveData();
             
             // Créer une modal pour afficher le post complet avec commentaires
             const modal = document.createElement('div');
@@ -590,7 +764,7 @@
                         </div>
                         
                         <div style="display: flex; gap: 20px; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 15px;">
-                            <span onclick="likePost(${post.id}); this.querySelector('span').textContent = ${post.likes + 1}" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">❤️ <span>${post.likes}</span></span>
+                            <span onclick="likePost(${post.id}); this.querySelector('span').textContent = ${post.likes + 1}; document.querySelector('.modal').remove()" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">❤️ <span>${post.likes}</span></span>
                             <span style="display: flex; align-items: center; gap: 5px;">💬 ${postComments.length}</span>
                             <span style="display: flex; align-items: center; gap: 5px;">👁️ ${post.views}</span>
                         </div>
@@ -600,150 +774,4 @@
                             
                             <div style="margin-bottom: 25px;">
                                 <textarea id="commentInput-${post.id}" placeholder="Partagez votre avis, posez des questions, proposez des améliorations..." style="width: 100%; min-height: 80px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-family: inherit; resize: vertical; outline: none;"></textarea>
-                                <button onclick="addComment(${post.id})" style="margin-top: 10px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 12px 24px; border: none; border-radius: 25px; font-weight: 600; cursor: pointer;">💬 Commenter</button>
-                            </div>
-                            
-                            <div id="comments-${post.id}">
-                                ${postComments.map(comment => `
-                                    <div style="background: #f9f9f9; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                            <span style="font-weight: 600; color: #333;">👤 ${comment.author}</span>
-                                            <span style="color: #666; font-size: 12px;">${formatDate(comment.date)}</span>
-                                        </div>
-                                        <div style="color: #666; line-height: 1.6; white-space: pre-wrap;">${comment.content}</div>
-                                        <div style="margin-top: 10px;">
-                                            <span onclick="likeComment(${post.id}, ${comment.id})" style="cursor: pointer; color: #888; font-size: 14px;">❤️ ${comment.likes || 0}</span>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            modal.className = 'modal';
-            document.body.appendChild(modal);
-            renderBlogPosts(); // Mettre à jour le compteur de vues
-        }
-
-        function addComment(postId) {
-            const commentInput = document.getElementById(`commentInput-${postId}`);
-            const commentContent = commentInput.value.trim();
-            
-            if (!commentContent) {
-                showNotification('⚠️ Veuillez écrire un commentaire');
-                return;
-            }
-
-            const newComment = {
-                id: Date.now(),
-                author: currentUser,
-                content: commentContent,
-                date: new Date().toISOString().split('T')[0],
-                likes: 0
-            };
-
-            if (!comments[postId]) {
-                comments[postId] = [];
-            }
-            
-            comments[postId].push(newComment);
-            commentInput.value = '';
-            
-            // Mettre à jour l'affichage des commentaires
-            const commentsContainer = document.getElementById(`comments-${postId}`);
-            const commentElement = document.createElement('div');
-            commentElement.style.cssText = 'background: #f9f9f9; padding: 20px; border-radius: 15px; margin-bottom: 15px; animation: fadeInUp 0.5s ease-out;';
-            commentElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="font-weight: 600; color: #333;">👤 ${newComment.author}</span>
-                    <span style="color: #666; font-size: 12px;">${formatDate(newComment.date)}</span>
-                </div>
-                <div style="color: #666; line-height: 1.6; white-space: pre-wrap;">${newComment.content}</div>
-                <div style="margin-top: 10px;">
-                    <span onclick="likeComment(${postId}, ${newComment.id})" style="cursor: pointer; color: #888; font-size: 14px;">❤️ ${newComment.likes}</span>
-                </div>
-            `;
-            
-            commentsContainer.appendChild(commentElement);
-            renderBlogPosts(); // Mettre à jour le compteur de commentaires
-            showNotification('💬 Commentaire ajouté!');
-        }
-
-        function likeComment(postId, commentId) {
-            const comment = comments[postId].find(c => c.id === commentId);
-            if (comment) {
-                comment.likes = (comment.likes || 0) + 1;
-                showNotification('❤️ Commentaire liké!');
-            }
-        }
-
-        function showEditor() {
-            document.getElementById('blogEditor').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
-            document.getElementById('ideaTitle').focus();
-        }
-
-        function toggleView() {
-            showNotification('📊 Vue Analytics - Fonctionnalité à venir!');
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #667eea, #764ba2);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 50px;
-                font-weight: 600;
-                z-index: 1000;
-                animation: slideIn 0.5s ease-out;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.5s ease-out forwards';
-                setTimeout(() => notification.remove(), 500);
-            }, 3000);
-        }
-
-        // Styles d'animation pour les notifications
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialisation
-        window.addEventListener('load', () => {
-            renderBlogPosts();
-            showNotification('✨ Bienvenue dans FashionFlow Ideas!');
-        });
-
-        // Auto-sauvegarde du brouillon
-        let draftTimer;
-        ['ideaTitle', 'ideaContent', 'ideaTags'].forEach(id => {
-            document.getElementById(id).addEventListener('input', () => {
-                clearTimeout(draftTimer);
-                draftTimer = setTimeout(() => {
-                    console.log('Brouillon sauvegardé automatiquement');
-                }, 2000);
-            });
-        });
-    </script>
-</body>
-</html>
+                                <button onclick="addComment(${post.id})" style="margin-top: 10px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 12px 24px; border: none; border-radius: 25px; font-weight:
