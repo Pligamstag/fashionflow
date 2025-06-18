@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives des Mises à Jour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 0.5rem);
+            background: linear-gradient(to bottom, rgba(102, 126, 234, 0.3), transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+        }
+        
+        .status-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .bug-fix {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .new-feature {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .whatsapp-update {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Header avec gradient -->
+        <header class="gradient-bg text-white shadow-2xl rounded-2xl mb-12">
+            <div class="px-8 py-12">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-4xl font-bold mb-2">FashionFlow</h1>
+                        <p class="text-lg opacity-90">Archives des Mises à Jour</p>
+                    </div>
+                    <div class="status-badge text-sm px-4 py-2 rounded-full text-white font-medium">
+                        🚀 Système actif
+                    </div>
+                </div>
+                
+                <!-- Bouton de retour -->
+                <div class="mt-6">
+                    <a href="index.html" class="btn-back inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search and Filters -->
+        <div class="glass-effect rounded-2xl p-8 shadow-xl card-hover mb-8">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <input type="text" id="searchInput" placeholder="Rechercher une mise à jour..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <div class="flex gap-2">
+                    <select id="yearFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Toutes les années</option>
+                        <option value="2025">2025</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                    <select id="typeFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Tous les types</option>
+                        <option value="feature">Nouvelle fonctionnalité</option>
+                        <option value="bugfix">Correction de bug</option>
+                        <option value="improvement">Amélioration</option>
+                        <option value="security">Sécurité</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="glass-effect rounded-2xl shadow-xl overflow-hidden card-hover">
+            <!-- Timeline Header -->
+            <div class="gradient-bg text-white px-8 py-6 flex justify-between items-center rounded-t-2xl">
+                <h2 class="text-2xl font-semibold">Historique des Mises à Jour</h2>
+                <span id="updateCount" class="bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-medium">12 mises à jour</span>
+            </div>
+
+            <!-- Timeline Content -->
+            <div class="divide-y divide-gray-200" id="timelineContainer">
+                <!-- Sample update items will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
+                <button id="prevPage" class="px-4 py-2 text-gray-600 hover:text-indigo-700 disabled:opacity-50" disabled>
+                    <i class="fas fa-chevron-left mr-2"></i>Précédent
+                </button>
+                <div class="flex gap-1">
+                    <button class="px-3 py-1 rounded bg-indigo-700 text-white">1</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-200">2</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-200">3</button>
+                </div>
+                <button id="nextPage" class="px-4 py-2 text-gray-600 hover:text-indigo-700">
+                    Suivant<i class="fas fa-chevron-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for updates
+        const updates = [
+            {
+                id: 1,
+                date: "2025-06-18",
+                title: "Système de mot de passe pour les administrateurs",
+                description: "Implémentation d'un système sécurisé de mot de passe pour accéder aux sections réservées aux administrateurs",
+                type: "security",
+                version: "2.3.5",
+                author: "Équipe Sécurité"
+            },
+            {
+                id: 2,
+                date: "2025-06-17",
+                title: "Correction des boutons de la page d'accueil",
+                description: "Résolution du problème qui empêchait de cliquer sur les boutons de navigation de la page d'accueil",
+                type: "bugfix",
+                version: "2.3.4",
+                author: "Équipe Développement"
+            },
+            {
+                id: 3,
+                date: "2025-06-17",
+                title: "Ajout du bouton retour à l'accueil",
+                description: "Intégration d'un bouton de retour vers la page d'accueil dans la section 'What's up'",
+                type: "improvement",
+                version: "2.3.3",
+                author: "Équipe Design"
+            },
+            {
+                id: 4,
+                date: "2025-06-17",
+                title: "Système de mise à jour WhatsApp",
+                description: "Lancement du système de notifications et mises à jour via WhatsApp pour la communauté FashionFlow",
+                type: "feature",
+                version: "2.3.2",
+                author: "Équipe Communication"
+            },
+            {
+                id: 5,
+                date: "2025-06-17",
+                title: "Amélioration des catégories du wiki",
+                description: "Optimisation et restructuration des catégories du Wiki FashionFlow",
+                type: "improvement",
+                version: "2.3.1",
+                author: "Équipe Contenu"
+            },
+            {
+                id: 6,
+                date: "2025-06-15",
+                title: "Refonte complète de l'interface",
+                description: "Refonte complète de l'interface d'accueil, de mise à jour et du wiki",
+                type: "feature",
+                version: "2.3.0",
+                author: "Équipe Design"
+            }
+        ];
+
+        // Function to render updates
+        function renderUpdates(filteredUpdates) {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+            
+            // Update count
+            document.getElementById('updateCount').textContent = `${filteredUpdates.length} mises à jour`;
+            
+            if (filteredUpdates.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl mb-2 text-gray-300"></i>
+                        <p>Aucune mise à jour ne correspond à vos critères de recherche.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredUpdates.forEach((update, index) => {
+                const dateObj = new Date(update.date);
+                const formattedDate = dateObj.toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Get icon and color based on type
+                let icon, bgColor, textColor;
+                switch(update.type) {
+                    case 'feature':
+                        icon = 'fa-star';
+                        bgColor = 'bg-blue-100';
+                        textColor = 'text-blue-800';
+                        break;
+                    case 'bugfix':
+                        icon = 'fa-bug';
+                        bgColor = 'bg-red-100';
+                        textColor = 'text-red-800';
+                        break;
+                    case 'improvement':
+                        icon = 'fa-chart-line';
+                        bgColor = 'bg-green-100';
+                        textColor = 'text-green-800';
+                        break;
+                    case 'security':
+                        icon = 'fa-shield-alt';
+                        bgColor = 'bg-purple-100';
+                        textColor = 'text-purple-800';
+                        break;
+                    default:
+                        icon = 'fa-sync-alt';
+                        bgColor = 'bg-gray-100';
+                        textColor = 'text-gray-800';
+                }
+                
+                const updateElement = document.createElement('div');
+                updateElement.className = `timeline-item relative px-8 py-6 hover:bg-gray-50 bg-opacity-50 transition-colors duration-200 fade-in`;
+                updateElement.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="flex items-center justify-center h-8 w-8 rounded-full ${bgColor}">
+                                <i class="fas ${icon} ${textColor} text-sm"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-medium text-gray-900">${update.title}</h3>
+                                <div class="flex items-center space-x-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        v${update.version}
+                                    </span>
+                                    <time class="text-sm text-gray-500">${formattedDate}</time>
+                                </div>
+                            </div>
+                            <p class="mt-1 text-gray-600">${update.description}</p>
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <i class="fas fa-user-circle mr-1"></i>
+                                <span>${update.author}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(updateElement);
+            });
+        }
+
+        // Filter updates based on search and filters
+        function filterUpdates() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const yearFilter = document.getElementById('yearFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            
+            return updates.filter(update => {
+                // Search in title and description
+                const matchesSearch = update.title.toLowerCase().includes(searchTerm) || 
+                                     update.description.toLowerCase().includes(searchTerm);
+                
+                // Filter by year
+                const updateYear = new Date(update.date).getFullYear().toString();
+                const matchesYear = !yearFilter || updateYear === yearFilter;
+                
+                // Filter by type
+                const matchesType = !typeFilter || update.type === typeFilter;
+                
+                return matchesSearch && matchesYear && matchesType;
+            });
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderUpdates(filterUpdates());
+        });
+        
+        document.getElementById('yearFilter').addEventListener('change', () => {
+            renderUpdates(filterUpdates());
+        });
+        
+        document.getElementById('typeFilter').addEventListener('change', () => {
+            renderUpdates(filterUpdates());
+        });
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUpdates(updates);
+            
+            // Populate year filter with unique years from updates
+            const yearSelect = document.getElementById('yearFilter');
+            const years = [...new Set(updates.map(update => new Date(update.date).getFullYear().toString()))];
+            
+            years.sort((a, b) => b - a); // Sort descending
+            years.forEach(year => {
+                if (!yearSelect.querySelector(`option[value="${year}"]`)) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
