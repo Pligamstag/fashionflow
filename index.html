@@ -340,6 +340,34 @@
       transform: scale(1);
     }
 
+    /* Styles pour le popup email */
+    .email-popup-content {
+      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    }
+
+    .admin-input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .admin-input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .admin-input:focus {
+      outline: none;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .section-content {
@@ -457,12 +485,26 @@
 
   </div>
 
-  <!-- Popup -->
+  <!-- Popup générique -->
   <div class="popup-overlay" id="popupOverlay">
     <div class="popup-content">
       <h3 style="margin-bottom: 1rem;">Information</h3>
       <p>Désolé, fonctionnalité désactivée temporairement.</p>
       <button class="modern-button" onclick="closePopup()" style="margin-top: 1rem;">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Popup Email avec authentification -->
+  <div class="popup-overlay" id="emailPopupOverlay">
+    <div class="popup-content email-popup-content">
+      <h3 style="margin-bottom: 1rem;">📧 Fonction Email</h3>
+      <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
+      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
+      <input type="password" class="admin-input" id="adminPassword" placeholder="Mot de passe admin" />
+      <div style="margin-top: 1rem;">
+        <button class="modern-button" onclick="checkAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
+        <button class="modern-button" onclick="closeEmailPopup()" style="margin: 0.5rem;">Fermer</button>
+      </div>
     </div>
   </div>
 
@@ -516,7 +558,12 @@
 
     // Fonctions de contact
     function contactEmail() {
-      window.location.href = "contacte.html";
+      const popup = document.getElementById('emailPopupOverlay');
+      popup.style.display = 'flex';
+      setTimeout(() => popup.classList.add('show'), 10);
+      
+      // Reset le champ password
+      document.getElementById('adminPassword').value = '';
     }
 
     function contactInstagram() {
@@ -546,6 +593,35 @@
       popup.classList.remove('show');
       setTimeout(() => popup.style.display = 'none', 300);
     }
+
+    function closeEmailPopup() {
+      const popup = document.getElementById('emailPopupOverlay');
+      popup.classList.remove('show');
+      setTimeout(() => popup.style.display = 'none', 300);
+    }
+
+    function checkAdminPassword() {
+      const password = document.getElementById('adminPassword').value;
+      const correctPassword = 'Lucie Karaoui';
+      
+      if (password === correctPassword) {
+        closeEmailPopup();
+        // Rediriger vers la page de contact email
+        window.location.href = "contacte.html";
+      } else {
+        alert('Mot de passe incorrect !');
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+
+    // Permettre la validation avec Enter
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          checkAdminPassword();
+        }
+      });
+    });
 
     // Initialisation
     document.addEventListener('DOMContentLoaded', () => {
