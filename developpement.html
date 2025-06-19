@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FashionFlow - Tous les Posts</title>
+    <title>FashionFlow Posts - Système de Publication</title>
     <style>
         * {
             margin: 0;
@@ -104,63 +104,73 @@
             margin-bottom: 30px;
         }
 
-        .stats-panel {
+        .post-editor {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            display: none;
+            animation: fadeInUp 1s ease-out 0.2s both;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .filter-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        .editor-header {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .filter-label {
+        .editor-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
             font-weight: 600;
             color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+            background: white;
+            transform: scale(1.01);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: inherit;
         }
 
         .category-selector {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            margin-top: 10px;
         }
 
         .category-tag {
@@ -314,6 +324,59 @@
             animation: slideIn 0.3s ease-out;
         }
 
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #333;
+        }
+
         .floating-elements {
             position: fixed;
             top: 0;
@@ -335,7 +398,461 @@
             font-size: 20px;
         }
 
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding:
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .posts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-item" style="width: 60px; height: 60px; top: 10%; left: 5%; animation-delay: 0s;">📝</div>
+        <div class="floating-item" style="width: 80px; height: 80px; top: 20%; right: 10%; animation-delay: 2s;">💬</div>
+        <div class="floating-item" style="width: 50px; height: 50px; bottom: 30%; left: 15%; animation-delay: 4s;">❤️</div>
+        <div class="floating-item" style="width: 70px; height: 70px; bottom: 15%; right: 5%; animation-delay: 1s;">🔥</div>
+        <div class="floating-item" style="width: 40px; height: 40px; top: 40%; left: 50%; animation-delay: 3s;">✨</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">FashionFlow Posts 📝</div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="toggleStats()">
+                    📊 Statistiques
+                </button>
+                <button class="btn btn-danger" onclick="clearAllPosts()" title="Supprimer tous les posts">
+                    🗑️ Reset
+                </button>
+                <button class="btn btn-primary" onclick="toggleEditor()">
+                    ✍️ Nouveau Post
+                </button>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <h1 class="hero-title">Système de Posts FashionFlow</h1>
+            <p class="hero-subtitle">Partagez vos pensées, découvertes et expériences avec la communauté</p>
+        </section>
+
+        <div class="stats-panel" id="statsPanel">
+            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 25px; color: #333;">📊 Statistiques des Posts</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats générées dynamiquement -->
+            </div>
+        </div>
+
+        <div class="post-editor" id="postEditor">
+            <div class="editor-header">
+                <h2 class="editor-title">✍️ Créer un Nouveau Post</h2>
+                <button class="btn btn-secondary" onclick="toggleEditor()">Fermer</button>
+            </div>
+
+            <form onsubmit="publishPost(event)">
+                <div class="form-group">
+                    <label class="form-label">Titre du Post</label>
+                    <input type="text" class="form-input" id="postTitle" placeholder="Donnez un titre accrocheur à votre post..." required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Catégorie</label>
+                    <div class="category-selector">
+                        <button type="button" class="category-tag active" data-category="general">📝 Général</button>
+                        <button type="button" class="category-tag" data-category="mode">👗 Mode</button>
+                        <button type="button" class="category-tag" data-category="tech">💻 Tech</button>
+                        <button type="button" class="category-tag" data-category="lifestyle">🌟 Lifestyle</button>
+                        <button type="button" class="category-tag" data-category="tips">💡 Conseils</button>
+                        <button type="button" class="category-tag" data-category="news">📰 Actualités</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Contenu du Post</label>
+                    <textarea class="form-input form-textarea" id="postContent" placeholder="Partagez vos pensées, expériences, conseils...
+
+Quelques idées :
+- Une découverte intéressante
+- Un conseil mode ou tech
+- Une réflexion personnelle
+- Une actualité importante
+- Une expérience à partager
+
+Soyez authentique et créatif !" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags (optionnel)</label>
+                    <input type="text" class="form-input" id="postTags" placeholder="mode, style, tech, tendance... (séparés par des virgules)">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 16px;">
+                    🚀 Publier le Post
+                </button>
+            </form>
+        </div>
+
+        <div class="filter-bar">
+            <span class="filter-label">Filtrer par :</span>
+            <div class="category-selector">
+                <button type="button" class="category-tag active" data-filter="all">Tous</button>
+                <button type="button" class="category-tag" data-filter="general">📝 Général</button>
+                <button type="button" class="category-tag" data-filter="mode">👗 Mode</button>
+                <button type="button" class="category-tag" data-filter="tech">💻 Tech</button>
+                <button type="button" class="category-tag" data-filter="lifestyle">🌟 Lifestyle</button>
+                <button type="button" class="category-tag" data-filter="tips">💡 Conseils</button>
+                <button type="button" class="category-tag" data-filter="news">📰 Actualités</button>
+            </div>
+        </div>
+
+        <div class="posts-container" id="postsContainer">
+            <!-- Posts générés dynamiquement -->
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let posts = [];
+        let comments = {};
+        let selectedCategory = 'general';
+        let currentFilter = 'all';
+        let currentUser = 'Utilisateur' + Math.floor(Math.random() * 1000);
+        let showingStats = false;
+        let editorVisible = false;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPosts();
+            renderPosts();
+            setupEventListeners();
+            updateStats();
+        });
+
+        // Gestion des données
+        function savePosts() {
+            const data = {
+                posts: posts,
+                comments: comments,
+                currentUser: currentUser,
+                lastSaved: new Date().toISOString()
+            };
+            
+            try {
+                window.postsData = data;
+                console.log('Posts sauvegardés en mémoire:', posts.length, 'posts');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+                showNotification('❌ Erreur lors de la sauvegarde');
+            }
+        }
+
+        function loadPosts() {
+            try {
+                if (window.postsData) {
+                    const data = window.postsData;
+                    posts = data.posts || [];
+                    comments = data.comments || {};
+                    currentUser = data.currentUser || currentUser;
+                    console.log('Posts chargés depuis la mémoire:', posts.length, 'posts');
+                } else {
+                    posts = [];
+                    comments = {};
+                    console.log('Aucune donnée trouvée, initialisation vide');
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                posts = [];
+                comments = {};
+            }
+        }
+
+        function clearAllPosts() {
+            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer tous les posts ? Cette action est irréversible.')) {
+                window.postsData = null;
+                posts = [];
+                comments = {};
+                renderPosts();
+                updateStats();
+                showNotification('🗑️ Tous les posts ont été supprimés');
+            }
+        }
+
+        // Interface utilisateur
+        function setupEventListeners() {
+            // Catégories dans l'éditeur
+            document.querySelectorAll('.post-editor .category-tag').forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.post-editor .category-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedCategory = this.dataset.category;
+                });
+            });
+
+            // Filtres
+            document.querySelectorAll('.filter-bar .category-tag').forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.filter-bar .category-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderPosts();
+                });
+            });
+        }
+
+        function toggleEditor() {
+            const editor = document.getElementById('postEditor');
+            editorVisible = !editorVisible;
+            
+            if (editorVisible) {
+                editor.style.display = 'block';
+                editor.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                editor.style.display = 'none';
+            }
+        }
+
+        function toggleStats() {
+            const statsPanel = document.getElementById('statsPanel');
+            showingStats = !showingStats;
+            
+            if (showingStats) {
+                statsPanel.style.display = 'block';
+                updateStats();
+                statsPanel.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                statsPanel.style.display = 'none';
+            }
+        }
+
+        // Publication de posts
+        function publishPost(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const tags = document.getElementById('postTags').value
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag);
+
+            if (!title || !content) {
+                showNotification('⚠️ Veuillez remplir le titre et le contenu');
+                return;
+            }
+
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                category: selectedCategory,
+                tags: tags,
+                author: currentUser,
+                date: new Date().toISOString(),
+                likes: 0,
+                views: 0,
+                comments: 0
+            };
+
+            posts.unshift(newPost);
+            comments[newPost.id] = [];
+            
+            savePosts();
+            renderPosts();
+            updateStats();
+            
+            // Reset formulaire
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            document.getElementById('postTags').value = '';
+            
+            showNotification('🎉 Post publié avec succès !');
+            
+            // Animation de succès
+            const editor = document.getElementById('postEditor');
+            editor.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                editor.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Rendu des posts
+        function renderPosts() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+
+            const filteredPosts = posts.filter(post => 
+                currentFilter === 'all' || post.category === currentFilter
+            );
+
+            if (filteredPosts.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 20px; color: #666;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📝</div>
+                        <h3 style="font-size: 24px; margin-bottom: 15px; color: #333;">
+                            ${currentFilter === 'all' ? 'Aucun post publié' : 'Aucun post dans cette catégorie'}
+                        </h3>
+                        <p style="font-size: 16px; line-height: 1.6;">
+                            ${currentFilter === 'all' 
+                                ? 'Soyez le premier à partager vos idées !<br>Cliquez sur "Nouveau Post" pour commencer.' 
+                                : 'Essayez une autre catégorie ou publiez le premier post de cette catégorie !'}
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredPosts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-card';
+                postElement.style.animationDelay = `${index * 0.1}s`;
+                
+                const categoryIcons = {
+                    'general': '📝',
+                    'mode': '👗',
+                    'tech': '💻',
+                    'lifestyle': '🌟',
+                    'tips': '💡',
+                    'news': '📰'
+                };
+
+                const commentsCount = comments[post.id] ? comments[post.id].length : 0;
+
+                postElement.innerHTML = `
+                    <div class="post-meta">
+                        <span class="post-category">${categoryIcons[post.category] || '📝'} ${post.category}</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="post-date">${formatDate(post.date)}</span>
+                            <button class="delete-btn" onclick="deletePost(${post.id}, event)" title="Supprimer ce post">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="post-author" style="font-size: 14px; color: #888; margin-bottom: 10px;">
+                        👤 Par ${post.author}
+                    </div>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-excerpt">${post.content.substring(0, 150)}${post.content.length > 150 ? '...' : ''}</p>
+                    ${post.tags.length > 0 ? `
+                        <div style="margin: 15px 0; display: flex; gap: 5px; flex-wrap: wrap;">
+                            ${post.tags.map(tag => `<span style="background: #f0f0f0; color: #666; padding: 2px 8px; border-radius: 10px; font-size: 12px;">#${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <span class="stat-item" onclick="likePost(${post.id})" title="Liker ce post">❤️ ${post.likes}</span>
+                            <span class="stat-item" onclick="openPost(${post.id})" title="Voir les commentaires">💬 ${commentsCount}</span>
+                            <span class="stat-item" title="Nombre de vues">👁️ ${post.views}</span>
+                        </div>
+                    </div>
+                `;
+
+                postElement.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('delete-btn') && !e.target.classList.contains('stat-item')) {
+                        openPost(post.id);
+                    }
+                });
+
+                container.appendChild(postElement);
+            });
+        }
+
+        // Actions sur les posts
+        function likePost(postId, event) {
+            if (event) event.stopPropagation();
+            
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                savePosts();
+                renderPosts();
+                updateStats();
+                showNotification('❤️ Post liké !');
+            }
+        }
+
+        function deletePost(postId, event) {
+            event.stopPropagation();
+            
+            if (confirm('🗑️ Êtes-vous sûr de vouloir supprimer ce post ?')) {
+                posts = posts.filter(post => post.id !== postId);
+                delete comments[postId];
+                savePosts();
+                renderPosts();
+                updateStats();
+                showNotification('🗑️ Post supprimé');
+            }
+        }
+
+        function openPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            post.views++;
+            savePosts();
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+
+            const categoryIcons = {
+                'general': '📝',
+                'mode': '👗',
+                'tech': '💻',
+                'lifestyle': '🌟',
+                'tips': '💡',
+                'news': '📰'
+            };
+
+            const postComments = comments[post.id] || [];
+            
+            modal.innerHTML = `
+                <div style="backgroun
