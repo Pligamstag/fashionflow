@@ -79,6 +79,11 @@
             color: white;
         }
 
+        .btn-nav {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -441,6 +446,11 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -457,6 +467,9 @@
         <header>
             <div class="logo">FashionFlow Posts 📝</div>
             <div class="header-actions">
+                <a href="postes.html" class="btn btn-nav">
+                    🏠 Voir les Postes
+                </a>
                 <button class="btn btn-secondary" onclick="toggleStats()">
                     📊 Statistiques
                 </button>
@@ -844,15 +857,3 @@ Soyez authentique et créatif !" required></textarea>
             `;
 
             const categoryIcons = {
-                'general': '📝',
-                'mode': '👗',
-                'tech': '💻',
-                'lifestyle': '🌟',
-                'tips': '💡',
-                'news': '📰'
-            };
-
-            const postComments = comments[post.id] || [];
-            
-            modal.innerHTML = `
-                <div style="backgroun
