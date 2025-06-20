@@ -3,585 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FashionFlow Posts - Système de Publication</title>
+    <title>Créer un nouveau Post</title>
     <style>
-        /* ... (Votre CSS reste inchangé) ... */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px 35px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: slideDown 0.8s ease-out;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.8);
-            color: #333;
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-        }
-
-        .btn-nav {
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .hero-section {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero-title {
-            font-size: 42px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .hero-subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-        }
-
-        .post-editor {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .editor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .editor-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .form-input:focus {
-            border-color: #667eea;
-            background: white;
-            transform: scale(1.01);
-        }
-
-        .form-textarea {
-            min-height: 200px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .category-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .category-tag {
-            padding: 8px 16px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .category-tag.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .category-tag:hover {
-            transform: scale(1.05);
-        }
-
-        .posts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .post-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeInUp 1s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .post-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .post-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .post-category {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .post-date {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .post-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #333;
-            line-height: 1.4;
-        }
-
-        .post-excerpt {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .post-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            color: #667eea;
-            transform: scale(1.1);
-        }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ff6b6b;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-
-        .delete-btn:hover {
-            background: #ff6b6b;
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            font-weight: 600;
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        /* ... (Le reste du CSS est identique) ... */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; padding: 20px; display: flex; align-items: center; justify-content: center; }
+        .container { max-width: 700px; width: 100%; }
+        header { text-align: center; color: white; margin-bottom: 20px; }
+        header h1 { font-weight: 800; }
+        .post-editor { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border-radius: 20px; padding: 30px 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #555; }
+        .form-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; }
+        .form-input:focus { border-color: #764ba2; outline: none; }
+        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; text-align: center; }
+        .btn-primary { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3); }
+        .btn-secondary { background-color: #e9ecef; color: #333; margin-top: 15px; }
+        .notification { position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 15px 25px; border-radius: 10px; font-weight: 600; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">FashionFlow Posts 📝</div>
-            <div class="header-actions">
-                <a href="postes.html" class="btn btn-nav">
-                    🏠 Voir les Postes
-                </a>
-                <button class="btn btn-secondary" onclick="toggleStats()">
-                    📊 Statistiques
-                </button>
-                <button class="btn btn-danger" onclick="clearAllPosts()" title="Supprimer tous les posts">
-                    🗑️ Reset
-                </button>
-                <button class="btn btn-primary" onclick="toggleEditor()">
-                    ✍️ Nouveau Post
-                </button>
-            </div>
+            <h1>Créez un Post</h1>
+            <p>Remplissez les champs ci-dessous pour publier dans l'archive.</p>
         </header>
 
-        <section class="hero-section">
-            <h1 class="hero-title">Système de Posts FashionFlow</h1>
-            <p class="hero-subtitle">Partagez vos pensées, découvertes et expériences avec la communauté</p>
-        </section>
-        
-        <div class="post-editor" id="postEditor">
-            <div class="editor-header">
-                <h2 class="editor-title">✍️ Créer un Nouveau Post</h2>
-                <button class="btn btn-secondary" onclick="toggleEditor()">Fermer</button>
-            </div>
-
-            <form onsubmit="publishPost(event)">
-                <div class="form-group">
-                    <label class="form-label">Titre du Post</label>
-                    <input type="text" class="form-input" id="postTitle" placeholder="Donnez un titre accrocheur à votre post..." required>
+        <div class="post-editor">
+            <form id="creationForm" onsubmit="publishPost(event)">
+                 <div class="form-group">
+                    <label for="postTitle">Titre du Post</label>
+                    <input type="text" id="postTitle" class="form-input" required placeholder="Un titre accrocheur...">
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Catégorie</label>
-                    <div class="category-selector">
-                        <button type="button" class="category-tag active" data-category="general">📝 Général</button>
-                        <button type="button" class="category-tag" data-category="mode">👗 Mode</button>
-                        <button type="button" class="category-tag" data-category="tech">💻 Tech</button>
-                        <button type="button" class="category-tag" data-category="lifestyle">🌟 Lifestyle</button>
-                        <button type="button" class="category-tag" data-category="tips">💡 Conseils</button>
-                        <button type="button" class="category-tag" data-category="news">📰 Actualités</button>
-                    </div>
+                    <label for="postContent">Contenu du Post</label>
+                    <textarea id="postContent" class="form-input" rows="8" required placeholder="Écrivez votre contenu ici..."></textarea>
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Contenu du Post</label>
-                    <textarea class="form-input form-textarea" id="postContent" placeholder="Partagez vos pensées, expériences, conseils..." required></textarea>
+                    <label for="postTags">Tags (séparés par une virgule)</label>
+                    <input type="text" id="postTags" class="form-input" placeholder="ex: tech, css, lifestyle">
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tags (optionnel)</label>
-                    <input type="text" class="form-input" id="postTags" placeholder="mode, style, tech, tendance... (séparés par des virgules)">
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 16px;">
-                    🚀 Publier le Post
-                </button>
+                <button type="submit" class="btn btn-primary">🚀 Publier le Post</button>
             </form>
+            <a href="postes.html" class="btn btn-secondary">📂 Voir l'Archive</a>
         </div>
-        
-        <div class="posts-container" id="postsContainer">
-            </div>
     </div>
 
-
     <script>
-        // ... (Toutes les variables globales et fonctions restent les mêmes, sauf celles ci-dessous)
-        let posts = [];
-        let comments = {};
-        let selectedCategory = 'general';
-        let currentFilter = 'all';
-        let currentUser = 'Utilisateur' + Math.floor(Math.random() * 1000);
-        let showingStats = false;
-        let editorVisible = false;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPosts(); // On charge les posts au démarrage
-            renderPosts();
-            setupEventListeners();
-            updateStats();
-        });
-
-        // MODIFIÉ : Sauvegarde les données dans le localStorage du navigateur
-        function savePosts() {
-            const data = {
-                posts: posts,
-                comments: comments
-            };
-            try {
-                // On convertit l'objet 'data' en chaîne de caractères JSON pour le stocker
-                localStorage.setItem('fashionFlowPostsData', JSON.stringify(data));
-                console.log('Posts sauvegardés dans localStorage:', posts.length, 'posts');
-            } catch (error) {
-                console.error('Erreur lors de la sauvegarde dans localStorage:', error);
-                showNotification('❌ Erreur lors de la sauvegarde');
-            }
-        }
-
-        // MODIFIÉ : Charge les données depuis le localStorage
-        function loadPosts() {
-            try {
-                // On récupère la chaîne de caractères depuis le localStorage
-                const storedData = localStorage.getItem('fashionFlowPostsData');
-                if (storedData) {
-                    // Si des données existent, on les reconvertit en objet JavaScript
-                    const data = JSON.parse(storedData);
-                    posts = data.posts || [];
-                    comments = data.comments || {};
-                    console.log('Posts chargés depuis localStorage:', posts.length, 'posts');
-                } else {
-                    // Si aucune donnée n'est trouvée, on initialise avec des tableaux vides
-                    posts = [];
-                    comments = {};
-                    console.log('Aucune donnée trouvée, initialisation vide');
-                }
-            } catch (error) {
-                console.error('Erreur lors du chargement depuis localStorage:', error);
-                posts = [];
-                comments = {};
-            }
-        }
-        
-        // MODIFIÉ : Supprime les données du localStorage
-        function clearAllPosts() {
-            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer tous les posts ? Cette action est irréversible.')) {
-                localStorage.removeItem('fashionFlowPostsData'); // On supprime la clé du localStorage
-                posts = [];
-                comments = {};
-                renderPosts();
-                updateStats();
-                showNotification('🗑️ Tous les posts ont été supprimés');
-            }
-        }
-        
-        // Le reste de votre script (publishPost, renderPosts, etc.) reste INCHANGÉ.
-        // Il fonctionnera maintenant avec les données persistantes.
-        function setupEventListeners() {
-            document.querySelectorAll('.post-editor .category-tag').forEach(tag => {
-                tag.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelectorAll('.post-editor .category-tag').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    selectedCategory = this.dataset.category;
-                });
-            });
-            document.querySelectorAll('.filter-bar .category-tag').forEach(tag => {
-                tag.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelectorAll('.filter-bar .category-tag').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    renderPosts();
-                });
-            });
-        }
-        function toggleEditor() {
-            const editor = document.getElementById('postEditor');
-            editorVisible = !editorVisible;
-            editor.style.display = editorVisible ? 'block' : 'none';
-        }
+        // Ce script ne fait qu'enregistrer les données, il n'affiche rien.
         function publishPost(event) {
             event.preventDefault();
-            const title = document.getElementById('postTitle').value.trim();
-            const content = document.getElementById('postContent').value.trim();
-            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
-            if (!title || !content) { return; }
+
+            // 1. Charger les posts existants pour ne pas les écraser
+            const storedData = localStorage.getItem('fashionFlowPostsData');
+            let data = storedData ? JSON.parse(storedData) : { posts: [], comments: {} };
+            
+            // 2. Créer le nouveau post
             const newPost = {
                 id: Date.now(),
-                title: title,
-                content: content,
-                category: selectedCategory,
-                tags: tags,
-                author: currentUser,
+                title: document.getElementById('postTitle').value.trim(),
+                content: document.getElementById('postContent').value.trim(),
+                tags: document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
                 date: new Date().toISOString(),
-                likes: 0,
-                views: 0,
+                // Vous pouvez ajouter d'autres champs si nécessaire
             };
-            posts.unshift(newPost);
-            comments[newPost.id] = [];
-            savePosts(); // La magie opère ici !
-            renderPosts();
-            updateStats();
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postContent').value = '';
-            document.getElementById('postTags').value = '';
+
+            // 3. Ajouter le nouveau post au début de la liste
+            data.posts.unshift(newPost);
+            
+            // 4. Sauvegarder la liste mise à jour
+            localStorage.setItem('fashionFlowPostsData', JSON.stringify(data));
+            
+            // 5. Informer l'utilisateur et vider le formulaire
             showNotification('🎉 Post publié avec succès !');
+            document.getElementById('creationForm').reset();
         }
-        function renderPosts() {
-            const container = document.getElementById('postsContainer');
-            container.innerHTML = '';
-            const filteredPosts = posts.filter(post => currentFilter === 'all' || post.category === currentFilter);
-            if (filteredPosts.length === 0) { container.innerHTML = `<p style="color:white; text-align:center;">Aucun post à afficher.</p>`; return; }
-            filteredPosts.forEach(post => {
-                const postElement = document.createElement('div');
-                postElement.className = 'post-card';
-                const commentsCount = comments[post.id] ? comments[post.id].length : 0;
-                postElement.innerHTML = `
-                    <div class="post-meta">
-                        <span class="post-category">${post.category}</span>
-                        <button class="delete-btn" onclick="deletePost(${post.id}, event)">🗑️</button>
-                    </div>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.content.substring(0, 100)}...</p>
-                    <div class="post-actions">
-                        <div class="post-stats">
-                            <span class="stat-item" onclick="likePost(${post.id}, event)">❤️ ${post.likes}</span>
-                            <span class="stat-item">💬 ${commentsCount}</span>
-                            <span class="stat-item">👁️ ${post.views}</span>
-                        </div>
-                    </div>`;
-                container.appendChild(postElement);
-            });
-        }
-        function deletePost(postId, event) {
-            event.stopPropagation();
-            if (confirm('Supprimer ce post ?')) {
-                posts = posts.filter(post => post.id !== postId);
-                delete comments[postId];
-                savePosts();
-                renderPosts();
-                updateStats();
-            }
-        }
-        function likePost(postId, event) {
-            event.stopPropagation();
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.likes++;
-                savePosts();
-                renderPosts();
-                updateStats();
-            }
-        }
+
         function showNotification(message) {
+            // Supprime une ancienne notification s'il y en a une
+            const oldNotif = document.querySelector('.notification');
+            if(oldNotif) oldNotif.remove();
+
             const notif = document.createElement('div');
             notif.className = 'notification';
             notif.textContent = message;
             document.body.appendChild(notif);
-            setTimeout(() => {
-                notif.style.animation = 'slideOut 0.3s ease-out forwards';
-                setTimeout(() => notif.remove(), 300);
-            }, 3000);
+            setTimeout(() => notif.remove(), 4000);
         }
-        function updateStats() { /* ... */ } // Placeholder
     </script>
 </body>
 </html>
