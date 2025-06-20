@@ -1,110 +1,219 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FashionFlow Posts - Système de Publication</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 25px 35px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 28px; font-weight: 800; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-actions { display: flex; gap: 15px; align-items: center; }
-        .btn { padding: 12px 25px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .btn-primary { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
-        .btn-nav { background: linear-gradient(45deg, #28a745, #20c997); color: white; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); }
-        .post-editor { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
-        .form-input { width: 100%; padding: 15px 20px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; }
-        .category-tag { padding: 8px 16px; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; }
-        .category-tag.active { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
-        .notification { position: fixed; top: 20px; right: 20px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 15px 25px; border-radius: 15px; font-weight: 600; z-index: 1000; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FashionFlow Posts - Système de Publication</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 25px 35px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(45deg, #28a745, #20c997);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    .post-editor {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .form-input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-family: inherit;
+    }
+    .category-tag {
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .category-tag.active {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 15px;
+      font-weight: 600;
+      z-index: 1000;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">FashionFlow Posts 📝</div>
-            <div class="header-actions">
-                <a href="postes.html" class="btn btn-nav">🏠 Voir l'Archive</a>
-            </div>
-        </header>
+  <div class="container">
+    <header>
+      <div class="logo">FashionFlow Posts 📝</div>
+      <div class="header-actions">
+        <a href="postes.html" class="btn">🏠 Voir l'Archive</a>
+      </div>
+    </header>
 
-        <div class="post-editor" id="postEditor">
-            <form onsubmit="publishPost(event)">
-                 <div class="form-group" style="margin-bottom:20px;">
-                    <label>Titre du Post</label>
-                    <input type="text" class="form-input" id="postTitle" required>
-                </div>
-                <div class="form-group" style="margin-bottom:20px;">
-                    <label>Catégorie</label>
-                    <div class="category-selector">
-                        <button type="button" class="category-tag active" data-category="general">📝 Général</button>
-                    </div>
-                </div>
-                <div class="form-group" style="margin-bottom:20px;">
-                    <label>Contenu du Post</label>
-                    <textarea class="form-input" id="postContent" rows="8" required></textarea>
-                </div>
-                <div class="form-group" style="margin-bottom:20px;">
-                    <label>Tags (séparés par virgule)</label>
-                    <input type="text" class="form-input" id="postTags">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">🚀 Publier le Post</button>
-            </form>
-        </div>
+    <div class="post-editor" id="postEditor">
+      <form id="postForm">
+        <label for="postTitle">Titre du Post</label>
+        <input type="text" id="postTitle" class="form-input" required />
+
+        <label for="postContent">Contenu du Post</label>
+        <textarea id="postContent" class="form-input" rows="8" required></textarea>
+
+        <label for="postTags">Tags (séparés par virgule)</label>
+        <input type="text" id="postTags" class="form-input" placeholder="ex: mode, tendance, été" />
+
+        <button type="submit" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); margin-top: 10px;">🚀 Publier le Post</button>
+      </form>
     </div>
 
-    <script>
-        let posts = [];
-        let comments = {};
-        let selectedCategory = 'general';
+    <div id="postsContainer"></div>
+  </div>
 
-        document.addEventListener('DOMContentLoaded', loadPosts);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-        function savePosts() {
-            const data = { posts: posts, comments: comments };
-            localStorage.setItem('fashionFlowPostsData', JSON.stringify(data));
-        }
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+      authDomain: "fashionflow-3db6b.firebaseapp.com",
+      projectId: "fashionflow-3db6b",
+      storageBucket: "fashionflow-3db6b.firebasestorage.app",
+      messagingSenderId: "1073693995934",
+      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+      measurementId: "G-P4DP02HQ75"
+    };
 
-        function loadPosts() {
-            const storedData = localStorage.getItem('fashionFlowPostsData');
-            if (storedData) {
-                const data = JSON.parse(storedData);
-                posts = data.posts || [];
-                comments = data.comments || {};
-            }
-        }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const postsCol = collection(db, "devloppement");
 
-        function publishPost(event) {
-            event.preventDefault();
-            const newPost = {
-                id: Date.now(),
-                title: document.getElementById('postTitle').value.trim(),
-                content: document.getElementById('postContent').value.trim(),
-                tags: document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
-                category: selectedCategory,
-                author: 'Admin',
-                date: new Date().toISOString(),
-                likes: 0,
-                views: 0,
-            };
-            posts.unshift(newPost);
-            comments[newPost.id] = [];
-            savePosts();
-            
-            showNotification('🎉 Post publié avec succès ! Il est visible dans l\'archive.');
-            event.target.reset();
-        }
+    const postsContainer = document.getElementById("postsContainer");
+    const form = document.getElementById("postForm");
 
-        function showNotification(message) {
-            const notif = document.createElement('div');
-            notif.className = 'notification';
-            notif.textContent = message;
-            document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 3000);
-        }
-    </script>
+    async function loadPosts() {
+      postsContainer.innerHTML = "Chargement des posts...";
+      const q = query(postsCol, orderBy("date", "desc"));
+      const snapshot = await getDocs(q);
+      const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      if (posts.length === 0) {
+        postsContainer.innerHTML = "<p>Aucun post pour le moment.</p>";
+        return;
+      }
+
+      postsContainer.innerHTML = posts
+        .map(
+          (post) => `
+          <div style="background:#fff; padding:15px; margin-bottom:15px; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3>${post.title}</h3>
+            <small style="color:#666;">${new Date(post.date).toLocaleString("fr-FR")}</small>
+            <p>${post.content}</p>
+            <p><em>Tags: ${post.tags?.join(", ") || "aucun"}</em></p>
+          </div>
+        `
+        )
+        .join("");
+    }
+
+    async function publishPost(event) {
+      event.preventDefault();
+
+      const newPost = {
+        title: form.postTitle.value.trim(),
+        content: form.postContent.value.trim(),
+        tags: form.postTags.value
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag),
+        category: "general",
+        author: "Admin",
+        date: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(postsCol, newPost);
+        showNotification("🎉 Post publié avec succès !");
+        form.reset();
+        loadPosts();
+      } catch (error) {
+        alert("Erreur lors de la publication : " + error.message);
+      }
+    }
+
+    function showNotification(msg) {
+      const notif = document.createElement("div");
+      notif.className = "notification";
+      notif.textContent = msg;
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }
+
+    form.addEventListener("submit", publishPost);
+    window.addEventListener("DOMContentLoaded", loadPosts);
+  </script>
 </body>
 </html>
