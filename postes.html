@@ -1,168 +1,185 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archive des Posts</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 40px; color: white; }
-        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .header p { font-size: 1.1rem; opacity: 0.9; }
-        .stats { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; }
-        .stat-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 20px; text-align: center; color: white; min-width: 150px; }
-        .stat-number { font-size: 2rem; font-weight: bold; display: block; }
-        .stat-label { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; }
-        .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        .post-card { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; animation: fadeIn 0.5s ease-in; }
-        .post-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
-        .post-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #667eea, #764ba2); }
-        .post-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .post-title { font-size: 1.3rem; font-weight: bold; color: #333; margin-bottom: 5px; line-height: 1.3; }
-        .post-date { font-size: 0.85rem; color: #666; background: #f0f0f0; padding: 4px 8px; border-radius: 12px; white-space: nowrap; }
-        .post-content { color: #555; line-height: 1.6; margin-bottom: 15px; }
-        .post-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .tag { background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
-        .empty-state { text-align: center; color: white; padding: 60px 20px; }
-        .controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .btn { background: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s ease; backdrop-filter: blur(10px); }
-        .btn:hover { background: rgba(255, 255, 255, 0.3); border-color: rgba(255, 255, 255, 0.5); transform: translateY(-2px); }
-        .search-box { background: rgba(255, 255, 255, 0.9); border: none; padding: 12px 20px; border-radius: 25px; font-size: 1rem; width: 300px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Archive des Posts - FashionFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: white;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    .post-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      color: #333;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .post-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+    .post-date {
+      font-size: 0.85rem;
+      color: #666;
+      background: #f0f0f0;
+      padding: 4px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .post-content {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .empty-state {
+      text-align: center;
+      color: white;
+      padding: 60px 20px;
+    }
+    a.back-link {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 Archive des Posts</h1>
-            <p>Tous vos posts de développement en un seul endroit</p>
-            <a href="devloppement.html" style="color:white; margin-top:15px; display:inline-block;">← Créer un nouveau post</a>
-        </div>
-        <div class="stats">
-            <div class="stat-card"> <span class="stat-number" id="totalPosts">0</span> <div class="stat-label">Posts Total</div> </div> <div class="stat-card"> <span class="stat-number" id="todayPosts">0</span> <div class="stat-label">Aujourd'hui</div> </div> <div class="stat-card"> <span class="stat-number" id="avgLength">0</span> <div class="stat-label">Mots Moyen</div> </div>
-        </div>
-        <div class="controls">
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Rechercher dans les posts...">
-            <button class="btn" onclick="clearArchive()">🗑️ Vider l'archive</button>
-            <button class="btn" onclick="exportPosts()">📤 Exporter</button>
-            <button class="btn" onclick="refreshPosts()">🔄 Actualiser</button>
-        </div>
-        <div id="postsContainer">
-            </div>
+  <div class="container">
+    <div class="header">
+      <h1>📚 Archive des Posts</h1>
+      <p>Tous vos posts de développement en un seul endroit</p>
+      <a href="devloppement.html" class="back-link">← Créer un nouveau post</a>
     </div>
 
-    <script>
-        let allPosts = []; // Garde tous les posts chargés
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            loadPostsFromStorage();
-            setupSearch();
-        });
+    <div id="postsContainer">
+      <p>Chargement des posts...</p>
+    </div>
+  </div>
 
-        // MODIFIÉ : Charge les posts depuis localStorage
-        function loadPostsFromStorage() {
-            const storedData = localStorage.getItem('fashionFlowPostsData');
-            if (storedData) {
-                const data = JSON.parse(storedData);
-                allPosts = data.posts || [];
-            } else {
-                allPosts = [];
-            }
-            displayPosts(allPosts); // Affiche tous les posts par défaut
-            updateStats();
-        }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-        function displayPosts(postsToDisplay) {
-            const container = document.getElementById('postsContainer');
-            if (!postsToDisplay || postsToDisplay.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h2>Aucun post pour le moment</h2>
-                        <p>Les posts créés depuis la page de développement apparaîtront ici.</p>
-                    </div>`;
-                return;
-            }
-            container.innerHTML = `
-                <div class="posts-grid">
-                    ${postsToDisplay.map(post => `
-                        <div class="post-card" data-id="${post.id}">
-                            <div class="post-header">
-                                <div class="post-title">${post.title}</div>
-                                <div class="post-date">${formatDate(post.date)}</div>
-                            </div>
-                            <div class="post-content">${truncateText(post.content, 150)}</div>
-                            <div class="post-tags">
-                                ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>`;
-        }
-        
-        // MODIFIÉ : La fonction de recherche reste, mais elle est appelée différemment
-        function setupSearch() {
-            const searchBox = document.getElementById('searchBox');
-            searchBox.addEventListener('input', function() {
-                const query = this.value.toLowerCase().trim();
-                if (query === '') {
-                    displayPosts(allPosts);
-                } else {
-                    const filtered = allPosts.filter(post => 
-                        post.title.toLowerCase().includes(query) ||
-                        post.content.toLowerCase().includes(query) ||
-                        post.tags.some(tag => tag.toLowerCase().includes(query))
-                    );
-                    displayPosts(filtered);
-                }
-            });
-        }
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+      authDomain: "fashionflow-3db6b.firebaseapp.com",
+      projectId: "fashionflow-3db6b",
+      storageBucket: "fashionflow-3db6b.firebasestorage.app",
+      messagingSenderId: "1073693995934",
+      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+      measurementId: "G-P4DP02HQ75"
+    };
 
-        // MODIFIÉ : Vide le localStorage en plus de l'affichage
-        function clearArchive() {
-            if (confirm('Êtes-vous sûr de vouloir vider TOUTE l\'archive ? Cette action est irréversible.')) {
-                localStorage.removeItem('fashionFlowPostsData');
-                allPosts = [];
-                displayPosts(allPosts);
-                updateStats();
-            }
-        }
-        
-        // NOUVEAU : Fonction "Actualiser" qui recharge depuis le localStorage
-        function refreshPosts() {
-            loadPostsFromStorage();
-            document.getElementById('searchBox').value = ''; // Réinitialise la recherche
-        }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const postsCol = collection(db, "devloppement");
 
-        // Le reste de vos fonctions utilitaires (formatDate, updateStats, etc.) sont conservées
-        function updateStats() {
-            document.getElementById('totalPosts').textContent = allPosts.length;
-            const today = new Date().toDateString();
-            const todayPosts = allPosts.filter(post => new Date(post.date).toDateString() === today).length;
-            document.getElementById('todayPosts').textContent = todayPosts;
-            const avgLength = allPosts.length > 0 ? Math.round(allPosts.reduce((sum, post) => sum + post.content.split(' ').length, 0) / allPosts.length) : 0;
-            document.getElementById('avgLength').textContent = avgLength;
-        }
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-        function truncateText(text, maxLength) {
-            if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength) + '...';
-        }
-        function exportPosts() {
-            if (allPosts.length === 0) { alert('Aucun post à exporter !'); return; }
-            const dataStr = JSON.stringify(allPosts, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = 'posts-archive.json';
-            link.click();
-        }
-        
-        // SUPPRIMÉ : Les fonctions addSamplePosts, receivePost et l'écouteur d'événement 'message' ont été enlevées car la communication se fait maintenant via localStorage.
-    </script>
+    const postsContainer = document.getElementById("postsContainer");
+
+    async function loadPosts() {
+      postsContainer.innerHTML = "Chargement des posts...";
+      const q = query(postsCol, orderBy("date", "desc"));
+      const snapshot = await getDocs(q);
+      const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      if (posts.length === 0) {
+        postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+        return;
+      }
+
+      postsContainer.innerHTML = posts
+        .map(
+          (post) => `
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-title">${post.title}</div>
+            <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+          </div>
+          <div class="post-content">${post.content}</div>
+          <div class="post-tags">
+            ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    window.addEventListener("DOMContentLoaded", loadPosts);
+  </script>
 </body>
 </html>
