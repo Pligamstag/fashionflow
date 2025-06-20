@@ -3,92 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un nouveau Post</title>
+    <title>FashionFlow Posts - Système de Publication</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; padding: 20px; display: flex; align-items: center; justify-content: center; }
-        .container { max-width: 700px; width: 100%; }
-        header { text-align: center; color: white; margin-bottom: 20px; }
-        header h1 { font-weight: 800; }
-        .post-editor { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border-radius: 20px; padding: 30px 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #555; }
-        .form-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; font-family: 'Inter', sans-serif; transition: border-color 0.3s; }
-        .form-input:focus { border-color: #764ba2; outline: none; }
-        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; text-align: center; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 25px 35px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: 800; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .btn { padding: 12px 25px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .btn-primary { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3); }
-        .btn-secondary { background-color: #e9ecef; color: #333; margin-top: 15px; }
-        .notification { position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 15px 25px; border-radius: 10px; font-weight: 600; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-nav { background: linear-gradient(45deg, #28a745, #20c997); color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); }
+        .post-editor { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .form-input { width: 100%; padding: 15px 20px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px; }
+        .category-tag { padding: 8px 16px; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; }
+        .category-tag.active { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
+        .notification { position: fixed; top: 20px; right: 20px; background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 15px 25px; border-radius: 15px; font-weight: 600; z-index: 1000; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Créez un Post</h1>
-            <p>Remplissez les champs ci-dessous pour publier dans l'archive.</p>
+            <div class="logo">FashionFlow Posts 📝</div>
+            <div class="header-actions">
+                <a href="postes.html" class="btn btn-nav">🏠 Voir l'Archive</a>
+            </div>
         </header>
 
-        <div class="post-editor">
-            <form id="creationForm" onsubmit="publishPost(event)">
-                 <div class="form-group">
-                    <label for="postTitle">Titre du Post</label>
-                    <input type="text" id="postTitle" class="form-input" required placeholder="Un titre accrocheur...">
+        <div class="post-editor" id="postEditor">
+            <form onsubmit="publishPost(event)">
+                 <div class="form-group" style="margin-bottom:20px;">
+                    <label>Titre du Post</label>
+                    <input type="text" class="form-input" id="postTitle" required>
                 </div>
-                <div class="form-group">
-                    <label for="postContent">Contenu du Post</label>
-                    <textarea id="postContent" class="form-input" rows="8" required placeholder="Écrivez votre contenu ici..."></textarea>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label>Catégorie</label>
+                    <div class="category-selector">
+                        <button type="button" class="category-tag active" data-category="general">📝 Général</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="postTags">Tags (séparés par une virgule)</label>
-                    <input type="text" id="postTags" class="form-input" placeholder="ex: tech, css, lifestyle">
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label>Contenu du Post</label>
+                    <textarea class="form-input" id="postContent" rows="8" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">🚀 Publier le Post</button>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label>Tags (séparés par virgule)</label>
+                    <input type="text" class="form-input" id="postTags">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">🚀 Publier le Post</button>
             </form>
-            <a href="postes.html" class="btn btn-secondary">📂 Voir l'Archive</a>
         </div>
     </div>
 
     <script>
-        // Ce script ne fait qu'enregistrer les données, il n'affiche rien.
+        let posts = [];
+        let comments = {};
+        let selectedCategory = 'general';
+
+        document.addEventListener('DOMContentLoaded', loadPosts);
+
+        function savePosts() {
+            const data = { posts: posts, comments: comments };
+            localStorage.setItem('fashionFlowPostsData', JSON.stringify(data));
+        }
+
+        function loadPosts() {
+            const storedData = localStorage.getItem('fashionFlowPostsData');
+            if (storedData) {
+                const data = JSON.parse(storedData);
+                posts = data.posts || [];
+                comments = data.comments || {};
+            }
+        }
+
         function publishPost(event) {
             event.preventDefault();
-
-            // 1. Charger les posts existants pour ne pas les écraser
-            const storedData = localStorage.getItem('fashionFlowPostsData');
-            let data = storedData ? JSON.parse(storedData) : { posts: [], comments: {} };
-            
-            // 2. Créer le nouveau post
             const newPost = {
                 id: Date.now(),
                 title: document.getElementById('postTitle').value.trim(),
                 content: document.getElementById('postContent').value.trim(),
                 tags: document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
+                category: selectedCategory,
+                author: 'Admin',
                 date: new Date().toISOString(),
-                // Vous pouvez ajouter d'autres champs si nécessaire
+                likes: 0,
+                views: 0,
             };
-
-            // 3. Ajouter le nouveau post au début de la liste
-            data.posts.unshift(newPost);
+            posts.unshift(newPost);
+            comments[newPost.id] = [];
+            savePosts();
             
-            // 4. Sauvegarder la liste mise à jour
-            localStorage.setItem('fashionFlowPostsData', JSON.stringify(data));
-            
-            // 5. Informer l'utilisateur et vider le formulaire
-            showNotification('🎉 Post publié avec succès !');
-            document.getElementById('creationForm').reset();
+            showNotification('🎉 Post publié avec succès ! Il est visible dans l\'archive.');
+            event.target.reset();
         }
 
         function showNotification(message) {
-            // Supprime une ancienne notification s'il y en a une
-            const oldNotif = document.querySelector('.notification');
-            if(oldNotif) oldNotif.remove();
-
             const notif = document.createElement('div');
             notif.className = 'notification';
             notif.textContent = message;
             document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 4000);
+            setTimeout(() => notif.remove(), 3000);
         }
     </script>
 </body>
