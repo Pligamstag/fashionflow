@@ -1,7 +1,9 @@
-<html lang="fr"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Archive des Posts - FashionFlow</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Archive des Posts - FashionFlow Admin</title>
   <style>
     * {
       margin: 0;
@@ -107,29 +109,42 @@
     a.back-link:hover {
       text-decoration: underline;
     }
+    button.delete-btn {
+      margin-top: 10px;
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    button.delete-btn:hover {
+      background: #c0392b;
+    }
   </style>
-<style data-styled="" data-styled-version="4.4.1"></style></head>
+</head>
 <body>
   <div class="container">
     <div class="header">
       <h1>📚 Bienvenue à la béta du blogue de Fashion !</h1>
       <p>Tous vos posts de développement en un seul endroit</p>
       <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
-
     </div>
 
     <div id="postsContainer">
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-title">yo</div>
-            <div class="post-date">20/06/2025</div>
-          </div>
-          <div class="post-content">yo</div>
-          <div class="post-tags">
-            <span class="tag">yo</span>
-          </div>
+      <div class="post-card">
+        <div class="post-header">
+          <div class="post-title">yo</div>
+          <div class="post-date">20/06/2025</div>
+        </div>
+        <div class="post-content">yo</div>
+        <div class="post-tags">
+          <span class="tag">yo</span>
         </div>
       </div>
+    </div>
   </div>
 
   <script type="module">
@@ -139,7 +154,9 @@
       collection,
       getDocs,
       query,
-      orderBy
+      orderBy,
+      deleteDoc,
+      doc
     } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -158,6 +175,36 @@
 
     const postsContainer = document.getElementById("postsContainer");
 
+    const currentUser = "Samy"; // Remplace par ton nom d'utilisateur réel
+    const ADMIN_PASSWORD = "LucieKaraoui";
+
+    async function deletePost(postId, postAuthor) {
+      if (postAuthor === currentUser) {
+        if (!confirm("Supprimer ton post ?")) return;
+        try {
+          await deleteDoc(doc(db, "devloppement", postId));
+          alert("Post supprimé !");
+          loadPosts();
+        } catch (error) {
+          alert("Erreur suppression : " + error.message);
+        }
+      } else {
+        const pass = prompt("Ce post n'est pas à toi, entre le mot de passe admin pour supprimer :");
+        if (pass !== ADMIN_PASSWORD) {
+          alert("Mot de passe incorrect, suppression annulée.");
+          return;
+        }
+        if (!confirm("Supprimer ce post ?")) return;
+        try {
+          await deleteDoc(doc(db, "devloppement", postId));
+          alert("Post supprimé !");
+          loadPosts();
+        } catch (error) {
+          alert("Erreur suppression : " + error.message);
+        }
+      }
+    }
+
     async function loadPosts() {
       postsContainer.innerHTML = "Chargement des posts...";
       const q = query(postsCol, orderBy("date", "desc"));
@@ -172,23 +219,26 @@
       postsContainer.innerHTML = posts
         .map(
           (post) => `
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-title">${post.title}</div>
-            <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+          <div class="post-card">
+            <div class="post-header">
+              <div class="post-title">${post.title}</div>
+              <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+            </div>
+            <div class="post-content">${post.content}</div>
+            <div class="post-tags">
+              ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+            <button class="delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">Supprimer</button>
           </div>
-          <div class="post-content">${post.content}</div>
-          <div class="post-tags">
-            ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
-          </div>
-        </div>
-      `
+        `
         )
         .join("");
     }
 
     window.addEventListener("DOMContentLoaded", loadPosts);
+
+    // Rendre la fonction accessible globalement (dans window) pour le onclick
+    window.deletePost = deletePost;
   </script>
-
-
-</body></html>
+</body>
+</html>
