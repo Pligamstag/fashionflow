@@ -76,28 +76,254 @@
 
       <div class="space-y-6">
        
-        <!-- Bloc FÊTE ajouté ici -->
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-pink-50 to-yellow-100 rounded-lg p-4 border-l-4 border-pink-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-pink-700 bg-pink-200 px-3 py-1 rounded-full">20 juin 2025</span>
-              <span class="text-xs text-pink-700 font-medium new-feature px-2 py-1 rounded" style="background: linear-gradient(135deg,#f472b6,#fbbf24); color:white;">FÊTE</span>
+        <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Item Animé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0.3) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05) rotate(2deg);
+            }
+            70% {
+                transform: scale(0.95) rotate(-1deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            25% {
+                transform: scale(1.1) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(0.9) rotate(180deg);
+                opacity: 1;
+            }
+            75% {
+                transform: scale(1.05) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-8px) rotate(2deg);
+            }
+            66% {
+                transform: translateY(-4px) rotate(-2deg);
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(244, 114, 182, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(244, 114, 182, 0.8), 0 0 30px rgba(251, 191, 36, 0.6);
+            }
+        }
+
+        @keyframes rainbow-border {
+            0% {
+                border-color: #f472b6;
+            }
+            25% {
+                border-color: #fbbf24;
+            }
+            50% {
+                border-color: #10b981;
+            }
+            75% {
+                border-color: #3b82f6;
+            }
+            100% {
+                border-color: #f472b6;
+            }
+        }
+
+        @keyframes wiggle {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(5deg);
+            }
+            75% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-item {
+            animation: bounce-in 1.2s ease-out;
+        }
+
+        .sparkle-emoji {
+            animation: sparkle 2s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            display: inline-block;
+        }
+
+        .float-emoji {
+            animation: float 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            display: inline-block;
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .rainbow-border {
+            animation: rainbow-border 3s linear infinite;
+        }
+
+        .wiggle {
+            animation: wiggle 0.5s ease-in-out infinite;
+        }
+
+        .fade-in-up {
+            animation: fade-in-up 0.8s ease-out;
+        }
+
+        .new-feature {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .party-emojis span {
+            animation-delay: calc(var(--i) * 0.3s);
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            animation: confetti 2s ease-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <!-- Bloc FÊTE avec animations -->
+    <div class="timeline-item max-w-2xl mx-auto">
+        <div class="bg-gradient-to-r from-pink-50 to-yellow-100 rounded-lg p-4 border-l-4 rainbow-border pulse-glow relative overflow-hidden">
+            <!-- Confetti animation -->
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+                <div class="confetti text-2xl" style="left: 10%; animation-delay: 0s;">🎊</div>
+                <div class="confetti text-xl" style="left: 30%; animation-delay: 0.5s;">✨</div>
+                <div class="confetti text-2xl" style="left: 60%; animation-delay: 1s;">🎉</div>
+                <div class="confetti text-xl" style="left: 80%; animation-delay: 1.5s;">🎈</div>
             </div>
-            <h4 class="text-gray-800 font-semibold mb-2">
-              🎉🎈✨ Ouverture du blogue !! <span style="font-size:1.3em;">🎊🪩🎆</span>
+
+            <div class="flex items-center justify-between mb-2 fade-in-up">
+                <span class="text-sm font-semibold text-pink-700 bg-pink-200 px-3 py-1 rounded-full pulse-glow">20 juin 2025</span>
+                <span class="text-xs text-pink-700 font-medium new-feature px-2 py-1 rounded wiggle" style="background: linear-gradient(135deg,#f472b6,#fbbf24); color:white;">FÊTE</span>
+            </div>
+            
+            <h4 class="text-gray-800 font-semibold mb-2 fade-in-up">
+                <span class="sparkle-emoji" style="--delay: 0s;">🎉</span>
+                <span class="float-emoji" style="--delay: 0.2s;">🎈</span>
+                <span class="sparkle-emoji" style="--delay: 0.4s;">✨</span>
+                Ouverture du blogue !! 
+                <span class="party-emojis" style="font-size:1.3em;">
+                    <span class="float-emoji" style="--delay: 0.6s; --i: 1;">🎊</span>
+                    <span class="sparkle-emoji" style="--delay: 0.8s; --i: 2;">🪩</span>
+                    <span class="float-emoji" style="--delay: 1s; --i: 3;">🎆</span>
+                </span>
             </h4>
-            <p class="text-gray-700 mb-2">
-              Le blogue est officiellement ouvert ! Découvrez nos premiers articles, partagez vos retours et faites la fête avec nous !<br>
-              <span class="inline-block mt-2 text-lg">🥳 🎉 🪩 🎈 🎆</span>
+            
+            <p class="text-gray-700 mb-2 fade-in-up" style="animation-delay: 0.3s;">
+                Le blogue est officiellement ouvert ! Découvrez nos premiers articles, partagez vos retours et faites la fête avec nous !<br>
+                <span class="inline-block mt-2 text-lg party-emojis">
+                    <span class="float-emoji" style="--delay: 0s; --i: 1;">🥳</span>
+                    <span class="sparkle-emoji" style="--delay: 0.3s; --i: 2;">🎉</span>
+                    <span class="float-emoji" style="--delay: 0.6s; --i: 3;">🪩</span>
+                    <span class="sparkle-emoji" style="--delay: 0.9s; --i: 4;">🎈</span>
+                    <span class="float-emoji" style="--delay: 1.2s; --i: 5;">🎆</span>
+                </span>
             </p>
-            <div class="bg-pink-50 border-l-4 border-pink-400 p-3 mt-3">
-              <div class="flex items-center">
-                <span class="text-xs text-pink-600 font-medium px-2 py-1 rounded mr-2 bg-pink-200">NOUVEAU</span>
-                <span class="text-pink-700 text-sm">Première publication sur le blogue – on célèbre ça !</span>
-              </div>
+            
+            <div class="bg-pink-50 border-l-4 border-pink-400 p-3 mt-3 fade-in-up rainbow-border" style="animation-delay: 0.6s;">
+                <div class="flex items-center">
+                    <span class="text-xs text-pink-600 font-medium px-2 py-1 rounded mr-2 bg-pink-200 pulse-glow">NOUVEAU</span>
+                    <span class="text-pink-700 text-sm">Première publication sur le blogue – on célèbre ça !</span>
+                </div>
             </div>
-          </div>
         </div>
+    </div>
+
+    <script>
+        // Ajouter des confettis supplémentaires de façon aléatoire
+        function createConfetti() {
+            const container = document.querySelector('.timeline-item .relative');
+            const emojis = ['🎊', '🎉', '✨', '🎈', '🎆', '🪩', '🥳'];
+            
+            setInterval(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                confetti.style.animationDelay = '0s';
+                confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                
+                container.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, 800);
+        }
+
+        // Démarrer l'animation de confettis après le chargement
+        setTimeout(createConfetti, 1500);
+
+        // Ajouter un effet de clic sur tout l'élément
+        document.querySelector('.timeline-item').addEventListener('click', function() {
+            this.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    </script>
+</body>
+</html>
          <!-- 20 juin 2025 : Changement de nom -->
         <div class="timeline-item">
           <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4 border-l-4 border-yellow-400">
