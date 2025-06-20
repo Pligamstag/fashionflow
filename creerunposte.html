@@ -122,8 +122,6 @@
         <button type="submit" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); margin-top: 10px;">🚀 Publier le Post</button>
       </form>
     </div>
-
-    <div id="postsContainer"></div>
   </div>
 
   <script type="module">
@@ -131,10 +129,7 @@
     import {
       getFirestore,
       collection,
-      addDoc,
-      getDocs,
-      query,
-      orderBy
+      addDoc
     } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -151,33 +146,7 @@
     const db = getFirestore(app);
     const postsCol = collection(db, "devloppement");
 
-    const postsContainer = document.getElementById("postsContainer");
     const form = document.getElementById("postForm");
-
-    async function loadPosts() {
-      postsContainer.innerHTML = "Chargement des posts...";
-      const q = query(postsCol, orderBy("date", "desc"));
-      const snapshot = await getDocs(q);
-      const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-      if (posts.length === 0) {
-        postsContainer.innerHTML = "<p>Aucun post pour le moment.</p>";
-        return;
-      }
-
-      postsContainer.innerHTML = posts
-        .map(
-          (post) => `
-          <div style="background:#fff; padding:15px; margin-bottom:15px; border-radius:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3>${post.title}</h3>
-            <small style="color:#666;">${new Date(post.date).toLocaleString("fr-FR")}</small>
-            <p>${post.content}</p>
-            <p><em>Tags: ${post.tags?.join(", ") || "aucun"}</em></p>
-          </div>
-        `
-        )
-        .join("");
-    }
 
     async function publishPost(event) {
       event.preventDefault();
@@ -198,7 +167,6 @@
         await addDoc(postsCol, newPost);
         showNotification("🎉 Post publié avec succès !");
         form.reset();
-        loadPosts();
       } catch (error) {
         alert("Erreur lors de la publication : " + error.message);
       }
@@ -213,7 +181,6 @@
     }
 
     form.addEventListener("submit", publishPost);
-    window.addEventListener("DOMContentLoaded", loadPosts);
   </script>
 </body>
 </html>
