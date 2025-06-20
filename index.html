@@ -429,10 +429,10 @@
       </div>
     </section>
 
-    <!-- Section Développement -->
+    <!-- Section Blogue -->
     <section class="section dev-section">
       <div class="section-content">
-        <h2 class="section-title">Développement</h2>
+        <h2 class="section-title">Blogue</h2>
         <p class="section-subtitle">Avez-vous des idées au sujet de FashionFlow ??</p>
         <div class="icon-container">
           <div class="fashion-icon rocket-icon">🚀</div>
@@ -508,10 +508,10 @@
     </div>
   </div>
 
-  <!-- Popup Développement avec authentification -->
+  <!-- Popup Blogue avec authentification -->
   <div class="popup-overlay" id="devPopupOverlay">
     <div class="popup-content email-popup-content">
-      <h3 style="margin-bottom: 1rem;">🚀 Idées de Développement</h3>
+      <h3 style="margin-bottom: 1rem;">🚀 Idées de Blogue</h3>
       <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
       <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
       <input type="password" class="admin-input" id="devAdminPassword" placeholder="Mot de passe admin" />
@@ -616,9 +616,9 @@
       const correctPassword = 'LucieKaraoui';
       
       if (password === correctPassword) {
-        alert('Mot de passe correct ! Redirection vers la page de développement...');
+        alert('Mot de passe correct ! Redirection vers la page du blogue...');
         closeDevPopup();
-        // Redirection vers blogue.html au lieu de developpement.html
+        // Redirection vers blogue.html
         window.location.href = "blogue.html";
       } else {
         alert('Mot de passe incorrect !');
