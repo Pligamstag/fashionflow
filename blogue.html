@@ -585,67 +585,121 @@
           return;
         }
 
-        // Charger le nombre de réponses pour chaque post
-        const postsWithReplies = await Promise.all(posts.map(async (post) => {
-          const repliesQuery = query(repliesCol, where("postId", "==", post.id));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          return { ...post, repliesCount: repliesSnapshot.size };
-        }));
+      // Charger le nombre de réponses pour chaque post
+const postsWithReplies = await Promise.all(posts.map(async (post) => {
+  const repliesQuery = query(repliesCol, where("postId", "==", post.id));
+  const repliesSnapshot = await getDocs(repliesQuery);
+  return { ...post, repliesCount: repliesSnapshot.size };
+}));
 
-        postsContainer.innerHTML = postsWithReplies
-          .map((post) => {
-            const likes = post.likes || [];
-            const likesCount = likes.length;
-            const hasLiked = likes.includes(currentUser);
-            const likedUsers = likes.length > 0 ? `Aimé par: ${likes.join(', ')}` : '';
-            
-            return `
-            <div class="post-card" data-post-id="${post.id}">
-              <div class="post-header">
-                <div class="post-title">${post.title}</div>
-                <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
-              </div>
-              <div class="author-info">👤 Par: ${post.author || 'Anonyme'}</div>
-              <div class="post-content">${post.content}</div>
-              <div class="post-tags">
-                ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
-              </div>
-              <div class="post-stats">
-                <div class="like-section">
-                  <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
-                    ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
-                  </button>
-                  <span class="like-count">${likesCount} like(s)</span>
-                </div>
-              </div>
-              ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
-              <div class="post-actions">
-                <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
-                <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
-              </div>
-              <div class="replies-section">
-                <div class="replies-header">
-                  <span class="replies-count">${post.repliesCount} réponse(s)</span>
-                  <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
-                </div>
-                <div class="reply-form">
-                  <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
-                  <div class="reply-form-actions">
-                    <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
-                    <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
-                  </div>
-                </div>
-                <div class="replies-list"></div>
-              </div>
-            </div>
-          `;
-          })
-          .join("");
-      } catch (error) {
-        console.error("Erreur lors du chargement des posts:", error);
-        postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
-      }
+postsContainer.innerHTML = postsWithReplies
+  .map((post) => {
+    const likes = post.likes || [];
+    const likesCount = likes.length;
+    const hasLiked = likes.includes(currentUser);
+    const likedUsers = likes.length > 0 ? `Aimé par : ${likes.join(', ')}` : '';
+
+    return `
+    <div class="post-card" data-post-id="${post.id}">
+      <div class="post-header">
+        <div class="post-title">${post.title}</div>
+        <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+      </div>
+      <div class="author-info">👤 Par : ${post.author || 'Anonyme'}</div>
+      <div class="post-content">${post.content}</div>
+      <div class="post-tags">
+        ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
+      </div>
+      <div class="post-stats">
+        <div class="like-section">
+          <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+            ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
+          </button>
+          <span class="like-count">${likesCount} like(s)</span>
+        </div>
+      </div>
+      ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
+      <div class="post-actions">
+        <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
+        <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
+      </div>
+      <div class="replies-section">
+        <div class="replies-header">
+          <span class="replies-count">${post.repliesCount} réponse(s)</span>
+          <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
+        </div>
+        <div class="reply-form">
+          <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
+          <div class="reply-form-actions">
+            <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
+            <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
+          </div>
+        </div>
+        <div class="replies-list"></div>
+      </div>
+    </div>
+    `;
+  })
+  .join("");
+} catch (error) {
+  console.error("Erreur lors du chargement des posts:", error);
+  postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
+}
+
     }
+async function toggleReplyLike(replyId) {
+  const replyRef = doc(repliesCol, replyId);
+  const replySnap = await getDoc(replyRef);
+  if (!replySnap.exists()) return alert("Commentaire introuvable.");
+
+  const replyData = replySnap.data();
+  const currentLikes = replyData.likes || [];
+  const hasLiked = currentLikes.includes(currentUser);
+
+  try {
+    await updateDoc(replyRef, {
+      likes: hasLiked ? arrayRemove(currentUser) : arrayUnion(currentUser)
+    });
+    loadReplies(replyData.postId);
+  } catch (e) {
+    alert("Erreur lors du like du commentaire : " + e.message);
+  }
+}
+
+function toggleSubReplyForm(replyId, postId) {
+  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function cancelSubReply(replyId) {
+  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
+  form.querySelector("textarea").value = "";
+  form.style.display = "none";
+}
+
+async function submitSubReply(parentReplyId, postId) {
+  const form = document.querySelector(`[data-reply-id="${parentReplyId}"] .sub-reply-form`);
+  const textarea = form.querySelector("textarea");
+  const content = textarea.value.trim();
+  if (!content) return alert("Écris un message !");
+
+  try {
+    await addDoc(repliesCol, {
+      postId,
+      content,
+      author: currentUser,
+      date: new Date().toISOString(),
+      timestamp: serverTimestamp(),
+      parentReplyId: parentReplyId,
+      likes: []
+    });
+    textarea.value = "";
+    form.style.display = "none";
+    loadReplies(postId);
+  } catch (e) {
+    alert("Erreur lors de la réponse au commentaire : " + e.message);
+  }
+}
 
     // Rendre les fonctions accessibles globalement
     window.deletePost = deletePost;
@@ -654,6 +708,10 @@
     window.cancelReply = cancelReply;
     window.toggleReplies = toggleReplies;
     window.toggleLike = toggleLike;
+    window.toggleReplyLike = toggleReplyLike;
+    window.toggleSubReplyForm = toggleSubReplyForm;
+    window.submitSubReply = submitSubReply;
+    window.cancelSubReply = cancelSubReply;
 
     // Charger les posts au démarrage
     window.addEventListener("DOMContentLoaded", loadPosts);
