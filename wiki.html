@@ -4,14 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wiki - FashionFlow</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
       min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
     
     .gradient-bg {
@@ -20,29 +27,32 @@
     
     .hero-pattern {
       background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
     }
     
     .glass-effect {
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     
     .glass-effect-light {
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
     
     .category-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
       background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+      will-change: transform;
     }
     
     .category-card::before {
@@ -52,8 +62,9 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.15), transparent);
-      transition: left 0.6s;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+      transition: left 0.5s ease;
+      pointer-events: none;
     }
     
     .category-card:hover::before {
@@ -61,8 +72,8 @@
     }
     
     .category-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 25px 50px -12px rgba(102, 126, 234, 0.3);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 20px 40px -12px rgba(102, 126, 234, 0.25);
       background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%);
     }
     
@@ -71,25 +82,27 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-size: 2rem;
-      filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.5));
+      font-size: 1.8rem;
+      filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+      line-height: 1;
     }
     
     .category-number {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       font-weight: 600;
       position: absolute;
-      top: -10px;
-      right: -10px;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      top: -8px;
+      right: -8px;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      z-index: 10;
     }
     
     .btn-primary {
@@ -98,6 +111,8 @@
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
       position: relative;
       overflow: hidden;
+      border: none;
+      cursor: pointer;
     }
     
     .btn-primary::before {
@@ -107,8 +122,9 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transition: left 0.4s ease;
+      pointer-events: none;
     }
     
     .btn-primary:hover::before {
@@ -117,7 +133,7 @@
     
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
     
     .floating-elements {
@@ -126,51 +142,59 @@
       height: 100%;
       overflow: hidden;
       pointer-events: none;
+      z-index: 1;
     }
     
     .floating-element {
       position: absolute;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 50%;
-      animation: float 6s ease-in-out infinite;
+      animation: float 8s ease-in-out infinite;
+      will-change: transform;
     }
     
     .floating-element:nth-child(1) {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       top: 20%;
       left: 10%;
       animation-delay: 0s;
     }
     
     .floating-element:nth-child(2) {
-      width: 60px;
-      height: 60px;
+      width: 40px;
+      height: 40px;
       top: 60%;
       right: 15%;
       animation-delay: 2s;
     }
     
     .floating-element:nth-child(3) {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       bottom: 20%;
       left: 20%;
       animation-delay: 4s;
     }
     
     @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      50% { 
+        transform: translateY(-15px) rotate(180deg);
+        opacity: 1;
+      }
     }
     
     .progress-bar {
-      height: 4px;
+      height: 3px;
       background: linear-gradient(90deg, #667eea, #764ba2);
       border-radius: 2px;
       margin-top: 1rem;
       transform-origin: left;
-      animation: progressLoad 2s ease-out;
+      animation: progressLoad 1.5s ease-out;
     }
     
     @keyframes progressLoad {
@@ -180,30 +204,31 @@
     
     .status-indicator {
       position: relative;
+      display: inline-block;
     }
     
     .status-indicator::after {
       content: '';
       position: absolute;
       top: 50%;
-      right: -30px;
+      right: -25px;
       transform: translateY(-50%);
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       background: #10b981;
       border-radius: 50%;
-      animation: pulse 2s infinite;
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite ease-in-out;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
     }
     
     @keyframes pulse {
       0% {
         transform: translateY(-50%) scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
       }
       70% {
         transform: translateY(-50%) scale(1);
-        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
       }
       100% {
         transform: translateY(-50%) scale(0.95);
@@ -225,21 +250,78 @@
     
     .mesh-gradient {
       background: 
-        radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+        radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at center, rgba(59, 130, 246, 0.03) 0%, transparent 70%);
     }
     
     .animated-bg {
       background: linear-gradient(-45deg, #0f0f23, #1a1a2e, #16213e, #0f1419);
       background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      animation: gradientShift 20s ease infinite;
     }
     
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+    
+    /* Optimisations pour mobile */
+    @media (max-width: 768px) {
+      .category-card:hover {
+        transform: translateY(-2px) scale(1.005);
+      }
+      
+      .floating-element {
+        animation-duration: 12s;
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-1px);
+      }
+      
+      .hero-pattern {
+        background-image: 
+          radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      }
+    }
+    
+    /* Réduction des animations pour les utilisateurs qui préfèrent moins de mouvement */
+    @media (prefers-reduced-motion: reduce) {
+      .floating-element,
+      .animated-bg,
+      .progress-bar,
+      .status-indicator::after {
+        animation: none;
+      }
+      
+      .category-card,
+      .btn-primary {
+        transition: none;
+      }
+      
+      .category-card:hover {
+        transform: none;
+      }
+    }
+    
+    /* Améliorations de performance */
+    .category-card,
+    .btn-primary,
+    .floating-element {
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+    
+    /* Correction du numéro manquant */
+    .missing-section {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .missing-section .category-number {
+      background: linear-gradient(135deg, #6b7280, #9ca3af);
     }
   </style>
 </head>
@@ -252,17 +334,17 @@
       <div class="floating-element"></div>
     </div>
     
-    <div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 relative z-10">
       <div class="text-center">
         <div class="status-indicator inline-block mb-4">
-          <span class="bg-white bg-opacity-20 text-sm px-4 py-2 rounded-full font-medium">
+          <span class="bg-white bg-opacity-20 text-sm px-3 sm:px-4 py-2 rounded-full font-medium">
             📚 Documentation Complète
           </span>
         </div>
-        <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
           Wiki FashionFlow
         </h1>
-        <p class="text-xl opacity-90 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto leading-relaxed">
           Découvrez tous les aspects de notre projet d'application mobile révolutionnaire
         </p>
         <div class="progress-bar max-w-md mx-auto"></div>
@@ -271,32 +353,32 @@
   </header>
 
   <!-- Contenu principal -->
-  <main class="max-w-7xl mx-auto px-6 py-16 mesh-gradient">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 mesh-gradient">
     <!-- Statistiques rapides -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <div class="glass-effect-light rounded-2xl p-6 text-center">
-        <div class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">9</div>
-        <div class="text-secondary font-medium">Sections détaillées</div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <div class="glass-effect-light rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">9</div>
+        <div class="text-secondary font-medium text-sm sm:text-base">Sections détaillées</div>
       </div>
-      <div class="glass-effect-light rounded-2xl p-6 text-center">
-        <div class="text-3xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">100%</div>
-        <div class="text-secondary font-medium">Documentation complète</div>
+      <div class="glass-effect-light rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">100%</div>
+        <div class="text-secondary font-medium text-sm sm:text-base">Documentation complète</div>
       </div>
-      <div class="glass-effect-light rounded-2xl p-6 text-center">
-        <div class="text-3xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent">2025</div>
-        <div class="text-secondary font-medium">Année de lancement</div>
+      <div class="glass-effect-light rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+        <div class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent">2025</div>
+        <div class="text-secondary font-medium text-sm sm:text-base">Année de lancement</div>
       </div>
     </div>
 
     <!-- Grille des catégories -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
       <!-- 1. Introduction -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">1</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">📌</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Introduction
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -310,12 +392,12 @@
       </div>
 
       <!-- 2. Fondateurs -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">2</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">👥</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Présentation des Fondateurs
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -329,12 +411,12 @@
       </div>
 
       <!-- 3. Problématique -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">3</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">❓</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Problématique Identifiée
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -348,12 +430,12 @@
       </div>
 
       <!-- 4. Description -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">4</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">📝</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Description de l'Application
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -367,12 +449,12 @@
       </div>
 
       <!-- 5. Maquette -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">5</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">🎨</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Maquette / Prototype
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -386,12 +468,12 @@
       </div>
 
       <!-- 6. Technologie -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">6</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">💻</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Technologie & Développement
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -405,12 +487,12 @@
       </div>
 
       <!-- 7. Modèle Économique -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">7</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">💰</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Modèle Économique
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -424,12 +506,12 @@
       </div>
 
       <!-- 8. Objectifs -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">8</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">🎯</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Objectifs & Perspectives
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -442,13 +524,32 @@
         </a>
       </div>
 
+      <!-- Section 9 manquante - Ajoutée comme placeholder -->
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group missing-section">
+        <div class="category-number">9</div>
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+          <span class="category-icon">🔧</span>
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2">
+              Section en développement
+            </h2>
+            <p class="text-muted text-sm leading-relaxed">
+              Cette section sera bientôt disponible
+            </p>
+          </div>
+        </div>
+        <span class="inline-flex items-center text-gray-500 font-semibold text-sm">
+          Bientôt disponible
+        </span>
+      </div>
+
       <!-- 10. Conclusion -->
-      <div class="category-card glass-effect rounded-2xl p-8 relative group">
+      <div class="category-card glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 relative group">
         <div class="category-number">10</div>
-        <div class="flex items-start space-x-4 mb-6">
+        <div class="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-6">
           <span class="category-icon">✅</span>
-          <div>
-            <h2 class="text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 group-hover:text-purple-400 transition-colors">
               Conclusion
             </h2>
             <p class="text-muted text-sm leading-relaxed">
@@ -463,11 +564,11 @@
     </div>
 
     <!-- Call to action -->
-    <div class="text-center mt-16">
-      <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
-        <h3 class="text-2xl font-bold text-primary mb-4">Prêt à découvrir FashionFlow ?</h3>
-        <p class="text-secondary mb-6">Explorez chaque section pour comprendre notre vision révolutionnaire du shopping mobile</p>
-        <a href="index.html" class="btn-primary text-white font-semibold py-4 px-8 rounded-xl inline-flex items-center space-x-2 text-lg">
+    <div class="text-center mt-12 sm:mt-16">
+      <div class="glass-effect rounded-xl sm:rounded-2xl p-6 sm:p-8 max-w-2xl mx-auto">
+        <h3 class="text-xl sm:text-2xl font-bold text-primary mb-4">Prêt à découvrir FashionFlow ?</h3>
+        <p class="text-secondary mb-6 text-sm sm:text-base">Explorez chaque section pour comprendre notre vision révolutionnaire du shopping mobile</p>
+        <a href="index.html" class="btn-primary text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-xl inline-flex items-center space-x-2 text-base sm:text-lg">
           <span>⬅</span>
           <span>Retour à l'accueil</span>
         </a>
@@ -476,11 +577,11 @@
   </main>
 
   <!-- Footer -->
-  <footer class="glass-effect border-t border-gray-700 mt-16">
-    <div class="max-w-7xl mx-auto px-6 py-8">
+  <footer class="glass-effect border-t border-gray-700 mt-12 sm:mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <div class="text-center text-secondary">
-        <p class="font-medium">© 2025 FashionFlow - Documentation Wiki</p>
-        <p class="text-sm mt-2 text-muted">Dernière mise à jour : 17 juin 2025</p>
+        <p class="font-medium text-sm sm:text-base">© 2025 FashionFlow - Documentation Wiki</p>
+        <p class="text-xs sm:text-sm mt-2 text-muted">Dernière mise à jour : 23 juin 2025</p>
       </div>
     </div>
   </footer>
