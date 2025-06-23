@@ -34,6 +34,67 @@
     .toggle-password { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #667eea; }
     .admin-section { display: none; }
     .admin-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+
+    /* Animations pour le bloc FÊTE */
+    @keyframes bounce-in {
+      0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+      50% { transform: scale(1.05) rotate(2deg); }
+      70% { transform: scale(0.95) rotate(-1deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      25% { transform: scale(1.1) rotate(90deg); opacity: 0.8; }
+      50% { transform: scale(0.9) rotate(180deg); opacity: 1; }
+      75% { transform: scale(1.05) rotate(270deg); opacity: 0.9; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-8px) rotate(2deg); }
+      66% { transform: translateY(-4px) rotate(-2deg); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 5px rgba(244, 114, 182, 0.4); }
+      50% { box-shadow: 0 0 20px rgba(244, 114, 182, 0.8), 0 0 30px rgba(251, 191, 36, 0.6); }
+    }
+
+    @keyframes rainbow-border {
+      0% { border-color: #f472b6; }
+      25% { border-color: #fbbf24; }
+      50% { border-color: #10b981; }
+      75% { border-color: #3b82f6; }
+      100% { border-color: #f472b6; }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+
+    @keyframes fade-in-up {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+
+    .timeline-item { animation: bounce-in 1.2s ease-out; }
+    .sparkle-emoji { animation: sparkle 2s ease-in-out infinite; animation-delay: var(--delay, 0s); display: inline-block; }
+    .float-emoji { animation: float 3s ease-in-out infinite; animation-delay: var(--delay, 0s); display: inline-block; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .rainbow-border { animation: rainbow-border 3s linear infinite; }
+    .wiggle { animation: wiggle 0.5s ease-in-out infinite; }
+    .fade-in-up { animation: fade-in-up 0.8s ease-out; }
+    .new-feature { animation: pulse-glow 2s ease-in-out infinite; }
+    .party-emojis span { animation-delay: calc(var(--i) * 0.3s); }
+    .confetti { position: absolute; animation: confetti 2s ease-out infinite; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
@@ -75,256 +136,55 @@
       </div>
 
       <div class="space-y-6">
-       
-        <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline Item Animé</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @keyframes bounce-in {
-            0% {
-                transform: scale(0.3) rotate(-10deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.05) rotate(2deg);
-            }
-            70% {
-                transform: scale(0.95) rotate(-1deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes sparkle {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-            25% {
-                transform: scale(1.1) rotate(90deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: scale(0.9) rotate(180deg);
-                opacity: 1;
-            }
-            75% {
-                transform: scale(1.05) rotate(270deg);
-                opacity: 0.9;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-            33% {
-                transform: translateY(-8px) rotate(2deg);
-            }
-            66% {
-                transform: translateY(-4px) rotate(-2deg);
-            }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 5px rgba(244, 114, 182, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(244, 114, 182, 0.8), 0 0 30px rgba(251, 191, 36, 0.6);
-            }
-        }
-
-        @keyframes rainbow-border {
-            0% {
-                border-color: #f472b6;
-            }
-            25% {
-                border-color: #fbbf24;
-            }
-            50% {
-                border-color: #10b981;
-            }
-            75% {
-                border-color: #3b82f6;
-            }
-            100% {
-                border-color: #f472b6;
-            }
-        }
-
-        @keyframes wiggle {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(5deg);
-            }
-            75% {
-                transform: rotate(-5deg);
-            }
-        }
-
-        @keyframes fade-in-up {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .timeline-item {
-            animation: bounce-in 1.2s ease-out;
-        }
-
-        .sparkle-emoji {
-            animation: sparkle 2s ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-            display: inline-block;
-        }
-
-        .float-emoji {
-            animation: float 3s ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-            display: inline-block;
-        }
-
-        .pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        .rainbow-border {
-            animation: rainbow-border 3s linear infinite;
-        }
-
-        .wiggle {
-            animation: wiggle 0.5s ease-in-out infinite;
-        }
-
-        .fade-in-up {
-            animation: fade-in-up 0.8s ease-out;
-        }
-
-        .new-feature {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        .party-emojis span {
-            animation-delay: calc(var(--i) * 0.3s);
-        }
-
-        @keyframes confetti {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        .confetti {
-            position: absolute;
-            animation: confetti 2s ease-out infinite;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 p-8">
-    <!-- Bloc FÊTE avec animations -->
-    <div class="timeline-item max-w-2xl mx-auto">
-        <div class="bg-gradient-to-r from-pink-50 to-yellow-100 rounded-lg p-4 border-l-4 rainbow-border pulse-glow relative overflow-hidden">
+        <!-- Bloc FÊTE avec animations -->
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-pink-50 to-yellow-100 rounded-lg p-4 border-l-4 rainbow-border pulse-glow relative overflow-hidden">
             <!-- Confetti animation -->
             <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
-                <div class="confetti text-2xl" style="left: 10%; animation-delay: 0s;">🎊</div>
-                <div class="confetti text-xl" style="left: 30%; animation-delay: 0.5s;">✨</div>
-                <div class="confetti text-2xl" style="left: 60%; animation-delay: 1s;">🎉</div>
-                <div class="confetti text-xl" style="left: 80%; animation-delay: 1.5s;">🎈</div>
+              <div class="confetti text-2xl" style="left: 10%; animation-delay: 0s;">🎊</div>
+              <div class="confetti text-xl" style="left: 30%; animation-delay: 0.5s;">✨</div>
+              <div class="confetti text-2xl" style="left: 60%; animation-delay: 1s;">🎉</div>
+              <div class="confetti text-xl" style="left: 80%; animation-delay: 1.5s;">🎈</div>
             </div>
 
             <div class="flex items-center justify-between mb-2 fade-in-up">
-                <span class="text-sm font-semibold text-pink-700 bg-pink-200 px-3 py-1 rounded-full pulse-glow">20 juin 2025</span>
-                <span class="text-xs text-pink-700 font-medium new-feature px-2 py-1 rounded wiggle" style="background: linear-gradient(135deg,#f472b6,#fbbf24); color:white;">FÊTE</span>
+              <span class="text-sm font-semibold text-pink-700 bg-pink-200 px-3 py-1 rounded-full pulse-glow">20 juin 2025</span>
+              <span class="text-xs text-pink-700 font-medium new-feature px-2 py-1 rounded wiggle" style="background: linear-gradient(135deg,#f472b6,#fbbf24); color:white;">FÊTE</span>
             </div>
             
             <h4 class="text-gray-800 font-semibold mb-2 fade-in-up">
-                <span class="sparkle-emoji" style="--delay: 0s;">🎉</span>
-                <span class="float-emoji" style="--delay: 0.2s;">🎈</span>
-                <span class="sparkle-emoji" style="--delay: 0.4s;">✨</span>
-                Ouverture du blogue !! 
-                <span class="party-emojis" style="font-size:1.3em;">
-                    <span class="float-emoji" style="--delay: 0.6s; --i: 1;">🎊</span>
-                    <span class="sparkle-emoji" style="--delay: 0.8s; --i: 2;">🪩</span>
-                    <span class="float-emoji" style="--delay: 1s; --i: 3;">🎆</span>
-                </span>
+              <span class="sparkle-emoji" style="--delay: 0s;">🎉</span>
+              <span class="float-emoji" style="--delay: 0.2s;">🎈</span>
+              <span class="sparkle-emoji" style="--delay: 0.4s;">✨</span>
+              Ouverture du blogue !! 
+              <span class="party-emojis" style="font-size:1.3em;">
+                <span class="float-emoji" style="--delay: 0.6s; --i: 1;">🎊</span>
+                <span class="sparkle-emoji" style="--delay: 0.8s; --i: 2;">🪩</span>
+                <span class="float-emoji" style="--delay: 1s; --i: 3;">🎆</span>
+              </span>
             </h4>
             
             <p class="text-gray-700 mb-2 fade-in-up" style="animation-delay: 0.3s;">
-                Le blogue est officiellement ouvert ! Découvrez nos premiers articles, partagez vos retours et faites la fête avec nous !<br>
-                <span class="inline-block mt-2 text-lg party-emojis">
-                    <span class="float-emoji" style="--delay: 0s; --i: 1;">🥳</span>
-                    <span class="sparkle-emoji" style="--delay: 0.3s; --i: 2;">🎉</span>
-                    <span class="float-emoji" style="--delay: 0.6s; --i: 3;">🪩</span>
-                    <span class="sparkle-emoji" style="--delay: 0.9s; --i: 4;">🎈</span>
-                    <span class="float-emoji" style="--delay: 1.2s; --i: 5;">🎆</span>
-                </span>
+              Le blogue est officiellement ouvert ! Découvrez nos premiers articles, partagez vos retours et faites la fête avec nous !<br>
+              <span class="inline-block mt-2 text-lg party-emojis">
+                <span class="float-emoji" style="--delay: 0s; --i: 1;">🥳</span>
+                <span class="sparkle-emoji" style="--delay: 0.3s; --i: 2;">🎉</span>
+                <span class="float-emoji" style="--delay: 0.6s; --i: 3;">🪩</span>
+                <span class="sparkle-emoji" style="--delay: 0.9s; --i: 4;">🎈</span>
+                <span class="float-emoji" style="--delay: 1.2s; --i: 5;">🎆</span>
+              </span>
             </p>
             
             <div class="bg-pink-50 border-l-4 border-pink-400 p-3 mt-3 fade-in-up rainbow-border" style="animation-delay: 0.6s;">
-                <div class="flex items-center">
-                    <span class="text-xs text-pink-600 font-medium px-2 py-1 rounded mr-2 bg-pink-200 pulse-glow">NOUVEAU</span>
-                    <span class="text-pink-700 text-sm">Première publication sur le blogue – on célèbre ça !</span>
-                </div>
+              <div class="flex items-center">
+                <span class="text-xs text-pink-600 font-medium px-2 py-1 rounded mr-2 bg-pink-200 pulse-glow">NOUVEAU</span>
+                <span class="text-pink-700 text-sm">Première publication sur le blogue – on célèbre ça !</span>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
 
-    <script>
-        // Ajouter des confettis supplémentaires de façon aléatoire
-        function createConfetti() {
-            const container = document.querySelector('.timeline-item .relative');
-            const emojis = ['🎊', '🎉', '✨', '🎈', '🎆', '🪩', '🥳'];
-            
-            setInterval(() => {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.fontSize = (Math.random() * 10 + 15) + 'px';
-                confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                confetti.style.animationDelay = '0s';
-                confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
-                
-                container.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
-            }, 800);
-        }
-
-        // Démarrer l'animation de confettis après le chargement
-        setTimeout(createConfetti, 1500);
-
-        // Ajouter un effet de clic sur tout l'élément
-        document.querySelector('.timeline-item').addEventListener('click', function() {
-            this.style.transform = 'scale(1.02)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 150);
-        });
-    </script>
-</body>
-</html>
-         <!-- 20 juin 2025 : Changement de nom -->
+        <!-- 20 juin 2025 : Changement de nom -->
         <div class="timeline-item">
           <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg p-4 border-l-4 border-yellow-400">
             <div class="flex items-center justify-between mb-2">
@@ -341,86 +201,6 @@
             </div>
           </div>
         </div>
-        <!-- 18 juin 2025 : Sécurité -->
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-l-4 border-blue-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-blue-700 bg-blue-200 px-3 py-1 rounded-full">18 juin 2025</span>
-              <span class="text-xs text-white font-medium new-feature px-2 py-1 rounded">SÉCURITÉ</span>
-            </div>
-            <h4 class="text-gray-800 font-semibold mb-2">🔒 Système de mot de passe pour les administrateurs</h4>
-            <p class="text-gray-700 mb-2">Implémentation d'un système sécurisé de mot de passe pour accéder aux sections réservées aux administrateurs</p>
-            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3">
-              <div class="flex items-center">
-                <span class="text-xs text-blue-600 font-medium px-2 py-1 rounded mr-2 bg-blue-200">AJOUTÉ</span>
-                <span class="text-blue-700 text-sm">Sécurisation des sections "Nous contacter" et "Développement"</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- ... (les autres timeline-item suivants restent inchangés) ... -->
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border-l-4 border-blue-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-blue-700 bg-blue-200 px-3 py-1 rounded-full">17 juin 2025</span>
-              <span class="text-xs text-white font-medium bug-fix px-2 py-1 rounded">CORRECTION</span>
-            </div>
-            <h4 class="text-gray-800 font-semibold mb-2">🔧 Correction des boutons de la page d'accueil</h4>
-            <p class="text-gray-700 mb-2">Résolution du problème qui empêchait de cliquer sur les boutons de navigation de la page d'accueil</p>
-            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mt-3">
-              <div class="flex items-center">
-                <span class="text-xs text-blue-600 font-medium px-2 py-1 rounded mr-2 bg-blue-200">RÉSOLU</span>
-                <span class="text-blue-700 text-sm">Navigation restaurée et fonctionnelle sur toutes les sections</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg p-4 border-l-4 border-indigo-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-indigo-700 bg-indigo-200 px-3 py-1 rounded-full">17 juin 2025</span>
-              <span class="text-xs text-indigo-600 font-medium new-feature px-2 py-1 rounded">NOUVEAU</span>
-            </div>
-            <h4 class="text-gray-800 font-semibold mb-2">🏠 Ajout du bouton retour à l'accueil</h4>
-            <p class="text-gray-700 mb-2">Intégration d'un bouton de retour vers la page d'accueil dans la section "What's up"</p>
-            <div class="bg-indigo-50 border-l-4 border-indigo-400 p-3 mt-3">
-              <div class="flex items-center">
-                <span class="text-xs text-indigo-600 font-medium new-feature px-2 py-1 rounded mr-2">AJOUTÉ</span>
-                <span class="text-indigo-700 text-sm">Navigation simplifiée entre les pages du site</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">17 juin 2025</span>
-              <span class="text-xs text-white font-medium whatsapp-update px-2 py-1 rounded">WHATSAPP</span>
-            </div>
-            <h4 class="text-gray-800 font-semibold mb-2">📱 Système de mise à jour WhatsApp</h4>
-            <p class="text-gray-700 mb-2">Lancement du système de notifications et mises à jour via WhatsApp pour la communauté FashionFlow</p>
-            <div class="bg-green-50 border-l-4 border-green-400 p-3 mt-3">
-              <div class="flex items-center">
-                <span class="text-xs text-green-600 font-medium new-feature px-2 py-1 rounded mr-2">NOUVEAU</span>
-                <span class="text-green-700 text-sm">Rejoignez notre groupe WhatsApp pour recevoir les actualités en temps réel</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border-l-4 border-green-400">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-green-700 bg-green-200 px-3 py-1 rounded-full">17 juin 2025</span>
-              <span class="text-xs text-green-600 font-medium new-feature px-2 py-1 rounded">AMÉLIORATION</span>
-            </div>
-            <h4 class="text-gray-800 font-semibold mb-2">Amélioration des catégories du wiki</h4>
-            <p class="text-gray-700 mb-2">Optimisation et restructuration des catégories du Wiki FashionFlow</p>
-            <div class="bg-red-50 border-l-4 border-red-400 p-3 mt-3">
-              <span class="text-xs text-red-600 font-medium bug-fix px-2 py-1 rounded mr-2">CORRECTION</span>
-              <span class="text-red-700 text-sm">Correction du bug d'affichage dans la catégorie "What's up ?"</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -431,20 +211,6 @@
         Voir les archives complètes
       </a>
     </div>
-    <script>
-      function checkAdminPassword() {
-        const password = prompt("Entrez le mot de passe admin :");
-        // Remplace "FashionAdmin123" par ton vrai mot de passe sécurisé
-        if (password === "FashionAdmin123") {
-          window.location.href = "ArchiveMiseajour.html";
-        } else if (password === null) {
-          // L'utilisateur a annulé
-          alert("Accès annulé.");
-        } else {
-          alert("Mot de passe incorrect.");
-        }
-      }
-    </script>
 
     <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
       <div class="flex items-center mb-8">
@@ -487,35 +253,7 @@
           </button>
         </div>
 
-        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
-          <div class="flex items-center mb-3">
-            <span class="feature-icon text-2xl mr-3">⚙️</span>
-            <h3 class="font-semibold text-gray-800">Catégorie Blogue</h3>
-          </div>
-          <p class="text-gray-600 text-sm">Lancement de la nouvelle catégorie blogue pour les ressources techniques</p>
-          <span class="inline-block mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">En préparation</span>
-          <!-- Section admin "Développement"/"Blogue" -->
-          <div id="dev-admin" class="admin-section mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-            <h4 class="font-semibold text-indigo-800 mb-2 flex items-center">
-              <i class="fas fa-lock mr-2"></i> Section Admin - Blogue
-            </h4>
-            <p class="text-sm text-indigo-700 mb-3">Ressources techniques pour les développeurs.</p>
-            <div class="space-y-3">
-              <div class="p-3 bg-white rounded border border-indigo-100">
-                <h5 class="font-medium text-indigo-900">Documentation API</h5>
-                <p class="text-xs text-indigo-600">Version 2.4 - Mise à jour</p>
-              </div>
-              <div class="p-3 bg-white rounded border border-indigo-100">
-                <h5 class="font-medium text-indigo-900">Journal des changements</h5>
-                <p class="text-xs text-indigo-600">Accès complet</p>
-              </div>
-            </div>
-          </div>
-          <button onclick="showPasswordModal('dev')" class="mt-3 w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded-lg transition-colors">
-            <i class="fas fa-key mr-2"></i> Accès Admin
-          </button>
-        </div>
-        <!-- Bloc "Mise à jour du blogue" ajouté ici -->
+        <!-- Bloc "Mise à jour du blogue" -->
         <div class="bg-gradient-to-br from-pink-50 to-yellow-100 p-6 rounded-xl border border-pink-200">
           <div class="flex items-center mb-3">
             <span class="feature-icon text-2xl mr-3">📝</span>
@@ -524,6 +262,7 @@
           <p class="text-gray-600 text-sm">Améliorations à venir sur la section blogue et nouveaux articles à découvrir prochainement !</p>
           <span class="inline-block mt-2 text-xs bg-pink-100 text-pink-700 px-2 py-1 rounded-full">À venir</span>
         </div>
+
         <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-xl border border-emerald-200">
           <div class="flex items-center mb-3">
             <span class="feature-icon text-2xl mr-3">💬</span>
@@ -548,72 +287,9 @@
           </div>
           <p class="text-gray-600 text-sm">Possibilité de voter pour les fonctionnalités à venir</p>
         </div>
-
-        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
-          <div class="flex items-center mb-3">
-            <span class="feature-icon text-2xl mr-3">🍪</span>
-            <h3 class="font-semibold text-gray-800">Cookies</h3>
-          </div>
-          <p class="text-gray-600 text-sm">Ajout d'un système de cookies pour l'expérience utilisateur</p>
-        </div>
       </div>
     </section>
   </main>
-  <!-- Bouton Archives avec protection admin -->
-  <div class="flex justify-center mb-8">
-    <button class="btn-primary inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors" onclick="showArchivePopup()">
-      <i class="fas fa-archive mr-2"></i>
-      Voir les archives complètes
-    </button>
-  </div>
-
-  <!-- Popup pour les archives (à ajouter dans votre HTML) -->
-  <div id="archivePopup" class="popup-overlay" style="display: none;">
-    <div class="popup-content email-popup-content">
-      <h3 style="margin-bottom: 1rem;">📁 Archives Complètes</h3>
-      <p style="margin-bottom: 1rem;">Accès restreint aux administrateurs</p>
-      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Entrez le mot de passe admin :</p>
-      <input type="password" class="admin-input" id="archiveAdminPassword" placeholder="Mot de passe admin">
-      <div style="margin-top: 1rem;">
-        <button class="modern-button" onclick="checkArchiveAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
-        <button class="modern-button" onclick="closeArchivePopup()" style="margin: 0.5rem;">Fermer</button>
-      </div>
-    </div>
-  </div>
-  <script>
-    // Fonction pour afficher le popup des archives
-    function showArchivePopup() { document.getElementById('archivePopup').style.display = 'flex'; }
-
-    // Fonction pour fermer le popup des archives
-    function closeArchivePopup() {
-      document.getElementById('archivePopup').style.display = 'none';
-      document.getElementById('archiveAdminPassword').value = '';
-    }
-
-    // Fonction pour vérifier le mot de passe admin des archives
-    function checkArchiveAdminPassword() {
-      const password = document.getElementById('archiveAdminPassword').value;
-      const correctPassword = 'votre_mot_de_passe_admin'; // Remplacez par votre mot de passe
-      if (password === correctPassword) {
-        window.location.href = 'ArchiveMiseajour.html';
-      } else {
-        alert('Mot de passe incorrect !');
-        document.getElementById('archiveAdminPassword').value = '';
-      }
-    }
-    // Fermer le popup en cliquant en dehors
-    document.getElementById('archivePopup').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeArchivePopup();
-      }
-    });
-    // Permettre la validation avec la touche Entrée
-    document.getElementById('archiveAdminPassword').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        checkArchiveAdminPassword();
-      }
-    });
-  </script>
 
   <!-- Footer avec bouton de retour -->
   <footer class="bg-white border-t border-gray-200 mt-16">
@@ -635,7 +311,7 @@
               </div>
               <h3 class="font-bold text-white text-2xl">Actualités en Direct</h3>
             </div>
-            <p class="text-green-100 text-lg mb-6 font-medium">
+             <p class="text-green-100 text-lg mb-6 font-medium">
               🚀 Rejoignez notre communauté WhatsApp et soyez les premiers informés !
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
