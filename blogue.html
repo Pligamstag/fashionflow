@@ -95,6 +95,52 @@
       font-size: 0.8rem;
       font-weight: 500;
     }
+    .post-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+    .like-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .like-btn {
+      background: none;
+      border: 2px solid #e74c3c;
+      color: #e74c3c;
+      padding: 6px 12px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    .like-btn:hover {
+      transform: scale(1.05);
+    }
+    .like-btn.liked {
+      background: #e74c3c;
+      color: white;
+      animation: likeAnimation 0.3s ease;
+    }
+    @keyframes likeAnimation {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .like-count {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.9rem;
+    }
     .post-actions {
       display: flex;
       gap: 10px;
@@ -259,6 +305,12 @@
       margin-bottom: 10px;
       font-style: italic;
     }
+    .liked-users {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 5px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -280,6 +332,12 @@
         <div class="post-content">yo</div>
         <div class="post-tags">
           <span class="tag">yo</span>
+        </div>
+        <div class="post-stats">
+          <div class="like-section">
+            <button class="like-btn">❤️ J'aime</button>
+            <span class="like-count">0 like(s)</span>
+          </div>
         </div>
         <div class="post-actions">
           <button class="btn delete-btn">🗑️ Supprimer</button>
@@ -315,7 +373,11 @@
       query,
       orderBy,
       where,
-      serverTimestamp
+      serverTimestamp,
+      updateDoc,
+      arrayUnion,
+      arrayRemove,
+      getDoc
     } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -336,6 +398,48 @@
     const postsContainer = document.getElementById("postsContainer");
     const currentUser = "Samy";
     const ADMIN_PASSWORD = "LucieKaraoui";
+
+    async function toggleLike(postId) {
+      try {
+        const postRef = doc(db, "devloppement", postId);
+        const postDoc = await getDoc(postRef);
+        
+        if (!postDoc.exists()) {
+          alert("Post introuvable !");
+          return;
+        }
+
+        const postData = postDoc.data();
+        const currentLikes = postData.likes || [];
+        const hasLiked = currentLikes.includes(currentUser);
+
+        if (hasLiked) {
+          // Retirer le like
+          await updateDoc(postRef, {
+            likes: arrayRemove(currentUser)
+          });
+        } else {
+          // Ajouter le like
+          await updateDoc(postRef, {
+            likes: arrayUnion(currentUser)
+          });
+        }
+
+        // Recharger les posts pour mettre à jour l'affichage
+        loadPosts();
+        
+        // Animation de feedback
+        const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
+        if (likeBtn && !hasLiked) {
+          likeBtn.classList.add('liked');
+          setTimeout(() => likeBtn.classList.remove('liked'), 300);
+        }
+
+      } catch (error) {
+        console.error("Erreur lors du toggle like:", error);
+        alert("Erreur lors de la mise à jour du like : " + error.message);
+      }
+    }
 
     async function deletePost(postId, postAuthor) {
       if (postAuthor === currentUser) {
@@ -489,8 +593,13 @@
         }));
 
         postsContainer.innerHTML = postsWithReplies
-          .map(
-            (post) => `
+          .map((post) => {
+            const likes = post.likes || [];
+            const likesCount = likes.length;
+            const hasLiked = likes.includes(currentUser);
+            const likedUsers = likes.length > 0 ? `Aimé par: ${likes.join(', ')}` : '';
+            
+            return `
             <div class="post-card" data-post-id="${post.id}">
               <div class="post-header">
                 <div class="post-title">${post.title}</div>
@@ -501,6 +610,15 @@
               <div class="post-tags">
                 ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
               </div>
+              <div class="post-stats">
+                <div class="like-section">
+                  <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+                    ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
+                  </button>
+                  <span class="like-count">${likesCount} like(s)</span>
+                </div>
+              </div>
+              ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
               <div class="post-actions">
                 <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
                 <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
@@ -520,8 +638,8 @@
                 <div class="replies-list"></div>
               </div>
             </div>
-          `
-          )
+          `;
+          })
           .join("");
       } catch (error) {
         console.error("Erreur lors du chargement des posts:", error);
@@ -535,6 +653,7 @@
     window.submitReply = submitReply;
     window.cancelReply = cancelReply;
     window.toggleReplies = toggleReplies;
+    window.toggleLike = toggleLike;
 
     // Charger les posts au démarrage
     window.addEventListener("DOMContentLoaded", loadPosts);
