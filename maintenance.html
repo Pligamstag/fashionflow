@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance en cours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .maintenance-container, .admin-container {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .admin-container {
+            max-width: 400px;
+            padding: 30px;
+        }
+
+        .gear-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: rotate 3s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+
+        .lock-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        .admin-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .admin-subtitle {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: progressMove 2s ease-in-out infinite, gradientMove 3s ease-in-out infinite;
+            width: 0;
+        }
+
+        .password-form {
+            margin: 30px 0;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .password-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .submit-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 1em;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .success-message {
+            color: #4ecdc4;
+            margin-top: 15px;
+            font-size: 1em;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 20px; height: 20px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 15px; height: 15px; left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { width: 25px; height: 25px; left: 70%; animation-delay: 2s; }
+        .particle:nth-child(4) { width: 18px; height: 18px; left: 80%; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 22px; height: 22px; left: 50%; animation-delay: 4s; }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes progressMove {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 0.8; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .maintenance-container, .admin-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            
+            h1, .admin-title {
+                font-size: 2.2em;
+            }
+            
+            .subtitle, .admin-subtitle {
+                font-size: 1.1em;
+            }
+            
+            .gear-icon {
+                font-size: 60px;
+            }
+
+            .admin-link {
+                position: relative;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Page de maintenance -->
+    <div id="maintenancePage" class="maintenance-container">
+        <div class="gear-icon">⚙️</div>
+        <h1>Maintenance en cours</h1>
+        <p class="subtitle">
+            Notre site est actuellement en maintenance pour vous offrir une meilleure expérience.
+            <br>Nous reviendrons très bientôt !
+        </p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <a href="#" class="admin-link" onclick="showAdminLogin()">🔐 Accès Admin</a>
+    </div>
+
+    <!-- Page de connexion admin -->
+    <div id="adminLogin" class="admin-container hidden">
+        <div class="lock-icon">🔐</div>
+        <h2 class="admin-title">Accès Administrateur</h2>
+        <p class="admin-subtitle">Entrez le mot de passe pour accéder au site</p>
+        
+        <div class="password-form">
+            <input type="password" id="passwordInput" class="password-input" placeholder="Mot de passe..." onkeypress="handleKeyPress(event)">
+            <button id="submitBtn" class="submit-btn" onclick="checkPassword()">Accéder</button>
+            <div id="errorMessage" class="error-message hidden">❌ Mot de passe incorrect</div>
+            <div id="successMessage" class="success-message hidden">✅ Accès autorisé, redirection...</div>
+            <div id="loadingSpinner" class="loading-spinner hidden"></div>
+        </div>
+        
+        <a href="#" onclick="showMaintenance()" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9em;">← Retour</a>
+    </div>
+
+    <script>
+        // Configuration - Modifiez ces valeurs selon vos besoins
+        const ADMIN_PASSWORD = "LucieKaraoui"; // Changez ce mot de passe
+        const REDIRECT_URL = "blog.html"; // Changez cette URL vers votre page
+
+        function showAdminLogin() {
+            document.getElementById('maintenancePage').classList.add('hidden');
+            document.getElementById('adminLogin').classList.remove('hidden');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function showMaintenance() {
+            document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('maintenancePage').classList.remove('hidden');
+            clearMessages();
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function clearMessages() {
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('loadingSpinner').classList.add('hidden');
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!password) {
+                showError("Veuillez entrer un mot de passe");
+                return;
+            }
+
+            // Désactiver le bouton et afficher le spinner
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Vérification...";
+            clearMessages();
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+
+            // Simuler un délai de vérification (optionnel)
+            setTimeout(() => {
+                if (password === ADMIN_PASSWORD) {
+                    // Mot de passe correct
+                    document.getElementById('loadingSpinner').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    
+                    // Redirection après un court délai
+                    setTimeout(() => {
+                        window.location.href = REDIRECT_URL;
+                    }, 1500);
+                } else {
+                    // Mot de passe incorrect
+                    document.getElementById('loadingSpinner').classList.add('hidden');
+                    showError("Mot de passe incorrect");
+                    
+                    // Réactiver le bouton
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Accéder";
+                    
+                    // Vider le champ de mot de passe
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordInput').focus();
+                }
+            }, 1000); // Délai de 1 seconde pour la simulation
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = "❌ " + message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        }
+
+        // Empêcher l'envoi du formulaire par défaut
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && event.target.id === 'passwordInput') {
+                event.preventDefault();
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
