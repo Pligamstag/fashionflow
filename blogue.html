@@ -37,7 +37,7 @@
     }
     .posts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
       gap: 25px;
       margin-bottom: 40px;
     }
@@ -85,6 +85,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-bottom: 15px;
     }
     .tag {
       background: linear-gradient(45deg, #667eea, #764ba2);
@@ -93,6 +94,148 @@
       border-radius: 20px;
       font-size: 0.8rem;
       font-weight: 500;
+    }
+    .post-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    .delete-btn:hover {
+      background: #c0392b;
+      transform: scale(1.05);
+    }
+    .reply-btn {
+      background: #3498db;
+      color: white;
+    }
+    .reply-btn:hover {
+      background: #2980b9;
+      transform: scale(1.05);
+    }
+    .replies-section {
+      border-top: 2px solid #eee;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    .replies-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .replies-count {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .toggle-replies {
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .toggle-replies:hover {
+      background: #7f8c8d;
+    }
+    .reply-form {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .reply-form.active {
+      display: block;
+    }
+    .reply-input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    .reply-input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+    .reply-form-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .submit-reply {
+      background: #27ae60;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .submit-reply:hover {
+      background: #229954;
+    }
+    .cancel-reply {
+      background: #95a5a6;
+      color: white;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .cancel-reply:hover {
+      background: #7f8c8d;
+    }
+    .replies-list {
+      display: none;
+    }
+    .replies-list.active {
+      display: block;
+    }
+    .reply-item {
+      background: #f1f2f6;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid #3498db;
+    }
+    .reply-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .reply-author {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 0.9rem;
+    }
+    .reply-date {
+      color: #7f8c8d;
+      font-size: 0.8rem;
+    }
+    .reply-content {
+      color: #34495e;
+      line-height: 1.5;
+      font-size: 0.9rem;
     }
     .empty-state {
       text-align: center;
@@ -105,44 +248,56 @@
       color: white;
       text-decoration: none;
       font-weight: 600;
+      margin-right: 20px;
     }
     a.back-link:hover {
       text-decoration: underline;
     }
-    button.delete-btn {
-      margin-top: 10px;
-      background: #e74c3c;
-      border: none;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.3s ease;
-    }
-    button.delete-btn:hover {
-      background: #c0392b;
+    .author-info {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 10px;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
   <div class="container">
-   <div class="header">
-  <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
-  <p>Tous vos posts de développement en un seul endroit</p>
-  <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
-  <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
-</div>
+    <div class="header">
+      <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
+      <p>Tous vos posts de développement en un seul endroit</p>
+      <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
+      <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
+    </div>
 
-    <div id="postsContainer">
+    <div id="postsContainer" class="posts-grid">
       <div class="post-card">
         <div class="post-header">
           <div class="post-title">yo</div>
           <div class="post-date">20/06/2025</div>
         </div>
+        <div class="author-info">Par: Utilisateur</div>
         <div class="post-content">yo</div>
         <div class="post-tags">
           <span class="tag">yo</span>
+        </div>
+        <div class="post-actions">
+          <button class="btn delete-btn">🗑️ Supprimer</button>
+          <button class="btn reply-btn">💬 Répondre</button>
+        </div>
+        <div class="replies-section">
+          <div class="replies-header">
+            <span class="replies-count">0 réponse(s)</span>
+            <button class="toggle-replies">Voir les réponses</button>
+          </div>
+          <div class="reply-form">
+            <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
+            <div class="reply-form-actions">
+              <button class="submit-reply">Publier</button>
+              <button class="cancel-reply">Annuler</button>
+            </div>
+          </div>
+          <div class="replies-list"></div>
         </div>
       </div>
     </div>
@@ -154,10 +309,13 @@
       getFirestore,
       collection,
       getDocs,
+      addDoc,
+      deleteDoc,
+      doc,
       query,
       orderBy,
-      deleteDoc,
-      doc
+      where,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -173,10 +331,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const postsCol = collection(db, "devloppement");
+    const repliesCol = collection(db, "replies");
 
     const postsContainer = document.getElementById("postsContainer");
-
-    const currentUser = "Samy"; // Remplace par ton nom d'utilisateur réel
+    const currentUser = "Samy";
     const ADMIN_PASSWORD = "LucieKaraoui";
 
     async function deletePost(postId, postAuthor) {
@@ -184,7 +342,14 @@
         if (!confirm("Supprimer ton post ?")) return;
         try {
           await deleteDoc(doc(db, "devloppement", postId));
-          alert("Post supprimé !");
+          
+          // Supprimer toutes les réponses associées
+          const repliesQuery = query(repliesCol, where("postId", "==", postId));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+          await Promise.all(deletePromises);
+          
+          alert("Post et réponses supprimés !");
           loadPosts();
         } catch (error) {
           alert("Erreur suppression : " + error.message);
@@ -198,7 +363,14 @@
         if (!confirm("Supprimer ce post ?")) return;
         try {
           await deleteDoc(doc(db, "devloppement", postId));
-          alert("Post supprimé !");
+          
+          // Supprimer toutes les réponses associées
+          const repliesQuery = query(repliesCol, where("postId", "==", postId));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+          await Promise.all(deletePromises);
+          
+          alert("Post et réponses supprimés !");
           loadPosts();
         } catch (error) {
           alert("Erreur suppression : " + error.message);
@@ -206,40 +378,166 @@
       }
     }
 
-    async function loadPosts() {
-      postsContainer.innerHTML = "Chargement des posts...";
-      const q = query(postsCol, orderBy("date", "desc"));
-      const snapshot = await getDocs(q);
-      const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    async function toggleReplyForm(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      form.classList.toggle('active');
+      
+      if (form.classList.contains('active')) {
+        const textarea = form.querySelector('.reply-input');
+        textarea.focus();
+      }
+    }
 
-      if (posts.length === 0) {
-        postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+    async function submitReply(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      const textarea = form.querySelector('.reply-input');
+      const content = textarea.value.trim();
+      
+      if (!content) {
+        alert("Veuillez écrire quelque chose avant de publier !");
         return;
       }
 
-      postsContainer.innerHTML = posts
-        .map(
-          (post) => `
-          <div class="post-card">
-            <div class="post-header">
-              <div class="post-title">${post.title}</div>
-              <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
-            </div>
-            <div class="post-content">${post.content}</div>
-            <div class="post-tags">
-              ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
-            </div>
-            <button class="delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">Supprimer</button>
-          </div>
-        `
-        )
-        .join("");
+      try {
+        await addDoc(repliesCol, {
+          postId: postId,
+          content: content,
+          author: currentUser,
+          date: new Date().toISOString(),
+          timestamp: serverTimestamp()
+        });
+        
+        textarea.value = '';
+        form.classList.remove('active');
+        loadReplies(postId);
+        alert("Réponse publiée avec succès !");
+      } catch (error) {
+        alert("Erreur lors de la publication : " + error.message);
+      }
     }
 
-    window.addEventListener("DOMContentLoaded", loadPosts);
+    async function cancelReply(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      const textarea = form.querySelector('.reply-input');
+      textarea.value = '';
+      form.classList.remove('active');
+    }
 
-    // Rendre la fonction accessible globalement (dans window) pour le onclick
+    async function toggleReplies(postId) {
+      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+      const toggleBtn = document.querySelector(`[data-post-id="${postId}"] .toggle-replies`);
+      
+      if (repliesList.classList.contains('active')) {
+        repliesList.classList.remove('active');
+        toggleBtn.textContent = 'Voir les réponses';
+      } else {
+        repliesList.classList.add('active');
+        toggleBtn.textContent = 'Masquer les réponses';
+        loadReplies(postId);
+      }
+    }
+
+    async function loadReplies(postId) {
+      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+      const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
+      
+      try {
+        const q = query(repliesCol, where("postId", "==", postId), orderBy("date", "asc"));
+        const snapshot = await getDocs(q);
+        const replies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        repliesCount.textContent = `${replies.length} réponse(s)`;
+        
+        if (replies.length === 0) {
+          repliesList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Aucune réponse pour le moment.</p>';
+          return;
+        }
+
+        repliesList.innerHTML = replies.map(reply => `
+          <div class="reply-item">
+            <div class="reply-header">
+              <span class="reply-author">👤 ${reply.author || 'Anonyme'}</span>
+              <span class="reply-date">${new Date(reply.date).toLocaleDateString('fr-FR')} à ${new Date(reply.date).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</span>
+            </div>
+            <div class="reply-content">${reply.content}</div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error("Erreur lors du chargement des réponses:", error);
+        repliesList.innerHTML = '<p style="color: #e74c3c;">Erreur lors du chargement des réponses.</p>';
+      }
+    }
+
+    async function loadPosts() {
+      postsContainer.innerHTML = "<p style='text-align: center; color: white;'>Chargement des posts...</p>";
+      
+      try {
+        const q = query(postsCol, orderBy("date", "desc"));
+        const snapshot = await getDocs(q);
+        const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        if (posts.length === 0) {
+          postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+          return;
+        }
+
+        // Charger le nombre de réponses pour chaque post
+        const postsWithReplies = await Promise.all(posts.map(async (post) => {
+          const repliesQuery = query(repliesCol, where("postId", "==", post.id));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          return { ...post, repliesCount: repliesSnapshot.size };
+        }));
+
+        postsContainer.innerHTML = postsWithReplies
+          .map(
+            (post) => `
+            <div class="post-card" data-post-id="${post.id}">
+              <div class="post-header">
+                <div class="post-title">${post.title}</div>
+                <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+              </div>
+              <div class="author-info">👤 Par: ${post.author || 'Anonyme'}</div>
+              <div class="post-content">${post.content}</div>
+              <div class="post-tags">
+                ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
+              </div>
+              <div class="post-actions">
+                <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
+                <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
+              </div>
+              <div class="replies-section">
+                <div class="replies-header">
+                  <span class="replies-count">${post.repliesCount} réponse(s)</span>
+                  <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
+                </div>
+                <div class="reply-form">
+                  <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
+                  <div class="reply-form-actions">
+                    <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
+                    <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
+                  </div>
+                </div>
+                <div class="replies-list"></div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      } catch (error) {
+        console.error("Erreur lors du chargement des posts:", error);
+        postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
+      }
+    }
+
+    // Rendre les fonctions accessibles globalement
     window.deletePost = deletePost;
+    window.toggleReplyForm = toggleReplyForm;
+    window.submitReply = submitReply;
+    window.cancelReply = cancelReply;
+    window.toggleReplies = toggleReplies;
+
+    // Charger les posts au démarrage
+    window.addEventListener("DOMContentLoaded", loadPosts);
   </script>
 </body>
 </html>
