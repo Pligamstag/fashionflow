@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Archive des Posts - FashionFlow Admin</title>
+  <title>Le blog de FashionFlow</title>
   <style>
     * {
       margin: 0;
@@ -34,6 +34,17 @@
     .header p {
       font-size: 1.1rem;
       opacity: 0.9;
+    }
+    .user-selector {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .user-selector select {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      margin-left: 10px;
     }
     .posts-grid {
       display: grid;
@@ -108,6 +119,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .like-btn {
       background: none;
@@ -140,6 +152,14 @@
       font-weight: bold;
       color: #666;
       font-size: 0.9rem;
+    }
+    .liked-users {
+      font-size: 0.8rem;
+      color: #666;
+      font-style: italic;
+      margin-top: 5px;
+      max-width: 100%;
+      word-wrap: break-word;
     }
     .post-actions {
       display: flex;
@@ -305,11 +325,24 @@
       margin-bottom: 10px;
       font-style: italic;
     }
-    .liked-users {
-      font-size: 0.8rem;
-      color: #666;
-      margin-top: 5px;
-      font-style: italic;
+    .loading {
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+    .error {
+      background: #e74c3c;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .success {
+      background: #27ae60;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -318,171 +351,162 @@
     <div class="header">
       <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
       <p>Tous vos posts de développement en un seul endroit</p>
-      <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
-      <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
+      <div class="user-selector">
+        <label for="userSelect" style="color: white;">Utilisateur actuel :</label>
+        <select id="userSelect">
+          <option value="Samy">Samy</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Lucie">Lucie</option>
+          <option value="Alex">Alex</option>
+          <option value="Marie">Marie</option>
+        </select>
+      </div>
+      <a href="#" class="back-link">← Créer un nouveau post</a>
+      <a href="#" class="back-link">🏠 Retour à l'accueil</a>
     </div>
 
     <div id="postsContainer" class="posts-grid">
-      <div class="post-card">
-        <div class="post-header">
-          <div class="post-title">yo</div>
-          <div class="post-date">20/06/2025</div>
-        </div>
-        <div class="author-info">Par: Utilisateur</div>
-        <div class="post-content">yo</div>
-        <div class="post-tags">
-          <span class="tag">yo</span>
-        </div>
-        <div class="post-stats">
-          <div class="like-section">
-            <button class="like-btn">❤️ J'aime</button>
-            <span class="like-count">0 like(s)</span>
-          </div>
-        </div>
-        <div class="post-actions">
-          <button class="btn delete-btn">🗑️ Supprimer</button>
-          <button class="btn reply-btn">💬 Répondre</button>
-        </div>
-        <div class="replies-section">
-          <div class="replies-header">
-            <span class="replies-count">0 réponse(s)</span>
-            <button class="toggle-replies">Voir les réponses</button>
-          </div>
-          <div class="reply-form">
-            <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
-            <div class="reply-form-actions">
-              <button class="submit-reply">Publier</button>
-              <button class="cancel-reply">Annuler</button>
-            </div>
-          </div>
-          <div class="replies-list"></div>
-        </div>
-      </div>
+      <div class="loading">Chargement des posts...</div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      addDoc,
-      deleteDoc,
-      doc,
-      query,
-      orderBy,
-      where,
-      serverTimestamp,
-      updateDoc,
-      arrayUnion,
-      arrayRemove,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+  <script>
+    // Simulation de données Firebase en mémoire
+    let posts = [
+      {
+        id: '1',
+        title: 'Mon premier post de développement',
+        content: 'Aujourd\'hui j\'ai appris React et c\'est vraiment génial ! Les composants rendent le développement tellement plus facile.',
+        author: 'Samy',
+        date: new Date('2025-06-20').toISOString(),
+        tags: ['React', 'JavaScript', 'Frontend'],
+        likes: ['Fashion', 'Alex'],
+        timestamp: Date.now()
+      },
+      {
+        id: '2',
+        title: 'CSS Grid vs Flexbox',
+        content: 'Une comparaison détaillée entre CSS Grid et Flexbox. Grid est parfait pour les layouts 2D tandis que Flexbox excelle en 1D.',
+        author: 'Fashion',
+        date: new Date('2025-06-21').toISOString(),
+        tags: ['CSS', 'Layout', 'Frontend'],
+        likes: ['Samy', 'Marie', 'Lucie'],
+        timestamp: Date.now() - 86400000
+      },
+      {
+        id: '3',
+        title: 'Introduction à Node.js',
+        content: 'Node.js permet d\'utiliser JavaScript côté serveur. Très pratique pour créer des APIs REST et des applications full-stack.',
+        author: 'Alex',
+        date: new Date('2025-06-22').toISOString(),
+        tags: ['Node.js', 'Backend', 'JavaScript'],
+        likes: ['Samy'],
+        timestamp: Date.now() - 172800000
+      }
+    ];
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-      authDomain: "fashionflow-3db6b.firebaseapp.com",
-      projectId: "fashionflow-3db6b",
-      storageBucket: "fashionflow-3db6b.firebasestorage.app",
-      messagingSenderId: "1073693995934",
-      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
-      measurementId: "G-P4DP02HQ75"
-    };
+    let replies = [
+      {
+        id: '1',
+        postId: '1',
+        content: 'Excellent post ! React est effectivement révolutionnaire.',
+        author: 'Marie',
+        date: new Date('2025-06-20T10:30:00').toISOString()
+      },
+      {
+        id: '2',
+        postId: '1',
+        content: 'As-tu essayé Next.js ? C\'est encore mieux !',
+        author: 'Lucie',
+        date: new Date('2025-06-20T11:45:00').toISOString()
+      },
+      {
+        id: '3',
+        postId: '2',
+        content: 'Très bon résumé ! J\'utilise Grid pour mes layouts principaux.',
+        author: 'Alex',
+        date: new Date('2025-06-21T14:20:00').toISOString()
+      }
+    ];
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const postsCol = collection(db, "devloppement");
-    const repliesCol = collection(db, "replies");
-
-    const postsContainer = document.getElementById("postsContainer");
-    const currentUser = "Samy";
+    const postsContainer = document.getElementById('postsContainer');
+    const userSelect = document.getElementById('userSelect');
     const ADMIN_PASSWORD = "LucieKaraoui";
+    let currentUser = 'Samy';
 
+    // Gestion du changement d'utilisateur
+    userSelect.addEventListener('change', (e) => {
+      currentUser = e.target.value;
+      loadPosts();
+    });
+
+    // Fonction pour générer un ID unique
+    function generateId() {
+      return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Fonction pour basculer les likes
     async function toggleLike(postId) {
       try {
-        const postRef = doc(db, "devloppement", postId);
-        const postDoc = await getDoc(postRef);
-        
-        if (!postDoc.exists()) {
-          alert("Post introuvable !");
+        const post = posts.find(p => p.id === postId);
+        if (!post) {
+          showMessage('Post introuvable !', 'error');
           return;
         }
 
-        const postData = postDoc.data();
-        const currentLikes = postData.likes || [];
-        const hasLiked = currentLikes.includes(currentUser);
-
+        if (!post.likes) post.likes = [];
+        
+        const hasLiked = post.likes.includes(currentUser);
+        
         if (hasLiked) {
           // Retirer le like
-          await updateDoc(postRef, {
-            likes: arrayRemove(currentUser)
-          });
+          post.likes = post.likes.filter(user => user !== currentUser);
         } else {
           // Ajouter le like
-          await updateDoc(postRef, {
-            likes: arrayUnion(currentUser)
-          });
+          post.likes.push(currentUser);
         }
 
         // Recharger les posts pour mettre à jour l'affichage
         loadPosts();
         
-        // Animation de feedback
-        const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
-        if (likeBtn && !hasLiked) {
-          likeBtn.classList.add('liked');
-          setTimeout(() => likeBtn.classList.remove('liked'), 300);
-        }
+        // Afficher un message de confirmation
+        showMessage(hasLiked ? 'Like retiré !' : 'Post liké !', 'success');
 
       } catch (error) {
         console.error("Erreur lors du toggle like:", error);
-        alert("Erreur lors de la mise à jour du like : " + error.message);
+        showMessage("Erreur lors de la mise à jour du like", 'error');
       }
     }
 
+    // Fonction pour supprimer un post
     async function deletePost(postId, postAuthor) {
       if (postAuthor === currentUser) {
         if (!confirm("Supprimer ton post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          // Supprimer toutes les réponses associées
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur suppression : " + error.message);
-        }
       } else {
         const pass = prompt("Ce post n'est pas à toi, entre le mot de passe admin pour supprimer :");
         if (pass !== ADMIN_PASSWORD) {
-          alert("Mot de passe incorrect, suppression annulée.");
+          showMessage("Mot de passe incorrect, suppression annulée.", 'error');
           return;
         }
         if (!confirm("Supprimer ce post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          // Supprimer toutes les réponses associées
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur suppression : " + error.message);
-        }
+      }
+
+      try {
+        // Supprimer le post
+        posts = posts.filter(p => p.id !== postId);
+        
+        // Supprimer toutes les réponses associées
+        replies = replies.filter(r => r.postId !== postId);
+        
+        showMessage("Post et réponses supprimés !", 'success');
+        loadPosts();
+      } catch (error) {
+        showMessage("Erreur suppression : " + error.message, 'error');
       }
     }
 
-    async function toggleReplyForm(postId) {
+    // Fonction pour basculer le formulaire de réponse
+    function toggleReplyForm(postId) {
       const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
       form.classList.toggle('active');
       
@@ -492,42 +516,47 @@
       }
     }
 
-    async function submitReply(postId) {
+    // Fonction pour soumettre une réponse
+    function submitReply(postId) {
       const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
       const textarea = form.querySelector('.reply-input');
       const content = textarea.value.trim();
       
       if (!content) {
-        alert("Veuillez écrire quelque chose avant de publier !");
+        showMessage("Veuillez écrire quelque chose avant de publier !", 'error');
         return;
       }
 
       try {
-        await addDoc(repliesCol, {
+        const newReply = {
+          id: generateId(),
           postId: postId,
           content: content,
           author: currentUser,
-          date: new Date().toISOString(),
-          timestamp: serverTimestamp()
-        });
+          date: new Date().toISOString()
+        };
+        
+        replies.push(newReply);
         
         textarea.value = '';
         form.classList.remove('active');
         loadReplies(postId);
-        alert("Réponse publiée avec succès !");
+        showMessage("Réponse publiée avec succès !", 'success');
       } catch (error) {
-        alert("Erreur lors de la publication : " + error.message);
+        showMessage("Erreur lors de la publication : " + error.message, 'error');
       }
     }
 
-    async function cancelReply(postId) {
+    // Fonction pour annuler une réponse
+    function cancelReply(postId) {
       const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
       const textarea = form.querySelector('.reply-input');
       textarea.value = '';
       form.classList.remove('active');
     }
 
-    async function toggleReplies(postId) {
+    // Fonction pour basculer l'affichage des réponses
+    function toggleReplies(postId) {
       const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
       const toggleBtn = document.querySelector(`[data-post-id="${postId}"] .toggle-replies`);
       
@@ -541,23 +570,23 @@
       }
     }
 
-    async function loadReplies(postId) {
+    // Fonction pour charger les réponses
+    function loadReplies(postId) {
       const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
       const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
       
       try {
-        const q = query(repliesCol, where("postId", "==", postId), orderBy("date", "asc"));
-        const snapshot = await getDocs(q);
-        const replies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const postReplies = replies.filter(r => r.postId === postId)
+                                   .sort((a, b) => new Date(a.date) - new Date(b.date));
         
-        repliesCount.textContent = `${replies.length} réponse(s)`;
+        repliesCount.textContent = `${postReplies.length} réponse(s)`;
         
-        if (replies.length === 0) {
+        if (postReplies.length === 0) {
           repliesList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Aucune réponse pour le moment.</p>';
           return;
         }
 
-        repliesList.innerHTML = replies.map(reply => `
+        repliesList.innerHTML = postReplies.map(reply => `
           <div class="reply-item">
             <div class="reply-header">
               <span class="reply-author">👤 ${reply.author || 'Anonyme'}</span>
@@ -572,25 +601,22 @@
       }
     }
 
-    async function loadPosts() {
-      postsContainer.innerHTML = "<p style='text-align: center; color: white;'>Chargement des posts...</p>";
-      
+    // Fonction pour charger les posts
+    function loadPosts() {
       try {
-        const q = query(postsCol, orderBy("date", "desc"));
-        const snapshot = await getDocs(q);
-        const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
         if (posts.length === 0) {
-          postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+          postsContainer.innerHTML = "<div class='empty-state'>Aucun post disponible.</div>";
           return;
         }
 
         // Charger le nombre de réponses pour chaque post
-        const postsWithReplies = await Promise.all(posts.map(async (post) => {
-          const repliesQuery = query(repliesCol, where("postId", "==", post.id));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          return { ...post, repliesCount: repliesSnapshot.size };
+        const postsWithReplies = posts.map(post => ({
+          ...post,
+          repliesCount: replies.filter(r => r.postId === post.id).length
         }));
+
+        // Trier par date décroissante
+        postsWithReplies.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         postsContainer.innerHTML = postsWithReplies
           .map((post) => {
@@ -643,8 +669,28 @@
           .join("");
       } catch (error) {
         console.error("Erreur lors du chargement des posts:", error);
-        postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
+        postsContainer.innerHTML = "<div class='empty-state'>Erreur lors du chargement des posts.</div>";
       }
+    }
+
+    // Fonction pour afficher des messages
+    function showMessage(message, type = 'success') {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = type;
+      messageDiv.textContent = message;
+      messageDiv.style.position = 'fixed';
+      messageDiv.style.top = '20px';
+      messageDiv.style.right = '20px';
+      messageDiv.style.zIndex = '1000';
+      messageDiv.style.padding = '15px';
+      messageDiv.style.borderRadius = '5px';
+      messageDiv.style.maxWidth = '300px';
+      
+      document.body.appendChild(messageDiv);
+      
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 3000);
     }
 
     // Rendre les fonctions accessibles globalement
