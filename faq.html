@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - FashionFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23pattern)"/></svg>');
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .faq-content {
+            padding: 40px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+
+        .faq-triangle {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #667eea;
+            transition: transform 0.3s ease;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-triangle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f8f9fa;
+        }
+
+        .faq-answer-content {
+            padding: 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+
+        .emoji {
+            font-size: 1.2rem;
+        }
+
+        .final-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .final-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .final-section p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .contact-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .faq-content {
+                padding: 20px;
+            }
+            
+            .category-title {
+                font-size: 1.2rem;
+                padding: 12px 16px;
+            }
+            
+            .faq-question {
+                padding: 15px;
+                font-size: 0.95rem;
+            }
+
+            .final-section {
+                padding: 20px;
+            }
+
+            .final-section h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>❓ FAQ FashionFlow</h1>
+            <p>Toutes tes questions sur l'app qui révolutionne le shopping mode !</p>
+        </div>
+        
+        <div class="faq-content">
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">👗</span> Questions générales sur FashionFlow
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        C'est quoi FashionFlow ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            FashionFlow est une future application de shopping qui mêle swipe à la Tinder et personnalisation comme sur TikTok, pour rendre la mode plus fun, rapide et adaptée à chacun.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        À qui s'adresse l'application ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            FashionFlow est pensé pour tous, mais surtout pour les jeunes entre 14 et 25 ans qui veulent découvrir ou créer leur style sans galérer.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Comment fonctionne le système de swipe ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Tu verras un vêtement à l'écran. Si tu l'aimes, tu swipes à droite. Sinon, tu swipes à gauche. Plus tu utilises l'app, plus elle apprend ce que tu aimes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Pourquoi FashionFlow est différent de Vinted ou Shein ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Parce qu'ici, t'as une vraie expérience personnalisée et interactive : des produits neufs, d'occasion, et même des vêtements que tu peux créer toi-même. Le tout avec une interface inspirée de TikTok.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">📲</span> Utilisation de l'application
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Comment personnaliser un vêtement ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Une section spéciale te permettra de modifier les couleurs, ajouter des textes ou logos sur des t-shirts, casquettes, baskets, etc. Cette fonction sera dispo dans la bêta.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Puis-je enregistrer mes articles préférés ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui, dès que tu likes un article, il sera ajouté à tes favoris dans ton profil. Tu pourras les retrouver à tout moment.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Est-ce que je peux acheter directement sur l'application ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            C'est prévu. On travaille avec des partenaires pour que tu puisses commander facilement depuis l'app.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Est-ce qu'il y a des frais de livraison ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui, comme sur tous les sites. Mais on essaiera de réduire au max selon les marques ou le type de produit.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">🛍️</span> Produits et Marques
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        D'où viennent les articles proposés ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Ils viendront de marques partenaires (ex : Zalando, Nike…), mais aussi de plateformes comme Vinted ou LeBonCoin pour la seconde main.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Y a-t-il des produits de seconde main ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui. Une catégorie entière sera dédiée à ça, pour te permettre de choper des pépites d'occasion.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Puis-je proposer mes propres créations sur FashionFlow ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Pas encore, mais on prévoit une fonctionnalité "Créateur" pour que tu puisses vendre ou montrer tes propres designs.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">👤</span> Compte et sécurité
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Ai-je besoin d'un compte pour utiliser l'application ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Non pour découvrir, mais oui pour sauvegarder tes favoris, personnaliser ou commander.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Mes données personnelles sont-elles protégées ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui. On respecte le RGPD, rien ne sera vendu. Tes infos sont en sécurité.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Comment supprimer mon compte ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Une option sera accessible dans les réglages pour te désinscrire facilement.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">💸</span> Paiement & Abonnement
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        L'application est-elle gratuite ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui, totalement gratuite à l'usage. Mais un abonnement Premium sera proposé pour ceux qui veulent plus d'options.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Quels sont les avantages de l'abonnement Premium ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Swipes illimités, personnalisation avancée, articles en avant-première et livraison plus rapide.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Quels moyens de paiement sont acceptés ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Carte bancaire, PayPal, et plus encore. Tous les moyens modernes seront là au lancement.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">🛠️</span> Support & Bêta
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Je rencontre un bug, que faire ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Lors de la bêta, un bouton de signalement sera dispo. Tu pourras aussi nous contacter directement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Comment devenir testeur de la version bêta ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Un formulaire sera bientôt dispo sur le site. Tu t'inscris, et tu reçois un accès dès que la bêta sort.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Puis-je donner mon avis ou proposer une idée ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Bien sûr. On veut construire l'appli avec la communauté. Tu pourras proposer des idées via la page What's Up.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">🌱</span> Mode éthique & écologie
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        FashionFlow est-il une application écoresponsable ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            L'objectif principal de FashionFlow est de réinventer l'expérience shopping de manière ludique et personnalisée. L'écologie n'est pas notre priorité numéro un, mais c'est une dimension que nous prenons en compte dans nos choix à long terme.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Comment FashionFlow limite-t-il son impact environnemental ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Nous comptons proposer des articles produits à la demande, pour éviter les surplus inutiles. De plus, la section seconde main permet de prolonger la vie des vêtements, ce qui est un vrai plus pour l'environnement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Allez-vous travailler avec des marques éthiques ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            À terme, nous aimerions mettre en avant des marques éthiques ou locales, avec des labels comme "vegan", "made in France" ou "bio". Ce n'est pas encore la base de l'appli, mais cela reste une orientation possible pour l'avenir.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Un système de revente directe est-il prévu ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui ! Nous avons en tête une marketplace intégrée où les utilisateurs pourront revendre directement leurs vêtements via FashionFlow, en toute sécurité et sans devoir passer par d'autres plateformes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">🎨</span> Créateurs & Influenceurs
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Puis-je vendre mes créations sur FashionFlow ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            C'est une fonctionnalité que nous souhaitons développer à moyen terme. FashionFlow a pour ambition de devenir une vitrine pour les jeunes créateurs. Une section dédiée pourrait permettre de vendre vos pièces personnalisées directement via l'application.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        FashionFlow collabore-t-il avec des influenceurs mode ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Pas encore, mais c'est prévu ! Si tu es influenceur.se ou créateur.trice de contenu dans la mode, n'hésite pas à nous contacter. FashionFlow pourrait devenir un espace où tu peux créer ta propre collection ou recommander des looks à ta communauté.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Est-ce que je peux avoir ma boutique personnalisée dans l'appli ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            À terme, oui. L'idée est de permettre à certains créateurs ou ambassadeurs de disposer de leur propre espace dans l'appli, un peu comme une vitrine personnelle avec leurs articles, collections et coups de cœur.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-title">
+                    <span class="emoji">🔮</span> Vision & Divers
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Quelle est la vision long terme de FashionFlow ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Devenir la plateforme de shopping mode la plus personnalisée au monde. On veut allier fun, rapidité et créativité, avec une ouverture vers l'international, l'intégration de la réalité augmentée, et la création de nos propres collections.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Un système de revente directe entre utilisateurs est-il prévu ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Oui ! À terme, une sorte de mini-marketplace dans l'app permettra de revendre directement ses articles ou créations, en gardant l'expérience de swipe rapide.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Est-ce qu'il y aura des évènements ou pop-up stores FashionFlow ?
+                        <div class="faq-triangle"></div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Pourquoi pas ! Nous aimerions organiser des rencontres, ateliers de customisation ou boutiques temporaires dans certaines villes si la communauté est au rendez-vous.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-section">
+                <h3>📬 D'autres questions ? Nous y répondons !</h3>
+                <p>Tu n'as pas trouvé la réponse à ta question ? Notre équipe est là pour t'aider !</p>
+                <button class="contact-btn" onclick="window.open('mailto:contact@fashionflow.com', '_blank')">
+                    📧 Nous contacter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', function() {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Fermer tous les autres items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle l'item cliqué
+                    if (isActive) {
+                        item.classList.remove('active');
+                    } else {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
