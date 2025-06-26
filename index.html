@@ -81,6 +81,7 @@
       position: relative;
       overflow: hidden;
       transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 1rem;
     }
 
     .section::before {
@@ -139,6 +140,7 @@
       padding: 2rem;
       z-index: 2;
       position: relative;
+      width: 100%;
     }
 
     .section-title {
@@ -290,13 +292,27 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
 
-    /* Contact buttons layout */
+    /* Contact buttons layout - AMÉLIORÉ */
     .contact-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
       margin-top: 2rem;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-buttons .modern-button {
+      margin: 0;
+      width: 100%;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
     }
 
     /* Indicateur de scroll */
@@ -323,6 +339,7 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      padding: 1rem;
     }
 
     .popup-content {
@@ -331,6 +348,7 @@
       border-radius: 20px;
       text-align: center;
       max-width: 400px;
+      width: 100%;
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
       transform: scale(0.8);
       transition: transform 0.3s ease;
@@ -357,6 +375,7 @@
       text-align: center;
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.3);
+      box-sizing: border-box;
     }
 
     .admin-input::placeholder {
@@ -368,29 +387,97 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.3);
     }
 
-    /* Responsive */
+    /* Responsive - AMÉLIORÉ */
     @media (max-width: 768px) {
+      .section {
+        padding: 0.5rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      
       .section-content {
         padding: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
       }
       
       .icon-container {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
+        margin: 1rem auto;
       }
       
       .fashion-icon {
-        font-size: 3rem;
+        font-size: 2.5rem;
       }
 
       .contact-buttons {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        margin-top: 1.5rem;
+        max-width: 100%;
       }
 
-      .modern-button {
-        margin: 0.5rem;
-        min-width: 200px;
+      .contact-buttons .modern-button {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+        min-height: 45px;
+      }
+
+      .section-subtitle {
+        margin-bottom: 1rem;
+      }
+
+      .popup-content {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+        padding: 1.5rem;
+      }
+
+      .scroll-indicator {
+        bottom: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .scroll-indicator div:first-child {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-buttons .modern-button {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+        min-height: 40px;
+      }
+
+      .section-content {
+        padding: 0.5rem;
+      }
+
+      .popup-content {
+        padding: 1rem;
+      }
+    }
+
+    /* Scrollbar pour les sections sur mobile */
+    @media (max-width: 768px) {
+      .section-content::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .section-content::-webkit-scrollbar-track {
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+      }
+
+      .section-content::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.3);
+        border-radius: 2px;
+      }
+
+      .section-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.5);
       }
     }
   </style>
@@ -708,6 +795,14 @@ function goToBlogue() {
         }
       }
     });
+
+    // Fonction de connexion Google (simulation)
+    function loginWithGoogle() {
+      // Simulation de connexion
+      localStorage.setItem('isLoggedIn', 'true');
+      alert('Connexion réussie !');
+      document.getElementById('googleLoginBox').style.display = 'none';
+    }
   </script>
   <!-- Popup Google Login -->
 <div class="popup-overlay" id="googleLoginBox">
