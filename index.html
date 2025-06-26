@@ -506,7 +506,7 @@
   <!-- Container principal -->
   <div class="main-container" id="mainContainer">
     
-    <!-- Section Hero -->
+   <!-- Section Hero -->
     <section class="section hero-section">
       <div class="section-content">
         <h1 class="section-title">FashionFlow</h1>
@@ -579,9 +579,9 @@
     <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous !</p>
     <div class="contact-buttons">
       <button class="modern-button" onclick="contactEmail()">📧 Email</button>
-      <button class="modern-button" onclick="contactInstagram()">📸 Instagram</button>
-      <button class="modern-button" onclick="contactTwitter()">🐦 Twitter</button>
-      <button class="modern-button" onclick="contactFacebook()">📘 Facebook</button>
+      <button class="modern-button" onclick="showTempMessage()">📸 Instagram</button>
+      <button class="modern-button" onclick="showTempMessage()">🐦 Twitter</button>
+      <button class="modern-button" onclick="showTempMessage()">📘 Facebook</button>
       <button class="modern-button" onclick="contactFAQ()">❓ FAQ</button>
     </div>
   </div>
@@ -671,6 +671,11 @@ function goToBlogue() {
       }
     }
 
+    // Fonction pour afficher un message temporaire pour les réseaux sociaux
+    function showTempMessage() {
+      alert("Nos réseaux sociaux ne sont pas encore disponibles, revenez bientôt !");
+    }
+
     // Fonctions de contact
     function contactEmail() {
       const popup = document.getElementById('emailPopupOverlay');
@@ -682,15 +687,15 @@ function goToBlogue() {
     }
 
     function contactInstagram() {
-      window.open('https://instagram.com/fashionflow_officiel', '_blank');
+      showTempMessage();
     }
 
     function contactTwitter() {
-      window.open('https://twitter.com/', '_blank');
+      showTempMessage();
     }
 
     function contactFacebook() {
-      window.open('https://facebook.com/', '_blank');
+      showTempMessage();
     }
 
     function contactFAQ() {
