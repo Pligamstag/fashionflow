@@ -321,45 +321,7 @@
       <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
       <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
     </div>
-
-    <div id="postsContainer" class="posts-grid">
-      <div class="post-card">
-        <div class="post-header">
-          <div class="post-title">yo</div>
-          <div class="post-date">20/06/2025</div>
-        </div>
-        <div class="author-info">Par: Utilisateur</div>
-        <div class="post-content">yo</div>
-        <div class="post-tags">
-          <span class="tag">yo</span>
-        </div>
-        <div class="post-stats">
-          <div class="like-section">
-            <button class="like-btn">❤️ J'aime</button>
-            <span class="like-count">0 like(s)</span>
-          </div>
-        </div>
-        <div class="post-actions">
-          <button class="btn delete-btn">🗑️ Supprimer</button>
-          <button class="btn reply-btn">💬 Répondre</button>
-        </div>
-        <div class="replies-section">
-          <div class="replies-header">
-            <span class="replies-count">0 réponse(s)</span>
-            <button class="toggle-replies">Voir les réponses</button>
-          </div>
-          <div class="reply-form">
-            <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
-            <div class="reply-form-actions">
-              <button class="submit-reply">Publier</button>
-              <button class="cancel-reply">Annuler</button>
-            </div>
-          </div>
-          <div class="replies-list"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="postsContainer" class="posts-grid"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -703,9 +665,6 @@ async function submitSubReply(parentReplyId, postId) {
 
     // Rendre les fonctions accessibles globalement
     window.deletePost = deletePost;
-    window.toggleReplyForm = toggleReplyForm;
-    window.submitReply = submitReply;
-    window.cancelReply = cancelReply;
     window.toggleReplies = toggleReplies;
     window.toggleLike = toggleLike;
     window.toggleReplyLike = toggleReplyLike;
