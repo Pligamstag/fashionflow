@@ -137,16 +137,20 @@
     .section-content {
       text-align: center;
       max-width: 800px;
-      padding: 2rem;
+      padding: 1rem;
       z-index: 2;
       position: relative;
       width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .section-title {
-      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-size: clamp(2rem, 6vw, 3.5rem);
       font-weight: 900;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
       background-size: 200% 200%;
       -webkit-background-clip: text;
@@ -162,18 +166,18 @@
     }
 
     .section-subtitle {
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      font-size: clamp(1rem, 3vw, 1.4rem);
       font-weight: 400;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       opacity: 0.9;
-      line-height: 1.6;
+      line-height: 1.4;
     }
 
-    /* Icônes animées */
+    /* Icônes animées - RÉDUITES */
     .icon-container {
-      width: 150px;
-      height: 150px;
-      margin: 2rem auto;
+      width: 80px;
+      height: 80px;
+      margin: 1rem auto;
       position: relative;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -191,7 +195,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4rem;
+      font-size: 2.5rem;
       animation: rotate 10s linear infinite;
       box-shadow: var(--glow);
     }
@@ -255,9 +259,9 @@
     /* Boutons modernes */
     .modern-button {
       display: inline-block;
-      padding: 1rem 2.5rem;
-      margin: 1rem;
-      font-size: 1.1rem;
+      padding: 0.8rem 2rem;
+      margin: 0.5rem;
+      font-size: 1rem;
       font-weight: 600;
       text-decoration: none;
       border: none;
@@ -292,14 +296,14 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
 
-    /* Contact buttons layout - AMÉLIORÉ */
+    /* Contact buttons layout - TOTALEMENT REFAIT */
     .contact-buttons {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 1rem;
       width: 100%;
-      max-width: 600px;
+      max-width: 500px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -307,21 +311,30 @@
     .contact-buttons .modern-button {
       margin: 0;
       width: 100%;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 50px;
+      min-height: 45px;
+      white-space: nowrap;
     }
 
-    /* Indicateur de scroll */
+    /* Dernière ligne avec un seul bouton centré */
+    .contact-buttons .modern-button:last-child {
+      grid-column: 1 / -1;
+      max-width: 250px;
+      justify-self: center;
+    }
+
+    /* Indicateur de scroll - RÉDUIT */
     .scroll-indicator {
       position: absolute;
-      bottom: 2rem;
+      bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
       animation: scrollHint 2s ease-in-out infinite;
+      font-size: 0.8rem;
     }
 
     @keyframes scrollHint {
@@ -391,41 +404,43 @@
     @media (max-width: 768px) {
       .section {
         padding: 0.5rem;
-        overflow-y: auto;
-        overflow-x: hidden;
       }
       
       .section-content {
-        padding: 1rem;
-        max-height: calc(100vh - 2rem);
-        overflow-y: auto;
+        padding: 0.5rem;
+        max-height: 95vh;
       }
       
       .icon-container {
-        width: 100px;
-        height: 100px;
-        margin: 1rem auto;
+        width: 60px;
+        height: 60px;
+        margin: 0.5rem auto;
       }
       
       .fashion-icon {
-        font-size: 2.5rem;
+        font-size: 2rem;
       }
 
       .contact-buttons {
         grid-template-columns: 1fr;
-        gap: 0.8rem;
-        margin-top: 1.5rem;
-        max-width: 100%;
+        gap: 0.4rem;
+        margin-top: 0.8rem;
+        max-width: 280px;
       }
 
       .contact-buttons .modern-button {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-        min-height: 45px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+        min-height: 40px;
+      }
+
+      .contact-buttons .modern-button:last-child {
+        grid-column: 1;
+        max-width: 100%;
       }
 
       .section-subtitle {
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
       }
 
       .popup-content {
@@ -435,49 +450,51 @@
       }
 
       .scroll-indicator {
-        bottom: 1rem;
-        font-size: 0.8rem;
+        bottom: 0.5rem;
+        font-size: 0.7rem;
       }
 
       .scroll-indicator div:first-child {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
     }
 
     @media (max-width: 480px) {
       .contact-buttons .modern-button {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.85rem;
-        min-height: 40px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        min-height: 35px;
       }
 
       .section-content {
-        padding: 0.5rem;
+        padding: 0.3rem;
       }
 
       .popup-content {
         padding: 1rem;
       }
+
+      .icon-container {
+        width: 50px;
+        height: 50px;
+      }
+
+      .fashion-icon {
+        font-size: 1.5rem;
+      }
     }
 
-    /* Scrollbar pour les sections sur mobile */
+    /* Style spécial pour la section contact */
+    .contact-section .section-content {
+      justify-content: space-evenly;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
     @media (max-width: 768px) {
-      .section-content::-webkit-scrollbar {
-        width: 4px;
-      }
-
-      .section-content::-webkit-scrollbar-track {
-        background: rgba(255,255,255,0.1);
-        border-radius: 2px;
-      }
-
-      .section-content::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.3);
-        border-radius: 2px;
-      }
-
-      .section-content::-webkit-scrollbar-thumb:hover {
-        background: rgba(255,255,255,0.5);
+      .contact-section .section-content {
+        justify-content: center;
+        gap: 0.5rem;
       }
     }
   </style>
@@ -559,11 +576,11 @@
       <div class="fashion-icon contact-icon">📧</div>
     </div>
     <h2 class="section-title">Nous contacter</h2>
-    <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous via vos plateformes préférées !</p>
+    <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous !</p>
     <div class="contact-buttons">
       <button class="modern-button" onclick="contactEmail()">📧 Email</button>
       <button class="modern-button" onclick="contactInstagram()">📸 Instagram</button>
-      <button class="modern-button" onclick="contactTwitter()">🐦 x (Twitter)</button>
+      <button class="modern-button" onclick="contactTwitter()">🐦 Twitter</button>
       <button class="modern-button" onclick="contactFacebook()">📘 Facebook</button>
       <button class="modern-button" onclick="contactFAQ()">❓ FAQ</button>
     </div>
