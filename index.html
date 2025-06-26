@@ -549,15 +549,17 @@
       window.location.href = "whatsupp.html";
     }
 
-    function goToBlogue() {
+function goToBlogue() {
   const loggedIn = localStorage.getItem('isLoggedIn');
   if (loggedIn === 'true') {
-    window.location.href = "blog.html";
+    // L'utilisateur est connecté, on le redirige vers la page maintenance
+    window.location.href = "maintenance.html";
   } else {
     alert("Connecte-toi avec Google pour accéder au blog !");
     document.getElementById("googleLoginBox").style.display = "block";
   }
 }
+
     function donate() {
       const confirmation = confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
       if (confirmation) {
