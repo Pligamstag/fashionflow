@@ -550,9 +550,14 @@
     }
 
     function goToBlogue() {
-      window.location.href = "maintenance.html";
-    }
-
+  const loggedIn = localStorage.getItem('isLoggedIn');
+  if (loggedIn === 'true') {
+    window.location.href = "blog.html";
+  } else {
+    alert("Connecte-toi avec Google pour accéder au blog !");
+    document.getElementById("googleLoginBox").style.display = "block";
+  }
+}
     function donate() {
       const confirmation = confirm("Vous allez être redirigé vers PayPal.\nSouhaitez-vous continuer ?");
       if (confirmation) {
