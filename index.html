@@ -709,5 +709,14 @@ function goToBlogue() {
       }
     });
   </script>
+  <!-- Popup Google Login -->
+<div class="popup-overlay" id="googleLoginBox">
+  <div class="popup-content">
+    <h3 style="margin-bottom: 1rem;">Connexion requise</h3>
+    <p style="margin-bottom: 1rem;">Veuillez vous connecter avec Google pour accéder au blog.</p>
+    <button class="modern-button" onclick="loginWithGoogle()">Se connecter avec Google</button>
+    <button class="modern-button" onclick="document.getElementById('googleLoginBox').style.display='none'">Annuler</button>
+  </div>
+</div>
 </body>
 </html>
