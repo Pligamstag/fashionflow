@@ -1,327 +1,655 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Le blog de FashionFLow</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FashionFlow - Blog</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #8b5cf6;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #0f172a;
+      --dark-secondary: #1e293b;
+      --text-light: #f8fafc;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%);
+      color: var(--text-light);
       min-height: 100vh;
-      padding: 20px;
-      color: white;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    .background-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+      filter: blur(40px);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .bg-circle:nth-child(1) {
+      width: 400px;
+      height: 400px;
+      top: -200px;
+      right: -200px;
+      animation-delay: 0s;
+    }
+
+    .bg-circle:nth-child(2) {
+      width: 300px;
+      height: 300px;
+      bottom: -150px;
+      left: -150px;
+      animation-delay: 2s;
+    }
+
+    .bg-circle:nth-child(3) {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
     }
-    .header {
-      text-align: center;
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 0;
       margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo i {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
     }
-    .header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
     }
-    .header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
     }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 60px 0;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .posts-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .posts-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-input {
+      padding: 12px 50px 12px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      width: 300px;
+      backdrop-filter: blur(10px);
+      font-size: 0.9rem;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
     .posts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
     }
+
     .post-card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      color: #333;
     }
+
+    .post-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+
     .post-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
     }
+
     .post-header {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 15px;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
     }
-    .post-title {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 5px;
-      line-height: 1.3;
-    }
-    .post-date {
-      font-size: 0.85rem;
-      color: #666;
-      background: #f0f0f0;
-      padding: 4px 8px;
-      border-radius: 12px;
-      white-space: nowrap;
-    }
-    .post-content {
-      color: #555;
-      line-height: 1.6;
-      margin-bottom: 15px;
-    }
-    .post-tags {
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    .tag {
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
       color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 500;
     }
-    .post-stats {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 15px;
-      padding: 10px;
-      background: #f8f9fa;
-      border-radius: 10px;
+
+    .post-meta {
+      flex: 1;
     }
-    .like-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .like-btn {
-      background: none;
-      border: 2px solid #e74c3c;
-      color: #e74c3c;
-      padding: 6px 12px;
-      border-radius: 25px;
-      cursor: pointer;
+
+    .post-author {
       font-weight: 600;
-      transition: all 0.3s ease;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+
+    .post-date {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+    }
+
+    .post-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    .post-content {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.9rem;
+      gap: 6px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
     }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .like-btn {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
     .like-btn:hover {
-      transform: scale(1.05);
+      background: rgba(239, 68, 68, 0.2);
+      transform: translateY(-1px);
     }
+
     .like-btn.liked {
-      background: #e74c3c;
-      color: white;
-      animation: likeAnimation 0.3s ease;
+      animation: likeAnimation 0.6s ease;
     }
+
     @keyframes likeAnimation {
       0% { transform: scale(1); }
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
     }
-    .like-count {
-      font-weight: bold;
-      color: #666;
-      font-size: 0.9rem;
+
+    .btn-info {
+      background: rgba(6, 182, 212, 0.1);
+      color: #67e8f9;
+      border: 1px solid rgba(6, 182, 212, 0.3);
     }
-    .post-actions {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
+
+    .btn-info:hover {
+      background: rgba(6, 182, 212, 0.2);
+      transform: translateY(-1px);
     }
-    .btn {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-    }
-    .delete-btn {
-      background: #e74c3c;
-      color: white;
-    }
-    .delete-btn:hover {
-      background: #c0392b;
-      transform: scale(1.05);
-    }
-    .reply-btn {
-      background: #3498db;
-      color: white;
-    }
-    .reply-btn:hover {
-      background: #2980b9;
-      transform: scale(1.05);
-    }
+
     .replies-section {
-      border-top: 2px solid #eee;
-      padding-top: 15px;
-      margin-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
     }
+
     .replies-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
+
     .replies-count {
-      font-weight: bold;
-      color: #666;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
       font-size: 0.9rem;
     }
+
     .toggle-replies {
-      background: #95a5a6;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      background: rgba(156, 163, 175, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(156, 163, 175, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 0.8rem;
+      transition: all 0.3s ease;
     }
+
     .toggle-replies:hover {
-      background: #7f8c8d;
+      background: rgba(156, 163, 175, 0.2);
     }
+
     .reply-form {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       display: none;
     }
+
     .reply-form.active {
       display: block;
+      animation: slideDown 0.3s ease;
     }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .reply-input {
       width: 100%;
-      padding: 10px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      margin-bottom: 10px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      margin-bottom: 12px;
       resize: vertical;
-      min-height: 80px;
+      min-height: 100px;
       font-family: inherit;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(10px);
+      font-size: 0.95rem;
     }
+
+    .reply-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
     .reply-input:focus {
       outline: none;
-      border-color: #3498db;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
+
     .reply-form-actions {
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
-    .submit-reply {
-      background: #27ae60;
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #059669);
       color: white;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
     }
-    .submit-reply:hover {
-      background: #229954;
+
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     }
-    .cancel-reply {
-      background: #95a5a6;
-      color: white;
-      padding: 8px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .cancel-reply:hover {
-      background: #7f8c8d;
-    }
+
     .replies-list {
       display: none;
     }
+
     .replies-list.active {
       display: block;
+      animation: slideDown 0.3s ease;
     }
+
     .reply-item {
-      background: #f1f2f6;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border-left: 4px solid #3498db;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 3px solid var(--accent);
+      backdrop-filter: blur(10px);
     }
+
     .reply-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
     }
+
     .reply-author {
-      font-weight: bold;
-      color: #2c3e50;
+      font-weight: 600;
+      color: #e2e8f0;
       font-size: 0.9rem;
     }
+
     .reply-date {
-      color: #7f8c8d;
+      color: rgba(255, 255, 255, 0.6);
       font-size: 0.8rem;
     }
+
     .reply-content {
-      color: #34495e;
-      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
       font-size: 0.9rem;
     }
+
     .empty-state {
       text-align: center;
-      color: white;
-      padding: 60px 20px;
+      padding: 80px 20px;
+      color: rgba(255, 255, 255, 0.8);
     }
-    a.back-link {
-      display: inline-block;
-      margin-bottom: 30px;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      margin-right: 20px;
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
     }
-    a.back-link:hover {
-      text-decoration: underline;
-    }
-    .author-info {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 10px;
-      font-style: italic;
-    }
+
     .liked-users {
       font-size: 0.8rem;
-      color: #666;
-      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
       font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 15px;
+      }
+
+      .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .post-card {
+        padding: 24px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .posts-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .post-actions {
+        justify-content: stretch;
+      }
+
+      .btn-small {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .loading i {
+      margin-right: 10px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
+  <div class="background-effects">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+  </div>
+
   <div class="container">
-    <div class="header">
-      <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
-      <p>Tous vos posts de développement en un seul endroit</p>
-      <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
-      <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
+    <nav class="navbar">
+      <a href="#" class="logo">
+        <i class="fas fa-blog"></i>
+        FashionFlow
+      </a>
+      <div class="nav-actions">
+        <a href="creerunposte.html" class="btn btn-primary">
+          <i class="fas fa-plus"></i>
+          Nouveau post
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+          <i class="fas fa-home"></i>
+          Accueil
+        </a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <h1>Blog de Développement</h1>
+      <p>Partagez vos idées, découvertes et projets avec la communauté</p>
+    </section>
+
+    <div class="posts-header">
+      <h2 class="posts-title">Publications récentes</h2>
+      <div class="search-filter">
+        <div class="search-box">
+          <input type="text" class="search-input" placeholder="Rechercher des posts...">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
     </div>
-<div id="postsContainer" class="posts-grid"></div>
+
+    <div id="postsContainer" class="posts-grid">
+      <div class="loading">
+        <i class="fas fa-spinner"></i>
+        Chargement des publications...
+      </div>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -361,6 +689,10 @@
     const currentUser = "Samy";
     const ADMIN_PASSWORD = "LucieKaraoui";
 
+    function getInitials(name) {
+      return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';
+    }
+
     async function toggleLike(postId) {
       try {
         const postRef = doc(db, "devloppement", postId);
@@ -376,25 +708,21 @@
         const hasLiked = currentLikes.includes(currentUser);
 
         if (hasLiked) {
-          // Retirer le like
           await updateDoc(postRef, {
             likes: arrayRemove(currentUser)
           });
         } else {
-          // Ajouter le like
           await updateDoc(postRef, {
             likes: arrayUnion(currentUser)
           });
         }
 
-        // Recharger les posts pour mettre à jour l'affichage
         loadPosts();
         
-        // Animation de feedback
         const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
         if (likeBtn && !hasLiked) {
           likeBtn.classList.add('liked');
-          setTimeout(() => likeBtn.classList.remove('liked'), 300);
+          setTimeout(() => likeBtn.classList.remove('liked'), 600);
         }
 
       } catch (error) {
@@ -405,41 +733,39 @@
 
     async function deletePost(postId, postAuthor) {
       if (postAuthor === currentUser) {
-        if (!confirm("Supprimer ton post ?")) return;
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
         try {
           await deleteDoc(doc(db, "devloppement", postId));
           
-          // Supprimer toutes les réponses associées
           const repliesQuery = query(repliesCol, where("postId", "==", postId));
           const repliesSnapshot = await getDocs(repliesQuery);
           const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
           await Promise.all(deletePromises);
           
-          alert("Post et réponses supprimés !");
+          alert("Post et réponses supprimés avec succès !");
           loadPosts();
         } catch (error) {
-          alert("Erreur suppression : " + error.message);
+          alert("Erreur lors de la suppression : " + error.message);
         }
       } else {
-        const pass = prompt("Ce post n'est pas à toi, entre le mot de passe admin pour supprimer :");
+        const pass = prompt("Ce post n'est pas le vôtre. Entrez le mot de passe administrateur pour le supprimer :");
         if (pass !== ADMIN_PASSWORD) {
           alert("Mot de passe incorrect, suppression annulée.");
           return;
         }
-        if (!confirm("Supprimer ce post ?")) return;
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
         try {
           await deleteDoc(doc(db, "devloppement", postId));
           
-          // Supprimer toutes les réponses associées
           const repliesQuery = query(repliesCol, where("postId", "==", postId));
           const repliesSnapshot = await getDocs(repliesQuery);
           const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
           await Promise.all(deletePromises);
           
-          alert("Post et réponses supprimés !");
+          alert("Post et réponses supprimés avec succès !");
           loadPosts();
         } catch (error) {
-          alert("Erreur suppression : " + error.message);
+          alert("Erreur lors de la suppression : " + error.message);
         }
       }
     }
@@ -470,210 +796,180 @@
           content: content,
           author: currentUser,
           date: new Date().toISOString(),
-          timestamp: serverTimestamp()
+          createdAt: serverTimestamp()
         });
-        
+
         textarea.value = '';
         form.classList.remove('active');
-        loadReplies(postId);
-        alert("Réponse publiée avec succès !");
+        
+        alert("Réponse ajoutée avec succès !");
+        await loadReplies(postId);
+        
       } catch (error) {
-        alert("Erreur lors de la publication : " + error.message);
+        console.error("Erreur lors de l'ajout de la réponse:", error);
+        alert("Erreur lors de l'ajout de la réponse : " + error.message);
       }
-    }
-
-    async function cancelReply(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      const textarea = form.querySelector('.reply-input');
-      textarea.value = '';
-      form.classList.remove('active');
     }
 
     async function toggleReplies(postId) {
       const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-      const toggleBtn = document.querySelector(`[data-post-id="${postId}"] .toggle-replies`);
+      const isVisible = repliesList.classList.contains('active');
       
-      if (repliesList.classList.contains('active')) {
+      if (isVisible) {
         repliesList.classList.remove('active');
-        toggleBtn.textContent = 'Voir les réponses';
       } else {
+        await loadReplies(postId);
         repliesList.classList.add('active');
-        toggleBtn.textContent = 'Masquer les réponses';
-        loadReplies(postId);
       }
     }
 
     async function loadReplies(postId) {
-      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-      const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
-      
       try {
-        const q = query(repliesCol, where("postId", "==", postId), orderBy("date", "asc"));
-        const snapshot = await getDocs(q);
-        const replies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const repliesQuery = query(
+          repliesCol, 
+          where("postId", "==", postId),
+          orderBy("createdAt", "desc")
+        );
+        const repliesSnapshot = await getDocs(repliesQuery);
+        const replies = repliesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+        const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
         
-        repliesCount.textContent = `${replies.length} réponse(s)`;
-        
+        repliesCount.textContent = `${replies.length} réponse${replies.length > 1 ? 's' : ''}`;
+
         if (replies.length === 0) {
-          repliesList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Aucune réponse pour le moment.</p>';
-          return;
+          repliesList.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><p>Aucune réponse pour le moment. Soyez le premier à répondre !</p></div>';
+        } else {
+          repliesList.innerHTML = replies.map(reply => `
+            <div class="reply-item">
+              <div class="reply-header">
+                <span class="reply-author">${reply.author}</span>
+                <span class="reply-date">${formatDate(reply.date)}</span>
+              </div>
+              <div class="reply-content">${reply.content}</div>
+            </div>
+          `).join('');
         }
 
-        repliesList.innerHTML = replies.map(reply => `
-          <div class="reply-item">
-            <div class="reply-header">
-              <span class="reply-author">👤 ${reply.author || 'Anonyme'}</span>
-              <span class="reply-date">${new Date(reply.date).toLocaleDateString('fr-FR')} à ${new Date(reply.date).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</span>
-            </div>
-            <div class="reply-content">${reply.content}</div>
-          </div>
-        `).join('');
       } catch (error) {
         console.error("Erreur lors du chargement des réponses:", error);
-        repliesList.innerHTML = '<p style="color: #e74c3c;">Erreur lors du chargement des réponses.</p>';
       }
     }
 
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
     async function loadPosts() {
-      postsContainer.innerHTML = "<p style='text-align: center; color: white;'>Chargement des posts...</p>";
-      
       try {
-        const q = query(postsCol, orderBy("date", "desc"));
-        const snapshot = await getDocs(q);
-        const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const q = query(postsCol, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        const posts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
         if (posts.length === 0) {
-          postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+          postsContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📝</div>
+              <h3>Aucune publication pour le moment</h3>
+              <p>Soyez le premier à partager quelque chose !</p>
+            </div>
+          `;
           return;
         }
 
-      // Charger le nombre de réponses pour chaque post
-const postsWithReplies = await Promise.all(posts.map(async (post) => {
-  const repliesQuery = query(repliesCol, where("postId", "==", post.id));
-  const repliesSnapshot = await getDocs(repliesQuery);
-  return { ...post, repliesCount: repliesSnapshot.size };
-}));
+        const postsHTML = await Promise.all(posts.map(async post => {
+          const likes = post.likes || [];
+          const likesText = likes.length > 0 ? `Aimé par ${likes.join(', ')}` : '';
+          
+          const repliesQuery = query(repliesCol, where("postId", "==", post.id));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          const repliesCount = repliesSnapshot.docs.length;
 
-postsContainer.innerHTML = postsWithReplies
-  .map((post) => {
-    const likes = post.likes || [];
-    const likesCount = likes.length;
-    const hasLiked = likes.includes(currentUser);
-    const likedUsers = likes.length > 0 ? `Aimé par : ${likes.join(', ')}` : '';
+        return `
+            <div class="post-card" data-post-id="${post.id}">
+              <div class="post-header">
+                <div class="author-avatar">${getInitials(post.author)}</div>
+                <div class="post-meta">
+                  <div class="post-author">${post.author}</div>
+                  <div class="post-date">${formatDate(post.date)}</div>
+                </div>
+              </div>
+              <h3 class="post-title">${post.title}</h3>
+              <div class="post-content">${post.content}</div>
+              ${likesText ? `<div class="liked-users">${likesText}</div>` : ''}
+              <div class="post-actions">
+                <button class="btn btn-small like-btn" onclick="toggleLike('${post.id}')">
+                  <i class="fas fa-heart"></i>
+                  ${likes.length} Like${likes.length > 1 ? 's' : ''}
+                </button>
+                <button class="btn btn-small reply-btn" onclick="toggleReplyForm('${post.id}')">
+                  <i class="fas fa-comment"></i>
+                  Répondre
+                </button>
+                <button class="btn btn-small replies-toggle" onclick="toggleReplies('${post.id}')">
+                  <i class="fas fa-comments"></i>
+                  <span class="replies-count">${repliesCount} réponse${repliesCount > 1 ? 's' : ''}</span>
+                </button>
+                <button class="btn btn-small btn-danger delete-btn" onclick="deletePost('${post.id}', '${post.author}')">
+                  <i class="fas fa-trash"></i>
+                  Supprimer
+                </button>
+              </div>
 
-    return `
-    <div class="post-card" data-post-id="${post.id}">
-      <div class="post-header">
-        <div class="post-title">${post.title}</div>
-        <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
-      </div>
-      <div class="author-info">👤 Par : ${post.author || 'Anonyme'}</div>
-      <div class="post-content">${post.content}</div>
-      <div class="post-tags">
-        ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
-      </div>
-      <div class="post-stats">
-        <div class="like-section">
-          <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
-            ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
-          </button>
-          <span class="like-count">${likesCount} like(s)</span>
-        </div>
-      </div>
-      ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
-      <div class="post-actions">
-        <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
-        <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
-      </div>
-      <div class="replies-section">
-        <div class="replies-header">
-          <span class="replies-count">${post.repliesCount} réponse(s)</span>
-          <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
-        </div>
-        <div class="reply-form">
-          <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
-          <div class="reply-form-actions">
-            <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
-            <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
+              <div class="reply-form">
+                <textarea class="reply-input" placeholder="Écrivez votre réponse ici..." rows="3"></textarea>
+                <div class="reply-form-actions">
+                  <button class="btn btn-primary" onclick="submitReply('${post.id}')">
+                    <i class="fas fa-paper-plane"></i>
+                    Publier
+                  </button>
+                  <button class="btn btn-secondary" onclick="toggleReplyForm('${post.id}')">
+                    Annuler
+                  </button>
+                </div>
+              </div>
+
+              <div class="replies-list"></div>
+            </div>
+          `;
+        }));
+
+        postsContainer.innerHTML = postsHTML.join('');
+
+      } catch (error) {
+        console.error("Erreur lors du chargement des posts:", error);
+        postsContainer.innerHTML = `
+          <div class="error-state">
+            <div class="error-icon">⚠️</div>
+            <h3>Erreur de chargement</h3>
+            <p>Impossible de charger les publications.</p>
           </div>
-        </div>
-        <div class="replies-list"></div>
-      </div>
-    </div>
-    `;
-  })
-  .join("");
-} catch (error) {
-  console.error("Erreur lors du chargement des posts:", error);
-  postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
-}
-
+        `;
+      }
     }
-async function toggleReplyLike(replyId) {
-  const replyRef = doc(repliesCol, replyId);
-  const replySnap = await getDoc(replyRef);
-  if (!replySnap.exists()) return alert("Commentaire introuvable.");
 
-  const replyData = replySnap.data();
-  const currentLikes = replyData.likes || [];
-  const hasLiked = currentLikes.includes(currentUser);
+    // Initialisation
+    loadPosts();
 
-  try {
-    await updateDoc(replyRef, {
-      likes: hasLiked ? arrayRemove(currentUser) : arrayUnion(currentUser)
-    });
-    loadReplies(replyData.postId);
-  } catch (e) {
-    alert("Erreur lors du like du commentaire : " + e.message);
-  }
-}
-
-function toggleSubReplyForm(replyId, postId) {
-  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function cancelSubReply(replyId) {
-  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
-  form.querySelector("textarea").value = "";
-  form.style.display = "none";
-}
-
-async function submitSubReply(parentReplyId, postId) {
-  const form = document.querySelector(`[data-reply-id="${parentReplyId}"] .sub-reply-form`);
-  const textarea = form.querySelector("textarea");
-  const content = textarea.value.trim();
-  if (!content) return alert("Écris un message !");
-
-  try {
-    await addDoc(repliesCol, {
-      postId,
-      content,
-      author: currentUser,
-      date: new Date().toISOString(),
-      timestamp: serverTimestamp(),
-      parentReplyId: parentReplyId,
-      likes: []
-    });
-    textarea.value = "";
-    form.style.display = "none";
-    loadReplies(postId);
-  } catch (e) {
-    alert("Erreur lors de la réponse au commentaire : " + e.message);
-  }
-}
-
-    // Rendre les fonctions accessibles globalement
-    window.deletePost = deletePost;
-    window.toggleReplies = toggleReplies;
+    // Exposition des fonctions pour les onclick
     window.toggleLike = toggleLike;
-    window.toggleReplyLike = toggleReplyLike;
-    window.toggleSubReplyForm = toggleSubReplyForm;
-    window.submitSubReply = submitSubReply;
-    window.cancelSubReply = cancelSubReply;
+    window.deletePost = deletePost;
+    window.toggleReplyForm = toggleReplyForm;
+    window.submitReply = submitReply;
+    window.toggleReplies = toggleReplies;
 
-    // Charger les posts au démarrage
-    window.addEventListener("DOMContentLoaded", loadPosts);
   </script>
-</body>
-</html>
