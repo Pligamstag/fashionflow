@@ -61,7 +61,7 @@
   <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
     
     <!-- Historique des Mises à Jour -->
-    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+ <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
       <div class="flex items-center mb-8">
         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
           <span class="text-white text-xl">🛠️</span>
@@ -71,8 +71,28 @@
           <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
         </div>
       </div>
-
       <div class="space-y-6">
+        <!-- Page d'accueil adaptée -->
+        <div class="timeline-item">
+          <div class="bg-gradient-to-r from-emerald-50 to-green-100 rounded-lg p-4 border-l-4 border-emerald-400">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-emerald-700 bg-emerald-200 px-3 py-1 rounded-full">26 juin 2025</span>
+              <span class="tag tag-new">UX</span>
+            </div>
+            <h4 class="text-gray-800 font-semibold mb-2">
+              <span class="mr-2">🏠</span>
+              Page d'accueil adaptée pour tous les utilisateurs
+            </h4>
+            <p class="text-gray-700 mb-3">
+              Modification légère de la page d'accueil pour une meilleure adaptation à tous types d'utilisateurs. Amélioration des boutons de navigation vers les sections "Blog" et "Nous contacter".
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="tag tag-new">Navigation optimisée</span>
+              <span class="tag tag-plan">Accessibilité améliorée</span>
+              <span class="tag tag-new">Boutons redesignés</span>
+            </div>
+          </div>
+        </div>
         <!-- FAQ -->
         <div class="timeline-item">
           <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg p-4 border-l-4 border-indigo-400">
@@ -89,7 +109,6 @@
             </p>
           </div>
         </div>
-
         <!-- Système de likes -->
         <div class="timeline-item">
           <div class="bg-gradient-to-r from-rose-50 to-pink-100 rounded-lg p-4 border-l-4 border-rose-400">
@@ -113,6 +132,63 @@
         </div>
       </div>
     </section>
+
+<style>
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-new {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.tag-plan {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+</style>
 
     <!-- Prochaines améliorations -->
     <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
