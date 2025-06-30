@@ -840,12 +840,12 @@ function goToBlogue() {
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
   const firebaseConfig = {
-    apiKey: "...",
-    authDomain: "...",
-    projectId: "...",
-    storageBucket: "...",
-    messagingSenderId: "...",
-    appId: "..."
+    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+    authDomain: "fashionflow-3db6b.firebaseapp.com",
+    projectId: "fashionflow-3db6b",
+    storageBucket: "fashionflow-3db6b.appspot.com",
+    messagingSenderId: "1073693995934",
+    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -854,16 +854,16 @@ function goToBlogue() {
   signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
     .then((userCredential) => {
       const user = userCredential.user;
+      console.log("Connecté :", user.email);
 
       if (user.email === "samyfoot51@gmail.com") {
         console.log("Bienvenue admin !!");
-        alert("Bienvenue admin !!");
       } else {
-        console.log("Utilisateur normal connecté.");
+        console.log("Utilisateur normal.");
       }
     })
     .catch((error) => {
-      console.error("Erreur connexion :", error.message);
+      console.error("Erreur connexion :", error.message, error.code);
     });
 </script>
 </body>
