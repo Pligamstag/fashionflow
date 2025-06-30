@@ -1,24 +1,8 @@
 // admin-check.js
+import { auth, db } from './firebase-config.js'; // adapte le chemin selon ta structure
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// === CONFIG FIREBASE ===
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-const firebaseConfig = {
- apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-    authDomain: "fashionflow-3db6b.firebaseapp.com",
-    projectId: "fashionflow-3db6b",
-    storageBucket: "fashionflow-3db6b.appspot.com",
-    messagingSenderId: "1073693995934",
-    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// === Vérifie si l'utilisateur est admin ===
 export async function checkIfAdmin() {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, async (user) => {
@@ -37,7 +21,6 @@ export async function checkIfAdmin() {
   });
 }
 
-// === Redirige si admin ===
 export async function redirectIfAdmin(url) {
   const isAdmin = await checkIfAdmin();
   if (isAdmin) {
