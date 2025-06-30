@@ -838,42 +838,33 @@ function goToBlogue() {
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-    authDomain: "fashionflow-3db6b.firebaseapp.com",
-    projectId: "fashionflow-3db6b",
-    storageBucket: "fashionflow-3db6b.appspot.com",
-    messagingSenderId: "1073693995934",
-    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
+    apiKey: "...",
+    authDomain: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "..."
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
 
- signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
-  .then(async (userCredential) => {
-    const user = userCredential.user;
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists()) {
-      console.log("Données du doc utilisateur :", userDoc.data()); // <--- Ajoute ça pour debug
-      const role = userDoc.data().role;
-      if (role === "admin") {
+  signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      if (user.email === "samyfoot51@gmail.com") {
         console.log("Bienvenue admin !!");
         alert("Bienvenue admin !!");
-        // actions admin ici
       } else {
         console.log("Utilisateur normal connecté.");
       }
-    } else {
-      console.log("Rôle non défini pour cet utilisateur.");
-    }
-  })
-  .catch((error) => {
-    console.error("Erreur connexion :", error.message);
-  });
+    })
+    .catch((error) => {
+      console.error("Erreur connexion :", error.message);
+    });
 </script>
 </body>
 </html>
