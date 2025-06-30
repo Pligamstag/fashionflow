@@ -339,10 +339,17 @@
     Version 2.3.5 • Dernière mise à jour : 24 juin 2025
   </p>
   <p class="text-gray-400 text-sm mt-2">
-    <a href="#" id="adminLink" class="hover:underline">Êtes-vous admin ?</a>
-  </p>
+  <a href="#" id="adminLink" class="hover:underline">Êtes-vous admin ?</a>
+</p>
+
+<script type="module">
+  import { redirectIfAdmin } from './admin-check.js';
+
+  document.getElementById('adminLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    redirectIfAdmin('administration.html');
+  });
+</script>
 </div>
-
-
 </body>
 </html>
