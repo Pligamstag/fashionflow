@@ -22,22 +22,23 @@ const db = getFirestore(app);
 
   // Exemple : Connexion
   signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
-    .then(async (userCredential) => {
-      const user = userCredential.user;
+   .then(async (userCredential) => {
+  const user = userCredential.user;
+  console.log("UID connecté:", user.uid);  // Ajoute ça pour debug
 
-      // Cherche son rôle dans Firestore
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        const role = userDoc.data().role;
-        if (role === "admin") {
-          console.log("C'est un admin !");
-        } else {
-          console.log("C'est un user normal.");
-        }
-      } else {
-        console.log("Pas de rôle défini.");
-      }
-    })
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  if (userDoc.exists()) {
+    console.log("Données utilisateur récupérées :", userDoc.data()); // Ajoute ça aussi
+    const role = userDoc.data().role;
+    if (role === "admin") {
+      console.log("C'est un admin !");
+    } else {
+      console.log("C'est un user normal.");
+    }
+  } else {
+    console.log("Pas de rôle défini.");
+  }
+})
     .catch((error) => {
       console.error(error);
     });
