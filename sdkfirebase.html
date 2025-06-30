@@ -1,0 +1,44 @@
+<script type="module">
+  // Import Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+  authDomain: "fashionflow-3db6b.firebaseapp.com",
+  projectId: "fashionflow-3db6b",
+  storageBucket: "fashionflow-3db6b.appspot.com", // corrige bien le `.app` en `.appspot.com`
+  messagingSenderId: "1073693995934",
+  appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+  measurementId: "G-P4DP02HQ75"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+  // Exemple : Connexion
+  signInWithEmailAndPassword(auth, "exemple@email.com", "motdepasse")
+    .then(async (userCredential) => {
+      const user = userCredential.user;
+
+      // Cherche son rôle dans Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const role = userDoc.data().role;
+        if (role === "admin") {
+          console.log("C'est un admin !");
+        } else {
+          console.log("C'est un user normal.");
+        }
+      } else {
+        console.log("Pas de rôle défini.");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+</script>
