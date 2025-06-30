@@ -338,9 +338,7 @@
   <p class="text-gray-500">
     Version 2.3.5 • Dernière mise à jour : 24 juin 2025
   </p>
- <p class="text-gray-400 text-sm mt-2">
-  <a href="#" id="adminLink" class="hover:underline">Êtes-vous admin ?</a>
-</p>
+<button id="adminLoginBtn">Êtes-vous admin ?</button>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -358,21 +356,26 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log("Connecté :", user.email);
+  document.getElementById('adminLoginBtn').addEventListener('click', () => {
+    signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Connecté :", user.email);
 
-      if (user.email === "samyfoot51@gmail.com") {
-        console.log("Bienvenue admin !!");
-      } else {
-        console.log("Utilisateur normal.");
-      }
-    })
-    .catch((error) => {
-      console.error("Erreur connexion :", error.message, error.code);
-    });
+        if (user.email === "samyfoot51@gmail.com") {
+          alert("Bienvenue admin !");
+          window.location.href = "administration.html"; // redirection
+        } else {
+          alert("Accès refusé : vous n'êtes pas admin.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur connexion :", error.message);
+        alert("Erreur lors de la connexion : " + error.message);
+      });
+  });
 </script>
+
 
 </div>
 </body>
