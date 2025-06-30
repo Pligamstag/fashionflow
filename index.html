@@ -853,23 +853,27 @@ function goToBlogue() {
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
-    .then(async (userCredential) => {
-      const user = userCredential.user;
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        const role = userDoc.data().role;
-        if (role === "admin") {
-          console.log("Bienvenue admin !!");
-          alert("Bienvenue admin !!");
-          // Ici tu peux ajouter ce que tu veux : afficher une section, etc.
-        } else {
-          console.log("Utilisateur normal connecté.");
-        }
+ signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
+  .then(async (userCredential) => {
+    const user = userCredential.user;
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+      console.log("Données du doc utilisateur :", userDoc.data()); // <--- Ajoute ça pour debug
+      const role = userDoc.data().role;
+      if (role === "admin") {
+        console.log("Bienvenue admin !!");
+        alert("Bienvenue admin !!");
+        // actions admin ici
       } else {
-        console.log("Rôle non défini pour cet utilisateur.");
+        console.log("Utilisateur normal connecté.");
       }
-    })
+    } else {
+      console.log("Rôle non défini pour cet utilisateur.");
+    }
+  })
+  .catch((error) => {
+    console.error("Erreur connexion :", error.message);
+  });
     .catch((error) => {
       console.error("Erreur connexion :", error.message);
     });
