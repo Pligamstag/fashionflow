@@ -343,13 +343,28 @@
 </p>
 
 <script type="module">
-  import { redirectIfAdmin } from './admin-check.js';
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-  document.getElementById('adminLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    redirectIfAdmin('administration.html');
+  const firebaseConfig = {
+    // TES INFOS FIREBASE
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("Utilisateur connecté :", user.email);
+      // Ici tu peux charger des infos, vérifier le rôle, etc.
+    } else {
+      console.log("Pas connecté !");
+      // Redirige si tu veux :
+      // window.location.href = 'index.html';
+    }
   });
 </script>
+
 </div>
 </body>
 </html>
