@@ -338,7 +338,21 @@
   <p class="text-gray-500">
     Version 2.3.5 • Dernière mise à jour : 24 juin 2025
   </p>
-<button id="adminLoginBtn" style="display:none;">Espace Admin</button>
+<button id="adminLoginBtn" style="display:none;">Êtes-vous admin ?</button>
+
+<form id="adminLoginForm" class="max-w-md mx-auto p-4 border rounded shadow-md">
+  <h3 class="text-xl font-semibold mb-4">Connexion Admin</h3>
+  <div class="mb-3">
+    <label for="email" class="block mb-1">Email</label>
+    <input type="email" id="email" required class="w-full border px-3 py-2 rounded" />
+  </div>
+  <div class="mb-4">
+    <label for="password" class="block mb-1">Mot de passe</label>
+    <input type="password" id="password" required class="w-full border px-3 py-2 rounded" />
+  </div>
+  <button type="submit" class="btn-primary px-4 py-2 rounded text-white font-semibold">Se connecter</button>
+</form>
+<div id="loginMessage" class="text-red-600 mt-2 text-center"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -358,13 +372,21 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+const form = document.getElementById('adminLoginForm');
+const messageDiv = document.getElementById('loginMessage');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  messageDiv.textContent = "";
+
+  const email = form.email.value;
+  const password = form.password.value;
+
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, "lutilisateur@example.com", "leMotDePasse");
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // On récupère le doc Firestore de l'utilisateur
-   const userDocRef = doc(db, "User", user.uid);
+    const userDocRef = doc(db, "User", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {
@@ -374,17 +396,20 @@ document.getElementById('adminLoginBtn').addEventListener('click', async () => {
         alert("Bienvenue admin !");
         window.location.href = "administration.html";
       } else {
-        alert("Accès refusé : vous n'êtes pas admin.");
+        messageDiv.textContent = "Accès refusé : vous n'êtes pas admin.";
+        await auth.signOut(); // déconnexion car pas admin
       }
     } else {
-      alert("Aucun profil trouvé !");
+      messageDiv.textContent = "Aucun profil trouvé pour cet utilisateur.";
+      await auth.signOut();
     }
 
   } catch (error) {
     console.error("Erreur connexion :", error.message);
-    alert("Erreur lors de la connexion : " + error.message);
+    messageDiv.textContent = "Erreur lors de la connexion : " + error.message;
   }
 });
+
 </script>
 
 
