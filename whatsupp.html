@@ -342,38 +342,49 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-    authDomain: "fashionflow-3db6b.firebaseapp.com",
-    projectId: "fashionflow-3db6b",
-    storageBucket: "fashionflow-3db6b.appspot.com",
-    messagingSenderId: "1073693995934",
-    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+  authDomain: "fashionflow-3db6b.firebaseapp.com",
+  projectId: "fashionflow-3db6b",
+  storageBucket: "fashionflow-3db6b.appspot.com",
+  messagingSenderId: "1073693995934",
+  appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  const adminBtn = document.getElementById('adminLoginBtn');
+document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, "lutilisateur@example.com", "leMotDePasse");
+    const user = userCredential.user;
 
-  // Quand la page charge, vérifier si connecté + admin
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists() && docSnap.data().role === "admin") {
-        // L'utilisateur est admin : montrer le bouton
-        adminBtn.style.display = 'inline-block';
-        adminBtn.addEventListener('click', () => {
-          window.location.href = "administration.html";
-        });
+    // On récupère le doc Firestore de l'utilisateur
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+
+      if (userData.role === "admin") {
+        alert("Bienvenue admin !");
+        window.location.href = "administration.html";
+      } else {
+        alert("Accès refusé : vous n'êtes pas admin.");
       }
+    } else {
+      alert("Aucun profil trouvé !");
     }
-  });
+
+  } catch (error) {
+    console.error("Erreur connexion :", error.message);
+    alert("Erreur lors de la connexion : " + error.message);
+  }
+});
 </script>
 
 
