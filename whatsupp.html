@@ -338,11 +338,12 @@
   <p class="text-gray-500">
     Version 2.3.5 • Dernière mise à jour : 24 juin 2025
   </p>
-<button id="adminLoginBtn">Êtes-vous admin ?</button>
+<button id="adminLoginBtn" style="display:none;">Espace Admin</button>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
@@ -355,24 +356,23 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  document.getElementById('adminLoginBtn').addEventListener('click', () => {
-    signInWithEmailAndPassword(auth, "samyfoot51@gmail.com", "Sam@Sam51")
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("Connecté :", user.email);
+  const adminBtn = document.getElementById('adminLoginBtn');
 
-        if (user.email === "samyfoot51@gmail.com") {
-          alert("Bienvenue admin !");
-          window.location.href = "administration.html"; // redirection
-        } else {
-          alert("Accès refusé : vous n'êtes pas admin.");
-        }
-      })
-      .catch((error) => {
-        console.error("Erreur connexion :", error.message);
-        alert("Erreur lors de la connexion : " + error.message);
-      });
+  // Quand la page charge, vérifier si connecté + admin
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists() && docSnap.data().role === "admin") {
+        // L'utilisateur est admin : montrer le bouton
+        adminBtn.style.display = 'inline-block';
+        adminBtn.addEventListener('click', () => {
+          window.location.href = "administration.html";
+        });
+      }
+    }
   });
 </script>
 
