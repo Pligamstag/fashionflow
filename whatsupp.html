@@ -364,7 +364,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', async () => {
     const user = userCredential.user;
 
     // On récupère le doc Firestore de l'utilisateur
-    const userDocRef = doc(db, "users", user.uid);
+   const userDocRef = doc(db, "User", user.uid);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {
