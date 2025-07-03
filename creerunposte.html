@@ -6,120 +6,737 @@
   <title>FashionFlow Posts - Système de Publication</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* Variables CSS pour les thèmes */
+    :root {
+      /* Thème clair - inspiré des images */
+      --bg-primary: #8B5CF6;
+      --bg-secondary: #A78BFA;
+      --bg-accent: #C084FC;
+      --bg-gradient: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 25%, #C084FC 50%, #DDD6FE 100%);
+      --container-bg: rgba(255, 255, 255, 0.15);
+      --container-bg-solid: rgba(255, 255, 255, 0.25);
+      --text-color: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.8);
+      --input-bg: rgba(255, 255, 255, 0.2);
+      --input-border: rgba(255, 255, 255, 0.3);
+      --input-focus: rgba(255, 255, 255, 0.5);
+      --placeholder-color: rgba(255, 255, 255, 0.6);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+      --btn-primary: linear-gradient(45deg, #10B981, #059669);
+      --btn-secondary: linear-gradient(45deg, #8B5CF6, #7C3AED);
+    }
+
+    [data-theme="dark"] {
+      /* Thème sombre - inspiré des images */
+      --bg-primary: #1E293B;
+      --bg-secondary: #334155;
+      --bg-accent: #475569;
+      --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 25%, #334155 50%, #475569 100%);
+      --container-bg: rgba(30, 41, 59, 0.8);
+      --container-bg-solid: rgba(30, 41, 59, 0.95);
+      --text-color: #F1F5F9;
+      --text-secondary: rgba(241, 245, 249, 0.8);
+      --input-bg: rgba(51, 65, 85, 0.6);
+      --input-border: rgba(71, 85, 105, 0.8);
+      --input-focus: rgba(139, 92, 246, 0.5);
+      --placeholder-color: rgba(148, 163, 184, 0.7);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+      --btn-primary: linear-gradient(45deg, #8B5CF6, #7C3AED);
+      --btn-secondary: linear-gradient(45deg, #3B82F6, #2563EB);
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-gradient);
       min-height: 100vh;
-      color: #333;
+      color: var(--text-color);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-x: hidden;
     }
+
+    /* Effet de particules animées en arrière-plan */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: particleFloat 20s ease-in-out infinite;
+    }
+
+    /* Particules flottantes */
+    .floating-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    [data-theme="dark"] .particle {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .particle:nth-child(1) {
+      width: 4px;
+      height: 4px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+      animation-duration: 12s;
+    }
+
+    .particle:nth-child(2) {
+      width: 6px;
+      height: 6px;
+      top: 60%;
+      left: 20%;
+      animation-delay: 2s;
+      animation-duration: 18s;
+    }
+
+    .particle:nth-child(3) {
+      width: 3px;
+      height: 3px;
+      top: 40%;
+      left: 70%;
+      animation-delay: 4s;
+      animation-duration: 15s;
+    }
+
+    .particle:nth-child(4) {
+      width: 5px;
+      height: 5px;
+      top: 80%;
+      left: 80%;
+      animation-delay: 6s;
+      animation-duration: 20s;
+    }
+
+    .particle:nth-child(5) {
+      width: 2px;
+      height: 2px;
+      top: 30%;
+      left: 50%;
+      animation-delay: 8s;
+      animation-duration: 14s;
+    }
+
+    .particle:nth-child(6) {
+      width: 4px;
+      height: 4px;
+      top: 70%;
+      left: 30%;
+      animation-delay: 10s;
+      animation-duration: 16s;
+    }
+
+    .particle:nth-child(7) {
+      width: 3px;
+      height: 3px;
+      top: 10%;
+      left: 90%;
+      animation-delay: 12s;
+      animation-duration: 22s;
+    }
+
+    .particle:nth-child(8) {
+      width: 5px;
+      height: 5px;
+      top: 90%;
+      left: 15%;
+      animation-delay: 14s;
+      animation-duration: 18s;
+    }
+
+    /* Formes géométriques animées */
+    .geometric-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.05;
+      animation: geometricFloat 25s infinite ease-in-out;
+    }
+
+    [data-theme="dark"] .shape {
+      opacity: 0.08;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid rgba(255, 255, 255, 0.1);
+      top: 15%;
+      left: 85%;
+      animation-delay: 0s;
+      animation-duration: 30s;
+    }
+
+    [data-theme="dark"] .triangle {
+      border-bottom-color: rgba(139, 92, 246, 0.2);
+    }
+
+    .square {
+      width: 15px;
+      height: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      top: 75%;
+      left: 5%;
+      animation-delay: 5s;
+      animation-duration: 28s;
+      transform: rotate(45deg);
+    }
+
+    [data-theme="dark"] .square {
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .circle {
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      top: 35%;
+      left: 95%;
+      animation-delay: 10s;
+      animation-duration: 32s;
+    }
+
+    [data-theme="dark"] .circle {
+      background: rgba(168, 85, 247, 0.12);
+    }
+
+    .hexagon {
+      width: 20px;
+      height: 11px;
+      background: rgba(255, 255, 255, 0.06);
+      position: relative;
+      top: 85%;
+      left: 75%;
+      animation-delay: 15s;
+      animation-duration: 35s;
+    }
+
+    .hexagon:before,
+    .hexagon:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+
+    .hexagon:before {
+      bottom: 100%;
+      border-bottom: 6px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hexagon:after {
+      top: 100%;
+      border-top: 6px solid rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="dark"] .hexagon {
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    [data-theme="dark"] .hexagon:before {
+      border-bottom-color: rgba(34, 197, 94, 0.1);
+    }
+
+    [data-theme="dark"] .hexagon:after {
+      border-top-color: rgba(34, 197, 94, 0.1);
+    }
+
+    /* Animations */
+    @keyframes particleFloat {
+      0%, 100% { 
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% { 
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.1;
+      }
+      25% { 
+        transform: translateY(-15px) translateX(10px) scale(1.1);
+        opacity: 0.2;
+      }
+      50% { 
+        transform: translateY(-30px) translateX(-5px) scale(0.9);
+        opacity: 0.15;
+      }
+      75% { 
+        transform: translateY(-10px) translateX(15px) scale(1.05);
+        opacity: 0.25;
+      }
+    }
+
+    @keyframes geometricFloat {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        opacity: 0.05;
+      }
+      25% { 
+        transform: translateY(-25px) translateX(20px) rotate(90deg) scale(1.2);
+        opacity: 0.1;
+      }
+      50% { 
+        transform: translateY(-50px) translateX(-15px) rotate(180deg) scale(0.8);
+        opacity: 0.08;
+      }
+      75% { 
+        transform: translateY(-20px) translateX(25px) rotate(270deg) scale(1.1);
+        opacity: 0.12;
+      }
+    }
+
+    /* Effet de lueur pulsante */
+    @keyframes pulse {
+      0%, 100% { 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      }
+      50% { 
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    [data-theme="dark"] @keyframes pulse {
+      0%, 100% { 
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+      }
+      50% { 
+        box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+      }
+    }
+
+    /* Ondulation de fond */
+    .wave-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse at center, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+      animation: waveMove 15s ease-in-out infinite;
+    }
+
+    [data-theme="dark"] .wave-animation {
+      background: 
+        radial-gradient(ellipse at center, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
+    }
+
+    @keyframes waveMove {
+      0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: scale(1.1) rotate(180deg);
+        opacity: 0.5;
+      }
+    }
+    
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
+      position: relative;
+      z-index: 1;
     }
+    
     header {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--container-bg);
       backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 25px 35px;
-      margin-bottom: 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 24px;
+      padding: 30px 40px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: pulse 4s ease-in-out infinite;
     }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+    
     .logo {
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      font-size: 32px;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ffffff, rgba(255, 255, 255, 0.8));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      letter-spacing: -1px;
     }
+    
     .header-actions {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       align-items: center;
     }
+    
     .btn {
-      padding: 12px 25px;
+      padding: 14px 28px;
       border: none;
       border-radius: 50px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       text-decoration: none;
       color: white;
-      background: linear-gradient(45deg, #28a745, #20c997);
+      background: var(--btn-primary);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      animation: pulse 6s ease-in-out infinite;
     }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+    
     .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
     }
+    
+    .theme-toggle {
+      background: var(--btn-secondary);
+      border: none;
+      color: white;
+      padding: 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-toggle::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: all 0.4s;
+      transform: translate(-50%, -50%);
+    }
+
+    .theme-toggle:hover::before {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .theme-toggle:hover {
+      transform: rotate(180deg) scale(1.1);
+      box-shadow: var(--shadow-hover);
+    }
+    
     .post-editor {
-      background: rgba(255, 255, 255, 0.95);
+      background: var(--container-bg);
       backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
     }
+
+    .post-editor::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+    
+    .form-group {
+      margin-bottom: 30px;
+    }
+    
     .form-input {
       width: 100%;
-      padding: 15px 20px;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
+      padding: 18px 24px;
+      border: 2px solid var(--input-border);
+      border-radius: 16px;
       font-size: 16px;
-      margin-bottom: 20px;
       font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text-color);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
     }
-    .category-tag {
-      padding: 8px 16px;
-      background: #f0f0f0;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
+    
+    .form-input::placeholder {
+      color: var(--placeholder-color);
     }
-    .category-tag.active {
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      color: white;
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+      transform: translateY(-1px);
     }
+    
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 700;
+      color: var(--text-color);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    textarea.form-input {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
     .notification {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      color: white;
-      padding: 15px 25px;
-      border-radius: 15px;
+      top: 30px;
+      right: 30px;
+      background: var(--container-bg-solid);
+      backdrop-filter: blur(20px);
+      color: var(--text-color);
+      padding: 20px 30px;
+      border-radius: 20px;
       font-weight: 600;
       z-index: 1000;
+      animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    @keyframes slideIn {
+      from { 
+        transform: translateX(100%) scale(0.8); 
+        opacity: 0; 
+      }
+      to { 
+        transform: translateX(0) scale(1); 
+        opacity: 1; 
+      }
+    }
+    
+    .publish-btn {
+      width: 100%;
+      justify-content: center;
+      background: var(--btn-secondary);
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 20px 30px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .publish-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: all 0.4s;
+      transform: translate(-50%, -50%);
+    }
+
+    .publish-btn:hover::after {
+      width: 300%;
+      height: 300%;
+    }
+    
+    .publish-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Animations au scroll */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container > * {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .container > *:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      header {
+        padding: 20px 25px;
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .post-editor {
+        padding: 25px;
+      }
+      
+      .logo {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Éléments d'animation d'arrière-plan -->
+  <div class="wave-animation"></div>
+  
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="geometric-shapes">
+    <div class="shape triangle"></div>
+    <div class="shape square"></div>
+    <div class="shape circle"></div>
+    <div class="shape hexagon"></div>
+  </div>
+
   <div class="container">
     <header>
       <div class="logo">FashionFlow Posts 📝</div>
       <div class="header-actions">
-       <a href="blog.html" class="btn">🏠 Voir les postes </a>
+        <button class="theme-toggle" id="themeToggle" title="Basculer le thème">
+          🌙
+        </button>
+        <a href="blog.html" class="btn">🏠 Voir les postes</a>
       </div>
     </header>
 
     <div class="post-editor" id="postEditor">
       <form id="postForm">
-        <label for="postTitle">Titre du Post</label>
-        <input type="text" id="postTitle" class="form-input" required />
+        <div class="form-group">
+          <label for="postTitle">Titre du Post</label>
+          <input type="text" id="postTitle" class="form-input" placeholder="Entrez un titre accrocheur..." required />
+        </div>
 
-        <label for="postContent">Contenu du Post</label>
-        <textarea id="postContent" class="form-input" rows="8" required></textarea>
+        <div class="form-group">
+          <label for="postContent">Contenu du Post</label>
+          <textarea id="postContent" class="form-input" rows="8" placeholder="Rédigez votre contenu ici..." required></textarea>
+        </div>
 
-        <label for="postTags">Tags (séparés par virgule)</label>
-        <input type="text" id="postTags" class="form-input" placeholder="ex: mode, tendance, été" />
+        <div class="form-group">
+          <label for="postTags">Tags (séparés par virgule)</label>
+          <input type="text" id="postTags" class="form-input" placeholder="ex: mode, tendance, été" />
+        </div>
 
-        <button type="submit" class="btn" style="width: 100%; justify-content: center; background: linear-gradient(45deg, #667eea, #764ba2); margin-top: 10px;">🚀 Publier le Post</button>
+        <button type="submit" class="btn publish-btn">🚀 Publier le Post</button>
       </form>
     </div>
   </div>
@@ -147,7 +764,27 @@
     const postsCol = collection(db, "devloppement");
 
     const form = document.getElementById("postForm");
+    const themeToggle = document.getElementById("themeToggle");
 
+    // Gestion des thèmes
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+    }
+
+    // Publication des posts
     async function publishPost(event) {
       event.preventDefault();
 
@@ -168,7 +805,7 @@
         showNotification("🎉 Post publié avec succès !");
         form.reset();
       } catch (error) {
-        alert("Erreur lors de la publication : " + error.message);
+        showNotification("❌ Erreur lors de la publication : " + error.message);
       }
     }
 
@@ -180,7 +817,12 @@
       setTimeout(() => notif.remove(), 3000);
     }
 
+    // Event listeners
     form.addEventListener("submit", publishPost);
+    themeToggle.addEventListener("click", toggleTheme);
+
+    // Initialisation
+    initTheme();
   </script>
 </body>
 </html>
