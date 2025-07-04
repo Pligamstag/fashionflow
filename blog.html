@@ -651,325 +651,353 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      addDoc,
-      deleteDoc,
-      doc,
-      query,
-      orderBy,
-      where,
-      serverTimestamp,
-      updateDoc,
-      arrayUnion,
-      arrayRemove,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+<script type="module">
+import { 
+  getAuth, 
+  signInAnonymously, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-      authDomain: "fashionflow-3db6b.firebaseapp.com",
-      projectId: "fashionflow-3db6b",
-      storageBucket: "fashionflow-3db6b.firebasestorage.app",
-      messagingSenderId: "1073693995934",
-      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
-      measurementId: "G-P4DP02HQ75"
-    };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  where,
+  serverTimestamp,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const postsCol = collection(db, "devloppement");
-    const repliesCol = collection(db, "replies");
+const firebaseConfig = {
+  apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+  authDomain: "fashionflow-3db6b.firebaseapp.com",
+  projectId: "fashionflow-3db6b",
+  storageBucket: "fashionflow-3db6b.firebasestorage.app",
+  messagingSenderId: "1073693995934",
+  appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+  measurementId: "G-P4DP02HQ75"
+};
 
-    const postsContainer = document.getElementById("postsContainer");
-    const currentUser = "Samy";
-    const ADMIN_PASSWORD = "LucieKaraoui";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const postsCol = collection(db, "devloppement");
+const repliesCol = collection(db, "replies");
 
-    function getInitials(name) {
-      return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';
+const auth = getAuth();
+let currentUser = null; // UID de l'utilisateur connecté
+
+const ADMIN_PASSWORD = "FFLFKSprod";
+const postsContainer = document.getElementById("postsContainer");
+
+// Connexion anonyme pour test
+signInAnonymously(auth).catch(error => {
+  console.error("Erreur connexion anonyme :", error);
+});
+
+// Écouteur d'état d'authentification
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user.uid;
+    console.log("Utilisateur connecté, UID:", currentUser);
+    loadPosts();  // Charge les posts uniquement après connexion
+  } else {
+    currentUser = null;
+    postsContainer.innerHTML = '<p>Veuillez vous connecter pour voir les posts.</p>';
+  }
+});
+
+function getInitials(name) {
+  return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';
+}
+
+async function toggleLike(postId) {
+  if (!currentUser) {
+    alert("Vous devez être connecté pour liker.");
+    return;
+  }
+
+  try {
+    const postRef = doc(db, "devloppement", postId);
+    const postDoc = await getDoc(postRef);
+
+    if (!postDoc.exists()) {
+      alert("Post introuvable !");
+      return;
     }
 
-    async function toggleLike(postId) {
-      try {
-        const postRef = doc(db, "devloppement", postId);
-        const postDoc = await getDoc(postRef);
-        
-        if (!postDoc.exists()) {
-          alert("Post introuvable !");
-          return;
-        }
+    const postData = postDoc.data();
+    const currentLikes = postData.likes || [];
+    const hasLiked = currentLikes.includes(currentUser);
 
-        const postData = postDoc.data();
-        const currentLikes = postData.likes || [];
-        const hasLiked = currentLikes.includes(currentUser);
-
-        if (hasLiked) {
-          await updateDoc(postRef, {
-            likes: arrayRemove(currentUser)
-          });
-        } else {
-          await updateDoc(postRef, {
-            likes: arrayUnion(currentUser)
-          });
-        }
-
-        loadPosts();
-        
-        const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
-        if (likeBtn && !hasLiked) {
-          likeBtn.classList.add('liked');
-          setTimeout(() => likeBtn.classList.remove('liked'), 600);
-        }
-
-      } catch (error) {
-        console.error("Erreur lors du toggle like:", error);
-        alert("Erreur lors de la mise à jour du like : " + error.message);
-      }
-    }
-
-    async function deletePost(postId, postAuthor) {
-      if (postAuthor === currentUser) {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés avec succès !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur lors de la suppression : " + error.message);
-        }
-      } else {
-        const pass = prompt("Ce post n'est pas le vôtre. Entrez le mot de passe administrateur pour le supprimer :");
-        if (pass !== ADMIN_PASSWORD) {
-          alert("Mot de passe incorrect, suppression annulée.");
-          return;
-        }
-        if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés avec succès !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur lors de la suppression : " + error.message);
-        }
-      }
-    }
-
-    async function toggleReplyForm(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      form.classList.toggle('active');
-      
-      if (form.classList.contains('active')) {
-        const textarea = form.querySelector('.reply-input');
-        textarea.focus();
-      }
-    }
-
-    async function submitReply(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      const textarea = form.querySelector('.reply-input');
-      const content = textarea.value.trim();
-      
-      if (!content) {
-        alert("Veuillez écrire quelque chose avant de publier !");
-        return;
-      }
-
-      try {
-        await addDoc(repliesCol, {
-          postId: postId,
-          content: content,
-          author: currentUser,
-          date: new Date().toISOString(),
-          createdAt: serverTimestamp()
-        });
-
-        textarea.value = '';
-        form.classList.remove('active');
-        
-        alert("Réponse ajoutée avec succès !");
-        await loadReplies(postId);
-        
-      } catch (error) {
-        console.error("Erreur lors de l'ajout de la réponse:", error);
-        alert("Erreur lors de l'ajout de la réponse : " + error.message);
-      }
-    }
-
-    async function toggleReplies(postId) {
-      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-      const isVisible = repliesList.classList.contains('active');
-      
-      if (isVisible) {
-        repliesList.classList.remove('active');
-      } else {
-        await loadReplies(postId);
-        repliesList.classList.add('active');
-      }
-    }
-
-    async function loadReplies(postId) {
-      try {
-        const repliesQuery = query(
-          repliesCol, 
-          where("postId", "==", postId),
-          orderBy("createdAt", "desc")
-        );
-        const repliesSnapshot = await getDocs(repliesQuery);
-        const replies = repliesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-        const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
-        
-        repliesCount.textContent = `${replies.length} réponse${replies.length > 1 ? 's' : ''}`;
-
-        if (replies.length === 0) {
-          repliesList.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><p>Aucune réponse pour le moment. Soyez le premier à répondre !</p></div>';
-        } else {
-          repliesList.innerHTML = replies.map(reply => `
-            <div class="reply-item">
-              <div class="reply-header">
-                <span class="reply-author">${reply.author}</span>
-                <span class="reply-date">${formatDate(reply.date)}</span>
-              </div>
-              <div class="reply-content">${reply.content}</div>
-            </div>
-          `).join('');
-        }
-
-      } catch (error) {
-        console.error("Erreur lors du chargement des réponses:", error);
-      }
-    }
-
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    if (hasLiked) {
+      await updateDoc(postRef, {
+        likes: arrayRemove(currentUser)
+      });
+    } else {
+      await updateDoc(postRef, {
+        likes: arrayUnion(currentUser)
       });
     }
 
-    async function loadPosts() {
-      try {
-        const q = query(postsCol, orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const posts = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        if (posts.length === 0) {
-          postsContainer.innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">📝</div>
-              <h3>Aucune publication pour le moment</h3>
-              <p>Soyez le premier à partager quelque chose !</p>
-            </div>
-          `;
-          return;
-        }
-
-        const postsHTML = await Promise.all(posts.map(async post => {
-          const likes = post.likes || [];
-          const likesText = likes.length > 0 ? `Aimé par ${likes.join(', ')}` : '';
-          
-          const repliesQuery = query(repliesCol, where("postId", "==", post.id));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const repliesCount = repliesSnapshot.docs.length;
-
-        return `
-            <div class="post-card" data-post-id="${post.id}">
-              <div class="post-header">
-                <div class="author-avatar">${getInitials(post.author)}</div>
-                <div class="post-meta">
-                  <div class="post-author">${post.author}</div>
-                  <div class="post-date">${formatDate(post.date)}</div>
-                </div>
-              </div>
-              <h3 class="post-title">${post.title}</h3>
-              <div class="post-content">${post.content}</div>
-              ${likesText ? `<div class="liked-users">${likesText}</div>` : ''}
-              <div class="post-actions">
-                <button class="btn btn-small like-btn" onclick="toggleLike('${post.id}')">
-                  <i class="fas fa-heart"></i>
-                  ${likes.length} Like${likes.length > 1 ? 's' : ''}
-                </button>
-                <button class="btn btn-small reply-btn" onclick="toggleReplyForm('${post.id}')">
-                  <i class="fas fa-comment"></i>
-                  Répondre
-                </button>
-                <button class="btn btn-small replies-toggle" onclick="toggleReplies('${post.id}')">
-                  <i class="fas fa-comments"></i>
-                  <span class="replies-count">${repliesCount} réponse${repliesCount > 1 ? 's' : ''}</span>
-                </button>
-                <button class="btn btn-small btn-danger delete-btn" onclick="deletePost('${post.id}', '${post.author}')">
-                  <i class="fas fa-trash"></i>
-                  Supprimer
-                </button>
-              </div>
-
-              <div class="reply-form">
-                <textarea class="reply-input" placeholder="Écrivez votre réponse ici..." rows="3"></textarea>
-                <div class="reply-form-actions">
-                  <button class="btn btn-primary" onclick="submitReply('${post.id}')">
-                    <i class="fas fa-paper-plane"></i>
-                    Publier
-                  </button>
-                  <button class="btn btn-secondary" onclick="toggleReplyForm('${post.id}')">
-                    Annuler
-                  </button>
-                </div>
-              </div>
-
-              <div class="replies-list"></div>
-            </div>
-          `;
-        }));
-
-        postsContainer.innerHTML = postsHTML.join('');
-
-      } catch (error) {
-        console.error("Erreur lors du chargement des posts:", error);
-        postsContainer.innerHTML = `
-          <div class="error-state">
-            <div class="error-icon">⚠️</div>
-            <h3>Erreur de chargement</h3>
-            <p>Impossible de charger les publications.</p>
-          </div>
-        `;
-      }
-    }
-
-    // Initialisation
     loadPosts();
 
-    // Exposition des fonctions pour les onclick
-    window.toggleLike = toggleLike;
-    window.deletePost = deletePost;
-    window.toggleReplyForm = toggleReplyForm;
-    window.submitReply = submitReply;
-    window.toggleReplies = toggleReplies;
+    const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
+    if (likeBtn && !hasLiked) {
+      likeBtn.classList.add('liked');
+      setTimeout(() => likeBtn.classList.remove('liked'), 600);
+    }
+  } catch (error) {
+    console.error("Erreur lors du toggle like:", error);
+    alert("Erreur lors de la mise à jour du like : " + error.message);
+  }
+}
 
-  </script>
+async function deletePost(postId, postAuthorUid) {
+  if (!currentUser) {
+    alert("Vous devez être connecté pour supprimer un post.");
+    return;
+  }
+
+  if (postAuthorUid === currentUser) {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
+  } else {
+    const pass = prompt("Ce post n'est pas le vôtre. Entrez le mot de passe administrateur pour le supprimer :");
+    if (pass !== ADMIN_PASSWORD) {
+      alert("Mot de passe incorrect, suppression annulée.");
+      return;
+    }
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce post ?")) return;
+  }
+
+  try {
+    await deleteDoc(doc(db, "devloppement", postId));
+
+    const repliesQuery = query(repliesCol, where("postId", "==", postId));
+    const repliesSnapshot = await getDocs(repliesQuery);
+    const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+
+    alert("Post et réponses supprimés avec succès !");
+    loadPosts();
+  } catch (error) {
+    alert("Erreur lors de la suppression : " + error.message);
+  }
+}
+
+async function toggleReplyForm(postId) {
+  const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+  form.classList.toggle('active');
+
+  if (form.classList.contains('active')) {
+    const textarea = form.querySelector('.reply-input');
+    textarea.focus();
+  }
+}
+
+async function submitReply(postId) {
+  if (!currentUser) {
+    alert("Vous devez être connecté pour répondre.");
+    return;
+  }
+
+  const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+  const textarea = form.querySelector('.reply-input');
+  const content = textarea.value.trim();
+
+  if (!content) {
+    alert("Veuillez écrire quelque chose avant de publier !");
+    return;
+  }
+
+  try {
+    await addDoc(repliesCol, {
+      postId: postId,
+      content: content,
+      authorUid: currentUser,
+      date: new Date().toISOString(),
+      createdAt: serverTimestamp()
+    });
+
+    textarea.value = '';
+    form.classList.remove('active');
+
+    alert("Réponse ajoutée avec succès !");
+    await loadReplies(postId);
+
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la réponse:", error);
+    alert("Erreur lors de l'ajout de la réponse : " + error.message);
+  }
+}
+
+async function toggleReplies(postId) {
+  const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+  const isVisible = repliesList.classList.contains('active');
+
+  if (isVisible) {
+    repliesList.classList.remove('active');
+  } else {
+    await loadReplies(postId);
+    repliesList.classList.add('active');
+  }
+}
+
+async function loadReplies(postId) {
+  try {
+    const repliesQuery = query(
+      repliesCol, 
+      where("postId", "==", postId),
+      orderBy("createdAt", "desc")
+    );
+    const repliesSnapshot = await getDocs(repliesQuery);
+    const replies = repliesSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+    const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
+
+    repliesCount.textContent = `${replies.length} réponse${replies.length > 1 ? 's' : ''}`;
+
+    if (replies.length === 0) {
+      repliesList.innerHTML = '<div class="empty-state"><div class="empty-icon">💬</div><p>Aucune réponse pour le moment. Soyez le premier à répondre !</p></div>';
+    } else {
+      repliesList.innerHTML = replies.map(reply => `
+        <div class="reply-item">
+          <div class="reply-header">
+            <span class="reply-author">${getInitials(reply.authorUid || 'A')}</span>
+            <span class="reply-date">${formatDate(reply.date)}</span>
+          </div>
+          <div class="reply-content">${reply.content}</div>
+        </div>
+      `).join('');
+    }
+  } catch (error) {
+    console.error("Erreur lors du chargement des réponses:", error);
+  }
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+async function loadPosts() {
+  try {
+    const q = query(postsCol, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    if (posts.length === 0) {
+      postsContainer.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h3>Aucune publication pour le moment</h3>
+          <p>Soyez le premier à partager quelque chose !</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Construire HTML des posts, avec affichage simplifié auteur = authorUid
+    const postsHTML = await Promise.all(posts.map(async post => {
+      const likes = post.likes || [];
+      const likesText = likes.length > 0 ? `Aimé par ${likes.length} utilisateur${likes.length > 1 ? 's' : ''}` : '';
+
+      // Pour suppression, on envoie authorUid au lieu du nom
+      const postAuthorUid = post.authorUid || "inconnu";
+
+      const repliesQuery = query(repliesCol, where("postId", "==", post.id));
+      const repliesSnapshot = await getDocs(repliesQuery);
+      const repliesCount = repliesSnapshot.docs.length;
+
+      return `
+        <div class="post-card" data-post-id="${post.id}">
+          <div class="post-header">
+            <div class="author-avatar">${getInitials(postAuthorUid)}</div>
+            <div class="post-meta">
+              <div class="post-author">Utilisateur ${postAuthorUid.substring(0,5)}</div>
+              <div class="post-date">${formatDate(post.date)}</div>
+            </div>
+          </div>
+          <h3 class="post-title">${post.title}</h3>
+          <div class="post-content">${post.content}</div>
+          ${likesText ? `<div class="liked-users">${likesText}</div>` : ''}
+          <div class="post-actions">
+            <button class="btn btn-small like-btn" onclick="toggleLike('${post.id}')">
+              <i class="fas fa-heart"></i>
+              ${likes.length} Like${likes.length > 1 ? 's' : ''}
+            </button>
+            <button class="btn btn-small reply-btn" onclick="toggleReplyForm('${post.id}')">
+              <i class="fas fa-comment"></i>
+              Répondre
+            </button>
+            <button class="btn btn-small replies-toggle" onclick="toggleReplies('${post.id}')">
+              <i class="fas fa-comments"></i>
+              <span class="replies-count">${repliesCount} réponse${repliesCount > 1 ? 's' : ''}</span>
+            </button>
+            <button class="btn btn-small btn-danger delete-btn" onclick="deletePost('${post.id}', '${postAuthorUid}')">
+              <i class="fas fa-trash"></i>
+              Supprimer
+            </button>
+          </div>
+
+          <div class="reply-form">
+            <textarea class="reply-input" placeholder="Écrivez votre réponse ici..." rows="3"></textarea>
+            <div class="reply-form-actions">
+              <button class="btn btn-primary" onclick="submitReply('${post.id}')">
+                <i class="fas fa-paper-plane"></i>
+                Publier
+              </button>
+              <button class="btn btn-secondary" onclick="toggleReplyForm('${post.id}')">
+                Annuler
+              </button>
+            </div>
+          </div>
+
+          <div class="replies-list"></div>
+        </div>
+      `;
+    }));
+
+    postsContainer.innerHTML = postsHTML.join('');
+
+  } catch (error) {
+    console.error("Erreur lors du chargement des posts:", error);
+    postsContainer.innerHTML = `
+      <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <h3>Erreur de chargement</h3>
+        <p>Impossible de charger les publications.</p>
+      </div>
+    `;
+  }
+}
+
+// Exposer les fonctions au global pour les onclick
+window.toggleLike = toggleLike;
+window.deletePost = deletePost;
+window.toggleReplyForm = toggleReplyForm;
+window.submitReply = submitReply;
+window.toggleReplies = toggleReplies;
+
+</script>
+
