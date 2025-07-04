@@ -833,7 +833,11 @@ async function deletePost(postId, postAuthorUid) {
 
 async function toggleReplyForm(postId) {
   const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-  form.classList.toggle('active');
+  if (form.style.display === 'none' || !form.style.display) {
+    form.style.display = 'block';
+  } else {
+    form.style.display = 'none';
+  }
 }
 
 async function submitReply(postId) {
@@ -849,7 +853,7 @@ async function submitReply(postId) {
     postId, content, authorUid: currentUser, date: new Date().toISOString(), createdAt: serverTimestamp()
   });
   textarea.value = '';
-  form.classList.remove('active');
+  form.style.display = 'none';
   loadReplies(postId);
 }
 
@@ -885,7 +889,10 @@ async function loadPosts() {
       <button onclick="toggleLike('${post.id}')">Like</button>
       <button onclick="toggleReplyForm('${post.id}')">Répondre</button>
       <button onclick="deletePost('${post.id}', '${post.authorUid}')">Supprimer</button>
-      <div class="reply-form" style="display:none;"></div>
+      <div class="reply-form" style="display:none;">
+        <textarea class="reply-input" rows="2" placeholder="Votre réponse..."></textarea>
+        <button onclick="submitReply('${post.id}')">Envoyer</button>
+      </div>
       <div class="replies-list"></div>
     </div>`).join('');
 }
