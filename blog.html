@@ -626,6 +626,12 @@
           Accueil
         </a>
       </div>
+      <div id="userProfile" style="color: white; display: flex; align-items: center; gap: 10px;">
+  <!-- Affiché quand l'utilisateur est connecté -->
+</div>
+
+<button id="loginBtn" class="btn btn-secondary">Se connecter</button>
+
     </nav>
 
     <section class="hero">
@@ -998,6 +1004,91 @@ window.deletePost = deletePost;
 window.toggleReplyForm = toggleReplyForm;
 window.submitReply = submitReply;
 window.toggleReplies = toggleReplies;
+<script>
+  const loginBtn = document.getElementById('loginBtn');
+  const loginModal = document.getElementById('loginModal');
+  const cancelLogin = document.getElementById('cancelLogin');
+  const loginForm = document.getElementById('loginForm');
+  const userProfile = document.getElementById('userProfile');
 
+  // Afficher modal login
+  loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+  });
+
+  // Annuler login
+  cancelLogin.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+  });
+
+  // Sauvegarder profil et afficher
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const username = loginForm.username.value.trim();
+    const avatar = loginForm.avatar.value.trim();
+    const bio = loginForm.bio.value.trim();
+
+    if (!username) {
+      alert('Le pseudo est obligatoire');
+      return;
+    }
+
+    const profile = { username, avatar, bio };
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+
+    loginModal.style.display = 'none';
+    updateUserProfileUI();
+  });
+
+  // Affiche le profil connecté ou le bouton login
+  function updateUserProfileUI() {
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
+
+    if (profile) {
+      loginBtn.style.display = 'none';
+      userProfile.innerHTML = `
+        <img src="${profile.avatar || 'https://via.placeholder.com/40'}" 
+             alt="Avatar" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border: 2px solid var(--primary);">
+        <div>
+          <div>${profile.username}</div>
+          <small style="font-size: 0.75rem; opacity: 0.7;">${profile.bio || ''}</small>
+        </div>
+        <button id="logoutBtn" class="btn btn-danger" style="margin-left: 10px; padding: 6px 12px; font-size: 0.8rem;">Déconnexion</button>
+      `;
+
+      // Bouton déconnexion
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('userProfile');
+        updateUserProfileUI();
+      });
+    } else {
+      userProfile.innerHTML = '';
+      loginBtn.style.display = 'inline-flex';
+    }
+  }
+
+  // Initialiser affichage au chargement
+  document.addEventListener('DOMContentLoaded', () => {
+    updateUserProfileUI();
+  });
 </script>
+  <div id="loginModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); 
+  justify-content: center; align-items: center; z-index: 1000;">
+  <form id="loginForm" style="background: var(--dark-secondary); padding: 20px; border-radius: 12px; width: 300px; color: white;">
+    <h3>Connexion Profil</h3>
+    <label for="username">Pseudo</label>
+    <input type="text" id="username" required style="width:100%; padding:8px; margin: 8px 0; border-radius: 6px; border:none;">
+    <label for="avatar">URL Avatar</label>
+    <input type="url" id="avatar" placeholder="https://..." style="width:100%; padding:8px; margin: 8px 0; border-radius: 6px; border:none;">
+    <label for="bio">Bio</label>
+    <textarea id="bio" rows="3" placeholder="Une petite bio..." style="width:100%; padding:8px; margin: 8px 0; border-radius: 6px; border:none;"></textarea>
+    <div style="text-align: right;">
+      <button type="button" id="cancelLogin" class="btn btn-secondary" style="margin-right:10px;">Annuler</button>
+      <button type="submit" class="btn btn-primary">Valider</button>
+    </div>
+  </form>
+</div>
+
+</body>
 
