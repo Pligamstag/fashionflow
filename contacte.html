@@ -493,6 +493,40 @@
                 templateParams
             );
         }
+// Tous les champs du formulaire
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const subjectInput = document.getElementById('subject');
+const messageInput = document.getElementById('message');
+const submitBtn = document.getElementById('submitBtn');
+
+// Fonction pour vérifier si tous les champs sont valides
+function validateForm() {
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const subject = subjectInput.value.trim();
+    const message = messageInput.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+        name.length > 0 &&
+        emailRegex.test(email) &&
+        subject.length > 0 &&
+        message.length > 0
+    ) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+}
+
+// Écouteurs d'événements pour chaque champ
+[nameInput, emailInput, subjectInput, messageInput].forEach(input => {
+    input.addEventListener('input', validateForm);
+});
+
+// Désactiver le bouton au début
+submitBtn.disabled = true;
 
         // Gestion du formulaire
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
