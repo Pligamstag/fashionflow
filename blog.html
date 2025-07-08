@@ -624,12 +624,15 @@
     <h3>Modifier le profil</h3>
     <form id="editProfileForm" style="display:flex; flex-direction:column; gap:10px;">
       <input id="displayNameInput" type="text" placeholder="Nouveau nom" style="padding:10px;">
-      <input id="photoURLInput" type="text" placeholder="URL photo de profil" style="padding:10px;">
+      <!-- Supprime le champ URL, on upload une image -->
+      <label for="photoFileInput">Importer une photo de profil :</label>
+      <input id="photoFileInput" type="file" accept="image/*" style="padding:10px;">
       <button type="submit" class="btn btn-success">Enregistrer</button>
       <button type="button" id="cancelEditProfile" class="btn btn-danger" style="position:absolute; top:10px; right:10px;">X</button>
     </form>
   </div>
 </div>
+
 
   <div class="background-effects">
     <div class="bg-circle"></div>
@@ -712,7 +715,8 @@ import {
   arrayUnion,
   arrayRemove
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-
+// <-- IMPORT POUR STORAGE
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
   authDomain: "fashionflow-3db6b.firebaseapp.com",
@@ -727,6 +731,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const postsCol = collection(db, "devloppement");
 const repliesCol = collection(db, "replies");
+const storage = getStorage(app);  // <-- INIT STORAGE
 
 const auth = getAuth();
 let currentUser = null;
@@ -916,15 +921,38 @@ const cancelEditProfile = document.getElementById('cancelEditProfile');
 
 editProfileForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const displayName = document.getElementById('displayNameInput').value.trim();
-  const photoURL = document.getElementById('photoURLInput').value.trim();
   if (!auth.currentUser) return;
 
+  const displayName = document.getElementById('displayNameInput').value.trim();
+  const photoFileInput = document.getElementById('photoFileInput');
+  const file = photoFileInput.files[0]; // Fichier sélectionné
+
   try {
+    let photoURL = null;
+    if (file) {
+      const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}/${file.name}`);
+      await uploadBytes(storageRef, file);
+      photoURL = await getDownloadURL(storageRef);
+    }
+
     await updateProfile(auth.currentUser, {
-  displayName: displayName || null,
-  photoURL: photoURL || null
+      displayName: displayName || null,
+      photoURL: photoURL || auth.currentUser.photoURL || null
     });
+
+    alert('Profil mis à jour !');
+    document.getElementById('editProfileModal').style.display = 'none';
+    updateUserProfileUI(auth.currentUser);
+
+  } catch (error) {
+    alert("Erreur lors de la mise à jour du profil : " + error.message);
+  }
+});
+
+cancelEditProfile.addEventListener('click', () => {
+  document.getElementById('editProfileModal').style.display = 'none';
+});
+
     alert('Profil mis à jour !');
     document.getElementById('editProfileModal').style.display = 'none';
     updateUserProfileUI(auth.currentUser);
