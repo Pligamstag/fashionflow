@@ -896,6 +896,7 @@ async function submitReply(postId) {
   loadReplies(postId);
 }
 
+
 async function toggleReplies(postId) {
   const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
   if (repliesList.classList.contains('active')) {
@@ -921,11 +922,12 @@ const cancelEditProfile = document.getElementById('cancelEditProfile');
 
 editProfileForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   if (!auth.currentUser) return;
 
   const displayName = document.getElementById('displayNameInput').value.trim();
   const photoFileInput = document.getElementById('photoFileInput');
-  const file = photoFileInput.files[0]; // Fichier sélectionné
+  const file = photoFileInput.files[0];
 
   try {
     let photoURL = null;
@@ -953,17 +955,6 @@ cancelEditProfile.addEventListener('click', () => {
   document.getElementById('editProfileModal').style.display = 'none';
 });
 
-    alert('Profil mis à jour !');
-    document.getElementById('editProfileModal').style.display = 'none';
-    updateUserProfileUI(auth.currentUser);
-  } catch (error) {
-    alert(error.message);
-  }
-});
-
-cancelEditProfile.addEventListener('click', () => {
-  document.getElementById('editProfileModal').style.display = 'none';
-});
 
 
 async function loadPosts() {
