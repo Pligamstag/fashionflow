@@ -693,7 +693,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  updateProfile   // ⏪⏪⏪ AJOUTE ÇA
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 import {
   getFirestore,
@@ -920,9 +921,9 @@ editProfileForm.addEventListener('submit', async (e) => {
   if (!auth.currentUser) return;
 
   try {
-    await auth.currentUser.updateProfile({
-      displayName: displayName || null,
-      photoURL: photoURL || null
+    await updateProfile(auth.currentUser, {
+  displayName: displayName || null,
+  photoURL: photoURL || null
     });
     alert('Profil mis à jour !');
     document.getElementById('editProfileModal').style.display = 'none';
