@@ -948,7 +948,7 @@ cancelEditProfile.addEventListener('click', () => {
 
 async function loadPosts() {
   try {
-    const q = query(postsCol, orderBy("createdAt", "desc"));
+   const q = query(postsCol, orderBy("date", "desc")); // 
     const querySnapshot = await getDocs(q);
     const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
