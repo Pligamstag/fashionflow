@@ -686,24 +686,6 @@
       </div>
     </div>
   </div>
-
-D'accord, je vais modifier votre script `blog.html` pour intégrer le système de commentaires et de réponses imbriquées comme discuté, en tenant compte de votre code actuel et de vos besoins.
-
-Je vois plusieurs points à ajuster :
-
-1.  **Collection des commentaires :** Vous utilisez `repliesCol` mais ma proposition était `commentsCol` pour gérer les commentaires de premier niveau et les réponses. On va standardiser sur `commentsCol` et utiliser le champ `parentId` pour l'imbrication.
-2.  **`loadPosts` et `displayPost` :** Votre `loadPosts` est déjà intégré et génère le HTML des posts. Nous allons modifier cette fonction directement pour y inclure la structure des commentaires et appeler la logique pour charger les commentaires.
-3.  **Logique d'affichage des commentaires :** Il faudra créer une fonction pour afficher un commentaire et ses réponses, avec la gestion des `parentId`.
-4.  **Fonctions existantes (`toggleReplyForm`, `submitReply`, `toggleReplies`) :** Elles devront être refactorisées pour s'adapter au nouveau modèle de données (`commentsCol` et `parentId`) et à l'affichage imbriqué.
-5.  **Utilisation de `onSnapshot` :** Pour un affichage en temps réel des commentaires, il est préférable d'utiliser `onSnapshot` plutôt que `getDocs` pour les commentaires.
-
------
-
-Voici le script `blog.html` modifié. J'ai commenté les changements importants pour que vous puissiez suivre.
-
-**Remplacez TOUT le contenu de votre balise `<script type="module">` par le code ci-dessous :**
-
-```html
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
   import {
