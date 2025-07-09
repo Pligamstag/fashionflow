@@ -986,72 +986,46 @@ window.toggleReplies = toggleReplies;
 </div>
 
 <style>
-#mouse-wave {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-  background: radial-gradient(
-    circle 150px at var(--x, 50%) var(--y, 50%),
-    rgba(255,255,255,0.1),
-    transparent 80%
-  );
-  mix-blend-mode: overlay;
-  transition: background 0.1s ease;
-}
-<style>
-  #mouse-wave {
+  #mouse-glow {
     position: fixed;
     top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 200px;
+    height: 200px;
     pointer-events: none;
     z-index: 9999;
-    background: radial-gradient(
-      circle 150px at var(--x, 50%) var(--y, 50%),
-      rgba(255,255,255,0.1),
-      transparent 80%
-    );
-    mix-blend-mode: overlay;
-    transition: background 0.1s ease;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.6), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(99,102,241,0.7));
+    transition: transform 0.1s ease;
+    transform: translate(-100px, -100px);
+    mix-blend-mode: screen;
+    animation: glowPulse 2.5s infinite alternate;
   }
 
-  /* Filtre wavy activé seulement quand body a cette classe */
-  body.wavy-effect {
-    filter: url(#wavy);
-    transition: filter 0.2s ease;
+  @keyframes glowPulse {
+    0% {
+      filter: drop-shadow(0 0 10px rgba(99,102,241,0.4));
+      background: radial-gradient(circle, rgba(99,102,241,0.5), transparent 70%);
+    }
+    100% {
+      filter: drop-shadow(0 0 20px rgba(139,92,246,0.9));
+      background: radial-gradient(circle, rgba(139,92,246,0.7), transparent 70%);
+    }
   }
 </style>
 
-<div id="mouse-wave"></div>
-
-<button id="toggleEffectBtn" style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
-  Activer / Désactiver effet vague
-</button>
+<div id="mouse-glow"></div>
 
 <script>
-  const mouseWaveDiv = document.getElementById('mouse-wave');
-  const toggleBtn = document.getElementById('toggleEffectBtn');
+  const mouseGlow = document.getElementById('mouse-glow');
 
-  // Suivi de la souris pour la position du gradient, toujours actif
-  document.addEventListener('mousemove', function(e) {
-    document.documentElement.style.setProperty('--x', `${e.clientX}px`);
-    document.documentElement.style.setProperty('--y', `${e.clientY}px`);
-  });
-
-  // Bouton pour activer ou désactiver l'effet wavy
-  toggleBtn.addEventListener('click', () => {
-    document.body.classList.toggle('wavy-effect');
+  document.addEventListener('mousemove', (e) => {
+    // Décale la position pour centrer la lumière autour de la souris
+    const x = e.clientX - 100;
+    const y = e.clientY - 100;
+    mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
   });
 </script>
 
-<svg style="display: none;">
-  <filter id="wavy">
-    <feTurbulence id="turbulence" baseFrequency="0.02 0.04" numOctaves="2" result="turb"/>
-    <feDisplacementMap in2="turb" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
 
 
