@@ -989,38 +989,46 @@ window.toggleReplies = toggleReplies;
   #mouse-glow {
     position: fixed;
     top: 0; left: 0;
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 100, 0, 0.4), transparent 70%);
+    background: radial-gradient(circle, rgba(0, 120, 255, 0.4), transparent 70%);
     mix-blend-mode: screen;
-    filter: drop-shadow(0 0 15px rgba(255, 100, 0, 0.5));
-    transform: translate(-75px, -75px); /* centre le rond sur la souris */
-    animation: colorShift 4s infinite alternate;
+    filter: drop-shadow(0 0 20px rgba(0, 120, 255, 0.6));
+    transform: translate(-90px, -90px); /* centre le rond sur la souris */
+    animation: colorShift 12s linear infinite;
   }
 
   @keyframes colorShift {
     0% {
-      background: radial-gradient(circle, rgba(255, 100, 0, 0.4), transparent 70%);
-      filter: drop-shadow(0 0 15px rgba(255, 100, 0, 0.5));
+      background: radial-gradient(circle, rgba(0, 120, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(0, 120, 255, 0.6));
     }
-    25% {
-      background: radial-gradient(circle, rgba(255, 140, 0, 0.4), transparent 70%);
-      filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.5));
+    16% {
+      background: radial-gradient(circle, rgba(0, 180, 230, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(0, 180, 230, 0.6));
+    }
+    33% {
+      background: radial-gradient(circle, rgba(50, 230, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(50, 230, 255, 0.6));
     }
     50% {
-      background: radial-gradient(circle, rgba(255, 180, 50, 0.4), transparent 70%);
-      filter: drop-shadow(0 0 15px rgba(255, 180, 50, 0.5));
+      background: radial-gradient(circle, rgba(100, 200, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.6));
     }
-    75% {
-      background: radial-gradient(circle, rgba(255, 120, 20, 0.4), transparent 70%);
-      filter: drop-shadow(0 0 15px rgba(255, 120, 20, 0.5));
+    66% {
+      background: radial-gradient(circle, rgba(120, 170, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(120, 170, 255, 0.6));
+    }
+    83% {
+      background: radial-gradient(circle, rgba(90, 130, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(90, 130, 255, 0.6));
     }
     100% {
-      background: radial-gradient(circle, rgba(255, 100, 0, 0.4), transparent 70%);
-      filter: drop-shadow(0 0 15px rgba(255, 100, 0, 0.5));
+      background: radial-gradient(circle, rgba(0, 120, 255, 0.4), transparent 70%);
+      filter: drop-shadow(0 0 20px rgba(0, 120, 255, 0.6));
     }
   }
 </style>
@@ -1035,6 +1043,7 @@ window.toggleReplies = toggleReplies;
     mouseGlow.style.top = e.clientY + 'px';
   });
 </script>
+
 
 
 
