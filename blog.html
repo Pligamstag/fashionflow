@@ -765,7 +765,7 @@
             // Unsubscribe all active comment listeners when logging out
             for (const postId in commentListeners) {
                 if (typeof commentListeners[postId] === 'function') {
-                    commentListeners[postId]();
+                    commentListeners[postId](); // Call the unsubscribe function
                     delete commentListeners[postId];
                 }
             }
@@ -827,7 +827,7 @@
             userProfile.innerHTML = `
                 <div class="user-info">
                     <strong>${user.displayName || user.email}</strong>
-                    <img src="${user.photoURL || 'https://via.placeholder.com/40'}" alt="Avatar" class="user-avatar">
+                    <img src="${user.photoURL || `https://via.placeholder.com/40?text=${getInitials(user.displayName || user.email)}`}" alt="Avatar" class="user-avatar">
                 </div>
                 <div class="profile-actions">
                     <button id="editProfileBtn" class="btn btn-info">Modifier Profil</button>
@@ -854,12 +854,12 @@
     }
 
     function getInitials(name) {
-        if (!name) return 'A';
+        if (!name) return 'A'; // Retourne 'A' si le nom est vide ou nul
         const parts = name.split(' ');
         if (parts.length > 1) {
             return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
         }
-        return parts[0][0].toUpperCase();
+        return parts[0][0] ? parts[0][0].toUpperCase() : 'A'; // Assure qu'on retourne au moins 'A'
     }
 
     function showNotification(message, duration = 3000) {
@@ -1071,14 +1071,20 @@
         }
 
         const authorDisplayName = comment.author || 'Anonyme';
-        // Use authorPhotoURL if it exists and is not 'null', otherwise generate initials image
-        const authorPhotoURL = (comment.authorPhotoURL && comment.authorPhotoURL !== 'null') ? comment.authorPhotoURL : `https://via.placeholder.com/40?text=${getInitials(authorDisplayName)}`;
+        const authorInitial = getInitials(authorDisplayName);
+        // Ensure photoURL is not 'null' string before using, otherwise use initials
+        const authorPhotoURL = (comment.authorPhotoURL && comment.authorPhotoURL !== 'null') ? comment.authorPhotoURL : `https://via.placeholder.com/40?text=${authorInitial}`;
+
+        let replyToHtml = '';
+        if (comment.parentId && comment.parentCommentAuthor) {
+            replyToHtml = `<span class="reply-to-text">a répondu à ${comment.parentCommentAuthor}</span>`;
+        }
 
         commentItem.innerHTML = `
             <div class="comment-header">
                 <img src="${authorPhotoURL}" alt="Avatar de ${authorDisplayName}" class="comment-avatar">
                 <div class="comment-meta">
-                    <div class="comment-author-name">${authorDisplayName}</div>
+                    <div class="comment-author-name">${authorDisplayName} ${replyToHtml}</div>
                     <div class="comment-date">${formattedDate}</div>
                 </div>
             </div>
@@ -1114,6 +1120,7 @@
         const form = event.target;
         const postId = form.dataset.postId;
         const parentId = form.dataset.parentId || null;
+        const parentAuthor = form.dataset.parentAuthor || null; // NEW: Get parent author for replies
 
         const textarea = form.querySelector('.comment-textarea');
         const commentContent = textarea.value.trim();
@@ -1128,10 +1135,16 @@
             content: commentContent,
             author: currentUser.displayName || currentUser.email || 'Anonyme',
             authorUid: currentUser.uid,
-            authorPhotoURL: currentUser.photoURL || null,
+            // Ensure photoURL is set to null if it's an empty string or undefined
+            authorPhotoURL: currentUser.photoURL || null, 
             createdAt: serverTimestamp(),
             parentId: parentId
         };
+
+        // NEW: Add parentCommentAuthor if it's a reply
+        if (parentId && parentAuthor) {
+            newComment.parentCommentAuthor = parentAuthor;
+        }
 
         try {
             await addDoc(commentsCol, newComment);
@@ -1155,6 +1168,9 @@
 
         const commentId = event.target.dataset.commentId;
         const postId = event.target.dataset.postId;
+        // NEW: Get the author of the comment being replied to
+        const parentAuthor = event.target.closest('.comment-item').querySelector('.comment-author-name').textContent.split(' ')[0]; // Basic way to get first name, improve if needed
+
         const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
 
         if (replyFormContainer.style.display === 'block') {
@@ -1162,8 +1178,8 @@
             replyFormContainer.innerHTML = ''; // Clear the form when hidden
         } else {
             replyFormContainer.innerHTML = `
-                <form class="comment-form reply-form-actual" data-post-id="${postId}" data-parent-id="${commentId}">
-                    <textarea class="comment-textarea" placeholder="Votre réponse..." required></textarea>
+                <form class="comment-form reply-form-actual" data-post-id="${postId}" data-parent-id="${commentId}" data-parent-author="${parentAuthor}">
+                    <textarea class="comment-textarea" placeholder="Votre réponse à ${parentAuthor}..." required></textarea>
                     <button type="submit" class="btn comment-submit-btn">Répondre</button>
                     <button type="button" class="btn btn-secondary cancel-reply-btn">Annuler</button>
                 </form>
@@ -1268,7 +1284,7 @@
 
                 const authorDisplayName = post.author || 'Anonyme';
                 const authorInitial = getInitials(authorDisplayName);
-                const authorPhoto = post.authorPhotoURL || `https://via.placeholder.com/40?text=${authorInitial}`;
+                const authorPhoto = (post.authorPhotoURL && post.authorPhotoURL !== 'null') ? post.authorPhotoURL : `https://via.placeholder.com/40?text=${authorInitial}`;
 
                 postElement.innerHTML = `
                     <div class="post-header">
