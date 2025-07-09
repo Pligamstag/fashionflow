@@ -976,7 +976,7 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
     getAuth,
     GoogleAuthProvider,
@@ -1016,7 +1016,7 @@ const firebaseConfig = {
     messagingSenderId: "1073693995934",
     appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
     measurementId: "G-P4DP02HQ75"
-  };
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -1106,7 +1106,6 @@ onAuthStateChanged(auth, (user) => {
             mainPostsListenerUnsubscribe();
             mainPostsListenerUnsubscribe = null;
         }
-
 
         currentUser = null;
         newPostBtn.style.display = 'none';
@@ -1887,8 +1886,8 @@ function loadUserPosts(uid) {
     userPostListeners[uid] = onSnapshot(q, (snapshot) => {
         // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
         const currentPostIds = Array.from(userPostsContainer.children)
-                                    .filter(el => el.classList.contains('post-card'))
-                                    .map(el => el.dataset.postId);
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
 
         const newPostIds = new Set();
         const postsToAdd = [];
@@ -1954,8 +1953,8 @@ function loadUserLikedPosts(uid) {
     userLikedPostListeners[uid] = onSnapshot(q, (snapshot) => {
         // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
         const currentPostIds = Array.from(userLikesContainer.children)
-                                    .filter(el => el.classList.contains('post-card'))
-                                    .map(el => el.dataset.postId);
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
 
         const newPostIds = new Set();
         const postsToAdd = [];
@@ -2027,8 +2026,8 @@ function loadPosts() {
     mainPostsListenerUnsubscribe = onSnapshot(q, (snapshot) => {
         // Obtenir les IDs des posts actuellement affichés
         const currentPostIds = Array.from(postsContainer.children)
-                                    .filter(el => el.classList.contains('post-card'))
-                                    .map(el => el.dataset.postId);
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
 
         const newPostIds = new Set();
         const postsToProcess = []; // Stocke les posts pour un traitement ordonné
@@ -2060,7 +2059,7 @@ function loadPosts() {
                 <div class="empty-state">
                     <i class="fas fa-box-open empty-icon"></i>
                     <p>Aucun post trouvé pour le moment.</p>
-                    ${currentUser ? '<p>Soyez le premier à partager une publication !</p>' : '<p>Connectez-vous pour pouvoir créer des publications !</p>'}
+                    <p>${currentUser ? 'Soyez le premier à partager une publication !' : 'Connectez-vous pour pouvoir créer des publications !'}</p>
                 </div>
             `;
         } else {
