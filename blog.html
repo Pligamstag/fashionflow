@@ -986,28 +986,29 @@ window.toggleReplies = toggleReplies;
 </div>
 
 <style>
-#mouse-light {
+#mouse-wave {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
+  z-index: 9999; /* Passe au-dessus du fond, mais laisse le contenu cliquable */
   background: radial-gradient(
-    circle 150px at var(--x, 50%) var(--y, 50%),
-    rgba(255, 255, 255, 0.1),
+    circle 200px at var(--x, 50%) var(--y, 50%),
+    rgba(255,255,255,0.15),
     transparent 80%
   );
-  transition: background-position 0.1s;
-  z-index: 0; /* Ajuste si besoin */
+  mix-blend-mode: overlay;
+  backdrop-filter: blur(50px);
+  animation: wave 5s infinite linear alternate;
+}
+
+@keyframes wave {
+  0% { backdrop-filter: blur(40px); }
+  50% { backdrop-filter: blur(70px); }
+  100% { backdrop-filter: blur(40px); }
 }
 </style>
 
-<div id="mouse-light"></div>
+<div id="mouse-wave"></div>
 
-<script>
-document.addEventListener('mousemove', function(e) {
-  document.documentElement.style.setProperty('--x', `${e.clientX}px`);
-  document.documentElement.style.setProperty('--y', `${e.clientY}px`);
-});
-</script>
