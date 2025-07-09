@@ -987,44 +987,42 @@ window.toggleReplies = toggleReplies;
 
 <style>
   #mouse-glow {
-    position: fixed;
-    top: 0; left: 0;
-    width: 200px;
-    height: 200px;
-    pointer-events: none;
-    z-index: 9999;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(99,102,241,0.6), transparent 70%);
-    filter: drop-shadow(0 0 15px rgba(99,102,241,0.7));
-    transition: transform 0.1s ease;
-    transform: translate(-100px, -100px);
-    mix-blend-mode: screen;
-    animation: glowPulse 2.5s infinite alternate;
+  position: fixed;
+  top: 0; left: 0;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 150, 255, 0.4), transparent 70%);
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 15px rgba(0, 150, 255, 0.5));
+  transform: translate(-75px, -75px);
+  animation: colorShift 4s infinite alternate;
+}
+
+@keyframes colorShift {
+  0% {
+    background: radial-gradient(circle, rgba(0, 150, 255, 0.4), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(0, 150, 255, 0.5));
   }
-
-  @keyframes glowPulse {
-    0% {
-      filter: drop-shadow(0 0 10px rgba(99,102,241,0.4));
-      background: radial-gradient(circle, rgba(99,102,241,0.5), transparent 70%);
-    }
-    100% {
-      filter: drop-shadow(0 0 20px rgba(139,92,246,0.9));
-      background: radial-gradient(circle, rgba(139,92,246,0.7), transparent 70%);
-    }
+  25% {
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.4), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(0, 200, 255, 0.5));
   }
-</style>
-
-<div id="mouse-glow"></div>
-
-<script>
-  const mouseGlow = document.getElementById('mouse-glow');
-
-  document.addEventListener('mousemove', (e) => {
-    // Décale la position pour centrer la lumière autour de la souris
-    const x = e.clientX - 100;
-    const y = e.clientY - 100;
-    mouseGlow.style.transform = `translate(${x}px, ${y}px)`;
-  });
+  50% {
+    background: radial-gradient(circle, rgba(100, 180, 255, 0.4), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(100, 180, 255, 0.5));
+  }
+  75% {
+    background: radial-gradient(circle, rgba(0, 180, 200, 0.4), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(0, 180, 200, 0.5));
+  }
+  100% {
+    background: radial-gradient(circle, rgba(0, 150, 255, 0.4), transparent 70%);
+    filter: drop-shadow(0 0 15px rgba(0, 150, 255, 0.5));
+  }
+}
 </script>
 
 
