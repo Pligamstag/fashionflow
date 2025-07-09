@@ -786,25 +786,34 @@
       setTheme(newTheme);
     }
 
-    // Publication des posts
-    async function publishPost(event) {
-      event.preventDefault();
+  // Publication des posts
+    async function publishPost(event) {
+      event.preventDefault();
 
-    import { serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"; // <-- CECI EST MAL PLACÉ ET DUPLIQUÉ
 
 const newPost = {
-  title: form.postTitle.value.trim(),
-  content: form.postContent.value.trim(),
-  tags: form.postTags.value
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter((tag) => tag),
-  category: "general",
-  author: "Admin",
-  date: new Date().toISOString(),
-  createdAt: serverTimestamp()  // ✅ C'est ça qu'il faut pour Firestore
+  title: form.postTitle.value.trim(),
+  content: form.postContent.value.trim(),
+  tags: form.postTags.value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag),
+  category: "general",
+  author: "Admin", // <-- CET AUTEUR "Admin" est codé en dur. Nous voulons l'utilisateur connecté.
+  date: new Date().toISOString(),
+  createdAt: serverTimestamp()  // ✅ C'est ça qu'il faut pour Firestore
 };
-};
+}; // <-- FERMETURE DE LA FONCTION ICI (mauvais endroit)
+
+      try {
+        await addDoc(postsCol, newPost);
+        showNotification("🎉 Post publié avec succès !");
+        form.reset();
+      } catch (error) {
+        showNotification("❌ Erreur lors de la publication : " + error.message);
+      }
+    } // <-- FERMETURE DE LA FONCTION ATTENDUE ICI
 
       try {
         await addDoc(postsCol, newPost);
