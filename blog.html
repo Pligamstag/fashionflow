@@ -1009,7 +1009,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 
 // Configuration Firebase
 const firebaseConfig = {
-   apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
     authDomain: "fashionflow-3db6b.firebaseapp.com",
     projectId: "fashionflow-3db6b",
     storageBucket: "fashionflow-3db6b.firebasestorage.app",
@@ -1029,7 +1029,8 @@ const auth = getAuth();
 let currentUser = null;
 
 // ATTENTION : Ce mot de passe ADMIN_PASSWORD NE DOIT JAMAIS être codé en dur en production côté client.
-// Utilisez Firebase Cloud Functions ou un service backend sécurisé pour cela.
+// Utilisez Firebase Cloud Functions ou un service backend sécurisé pour gérer les rôles administrateur.
+// Ceci est UNIQUEMENT pour le développement local et les tests.
 const ADMIN_PASSWORD = "FFLFKSprod"; // Remplacez par votre mot de passe admin pour le développement, mais sécurisez-le !
 
 // Références aux éléments du DOM
@@ -1068,6 +1069,7 @@ const provider = new GoogleAuthProvider();
 const commentListeners = {};
 const userPostListeners = {};
 const userLikedPostListeners = {};
+let mainPostsListenerUnsubscribe = null; // Listener pour le fil principal
 
 // --- Authentification et gestion des utilisateurs ---
 onAuthStateChanged(auth, (user) => {
@@ -1075,7 +1077,10 @@ onAuthStateChanged(auth, (user) => {
         currentUser = user;
         updateUserProfileUI(user);
         newPostBtn.style.display = 'inline-flex';
-        loadPosts();
+        loadPosts(); // Recharger les posts pour l'utilisateur connecté (pour les likes, etc.)
+        // Optionnel: Persister l'état de connexion. Par défaut Firebase gère une session.
+        // setPersistence(auth, browserSessionPersistence); // Pour une session basée sur l'onglet
+        // ou setPersistence(auth, browserLocalPersistence); // Pour une session persistante entre les fermetures du navigateur
     } else {
         // Nettoyage des listeners actifs lors de la déconnexion
         for (const postId in commentListeners) {
@@ -1096,11 +1101,17 @@ onAuthStateChanged(auth, (user) => {
                 delete userLikedPostListeners[listenerKey];
             }
         }
+        // Désabonner le listener du fil principal si l'utilisateur se déconnecte et qu'il était abonné
+        if (mainPostsListenerUnsubscribe) {
+            mainPostsListenerUnsubscribe();
+            mainPostsListenerUnsubscribe = null;
+        }
+
 
         currentUser = null;
         newPostBtn.style.display = 'none';
         updateUserProfileUI(null);
-        loadPosts(); // Recharger les posts pour les invités
+        loadPosts(); // Recharger les posts pour les invités (sans options de like/commenter)
     }
 });
 
@@ -1407,11 +1418,13 @@ async function deletePost(postId, postAuthorUid) {
         showNotification("🚫 Vous devez être connecté pour supprimer un post.");
         return;
     }
-    // Vérification côté client pour le mot de passe admin (INSÉCURISÉ POUR LA PRODUCTION)
+    // Vérification côté client pour le mot de passe admin (INSÉCURISÉ POUR LA PRODUCTION - NE PAS UTILISER AINSI)
+    // Pour une solution sécurisée, implémentez un système de rôles via Firestore et utilisez les Security Rules
+    // ou une fonction Cloud Functions pour vérifier les privilèges administrateur.
     if (postAuthorUid !== currentUser.uid) {
         const pass = prompt("Mot de passe administrateur requis pour supprimer le post d'un autre utilisateur :");
-        if (pass !== ADMIN_PASSWORD) {
-            showNotification("🚫 Mot de passe incorrect.");
+        if (pass !== ADMIN_PASSWORD) { // TRÈS INSÉCURISÉ EN PRODUCTION
+            showNotification("🚫 Mot de passe incorrect. Accès refusé.");
             return;
         }
     }
@@ -1420,14 +1433,18 @@ async function deletePost(postId, postAuthorUid) {
     try {
         await deleteDoc(doc(db, "devloppement", postId));
 
-        // Supprimer les commentaires associés (NOTE: Ne gère pas efficacement les réponses imbriquées ici,
-        // les fonctions Cloud sont recommandées pour les suppressions en cascade)
+        // Supprimer les commentaires associés.
+        // NOTE IMPORTANTE: Pour une suppression en cascade robuste et sécurisée de tous les commentaires
+        // (y compris les réponses imbriquées), l'utilisation d'une Firebase Cloud Function déclenchée
+        // par la suppression du post est FORTEMENT RECOMMANDÉE.
+        // La méthode ci-dessous ne supprime que les commentaires de premier niveau et leurs réponses directes,
+        // mais pas les réponses de réponses imbriquées.
         const commentsQuery = query(commentsCol, where("postId", "==", postId));
         const commentsSnapshot = await getDocs(commentsQuery);
         const deletePromises = commentsSnapshot.docs.map(doc => deleteDoc(doc.ref));
         await Promise.all(deletePromises);
 
-        showNotification("✅ Post et commentaires supprimés avec succès !");
+        showNotification("✅ Post et commentaires associés supprimés avec succès !");
     } catch (error) {
         console.error("Erreur lors de la suppression du post:", error);
         showNotification("🚫 Erreur lors de la suppression : " + error.message);
@@ -1526,7 +1543,9 @@ function displayComment(comment, parentContainer) {
         `;
     }
     // Autoriser l'auteur ou l'admin à supprimer le commentaire
-    if (currentUser && (currentUser.uid === comment.authorUid || ADMIN_PASSWORD)) { // Vérification admin basique côté client
+    // ATTENTION: La vérification ADMIN_PASSWORD côté client est INSÉCURISÉE pour la production.
+    // Utilisez des Firebase Security Rules ou une Cloud Function pour la gestion des rôles.
+    if (currentUser && (currentUser.uid === comment.authorUid || (currentUser.email && ADMIN_PASSWORD === "FFLFKSprod"))) { // Exemple très basique d'admin check
         actionButtonsHTML += `
             <button class="action-btn delete-comment-btn" data-comment-id="${comment.id}">
                 Supprimer
@@ -1691,11 +1710,11 @@ async function deleteComment(event) {
 
         const commentData = commentDoc.data();
 
-        // Vérification admin côté client (INSÉCURISÉ POUR LA PRODUCTION)
+        // Vérification admin côté client (INSÉCURISÉ POUR LA PRODUCTION - NE PAS UTILISER AINSI)
         if (commentData.authorUid !== currentUser.uid) {
             const pass = prompt("Mot de passe administrateur requis pour supprimer ce commentaire :");
-            if (pass !== ADMIN_PASSWORD) {
-                showNotification("🚫 Mot de passe incorrect.");
+            if (pass !== ADMIN_PASSWORD) { // TRÈS INSÉCURISÉ EN PRODUCTION
+                showNotification("🚫 Mot de passe incorrect. Accès refusé.");
                 return;
             }
         }
@@ -1706,7 +1725,9 @@ async function deleteComment(event) {
 
         await deleteDoc(commentRef);
 
-        // Supprimer les réponses directes à ce commentaire (la suppression récursive des réponses imbriquées est complexe côté client)
+        // Supprimer les réponses directes à ce commentaire.
+        // NOTE IMPORTANTE: Pour une suppression en cascade robuste de toutes les réponses imbriquées,
+        // l'utilisation d'une Firebase Cloud Function est FORTEMENT RECOMMANDÉE.
         const repliesToDeleteQuery = query(commentsCol, where("parentId", "==", commentId));
         const repliesSnapshot = await getDocs(repliesToDeleteQuery);
         const deleteRepliesPromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
@@ -1723,24 +1744,6 @@ async function deleteComment(event) {
 function renderPostCard(post, containerElement) {
     const postId = post.id;
     let postElement = containerElement.querySelector(`.post-card[data-post-id="${postId}"]`);
-
-    // Si le post existe déjà, le mettre à jour (utile pour onSnapshot pour minimiser les changements DOM)
-    if (postElement) {
-        // Mettre à jour le contenu si nécessaire (comme les comptes de likes, etc.)
-        const likesCount = (post.likes && post.likes.length) ? post.likes.length : 0;
-        const hasLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        const likeButton = postElement.querySelector('.like-toggle-btn'); // Cible le bouton par sa classe
-        if (likeButton) {
-            likeButton.className = `btn-small like-btn ${hasLiked ? 'liked' : ''}`;
-            likeButton.innerHTML = `<i class="fas fa-heart"></i> ${likesCount} J'aime`;
-        }
-        return;
-    }
-
-    // Si le post n'existe pas, créer un nouvel élément
-    postElement = document.createElement("div");
-    postElement.className = "post-card";
-    postElement.dataset.postId = postId;
 
     const postDate = post.createdAt ?
         new Date(post.createdAt.toDate()).toLocaleString('fr-FR', {
@@ -1759,12 +1762,51 @@ function renderPostCard(post, containerElement) {
     const authorInitial = getInitials(authorDisplayName);
     const authorPhoto = (post.authorPhotoURL && post.authorPhotoURL !== 'null') ? post.authorPhotoURL : `https://via.placeholder.com/55?text=${authorInitial}`;
 
-    const deleteButton = (isAuthor || (currentUser && currentUser.email === 'votre_email_admin@exemple.com')) ?
+    // Vérification de l'admin par email est également INSÉCURISÉE en production,
+    // Utilisez des Firebase Security Rules ou Cloud Functions pour une gestion de rôles.
+    const isAdmin = currentUser && currentUser.email === 'votre_email_admin@exemple.com'; // REMPLACER CET EMAIL
+    const deleteButton = (isAuthor || isAdmin) ?
         `<button class="btn-small btn-danger delete-post-btn">
             <i class="fas fa-trash"></i> Supprimer
         </button>` : '';
 
     const commentButtonDisabled = !currentUser ? 'disabled' : '';
+
+    // Si le post existe déjà, le mettre à jour (utile pour onSnapshot pour minimiser les changements DOM)
+    if (postElement) {
+        // Mettre à jour seulement les parties dynamiques (likes, counts, etc.)
+        const likeButton = postElement.querySelector('.like-toggle-btn');
+        if (likeButton) {
+            likeButton.className = `${likeButtonClass}`; // Mise à jour de la classe pour le 'liked'
+            likeButton.innerHTML = `<i class="fas fa-heart"></i> ${likesCount} J'aime`;
+        }
+        // Le reste du contenu statique (titre, contenu, auteur) ne change pas, donc pas besoin de le recréer
+        // On pourrait aussi vouloir mettre à jour les boutons d'action (suppression) si le statut de l'utilisateur change (ex: devient admin)
+        const currentDeleteButton = postElement.querySelector('.delete-post-btn');
+        if (isAuthor || isAdmin) {
+            if (!currentDeleteButton) { // Si le bouton de suppression n'existe pas mais devrait exister
+                const postActionsDiv = postElement.querySelector('.post-actions');
+                if (postActionsDiv) {
+                    postActionsDiv.insertAdjacentHTML('beforeend', deleteButton);
+                    postElement.querySelector('.delete-post-btn')?.addEventListener('click', () => deletePost(postId, post.authorUid));
+                }
+            }
+        } else {
+            if (currentDeleteButton) { // Si le bouton existe mais ne devrait plus
+                currentDeleteButton.remove();
+            }
+        }
+
+        // Re-setup du listener de commentaires pour s'assurer que les compteurs sont à jour
+        // La fonction setupCommentsListener gère déjà la désinscription/réinscription
+        setupCommentsListener(postId);
+        return; // Sortir après la mise à jour
+    }
+
+    // Si le post n'existe pas, créer un nouvel élément
+    postElement = document.createElement("div");
+    postElement.className = "post-card";
+    postElement.dataset.postId = postId;
 
     postElement.innerHTML = `
         <div class="post-header">
@@ -1800,6 +1842,7 @@ function renderPostCard(post, containerElement) {
         </div>
     `;
 
+    // Ajouter le nouveau post en haut de la liste (ordre chronologique inverse)
     containerElement.prepend(postElement);
 
     // Attacher les écouteurs d'événements
@@ -1842,9 +1885,32 @@ function loadUserPosts(uid) {
     const q = query(postsCol, where("authorUid", "==", uid), orderBy("createdAt", "desc"));
 
     userPostListeners[uid] = onSnapshot(q, (snapshot) => {
-        userPostsContainer.innerHTML = ''; // Effacer le message de chargement
+        // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
+        const currentPostIds = Array.from(userPostsContainer.children)
+                                    .filter(el => el.classList.contains('post-card'))
+                                    .map(el => el.dataset.postId);
 
-        if (snapshot.empty) {
+        const newPostIds = new Set();
+        const postsToAdd = [];
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToAdd.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = userPostsContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToAdd.length === 0) {
             userPostsContainer.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-box-open empty-icon"></i>
@@ -1853,9 +1919,12 @@ function loadUserPosts(uid) {
                 </div>
             `;
         } else {
-            userPostsContainer.innerHTML = ''; // Effacer les posts existants avant de re-rendre
-            snapshot.forEach(doc => {
-                renderPostCard(Object.assign({ id: doc.id }, doc.data()), userPostsContainer);
+            // Effacer l'état vide si des posts arrivent
+            const emptyState = userPostsContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            postsToAdd.forEach(post => {
+                renderPostCard(post, userPostsContainer);
             });
         }
     }, (error) => {
@@ -1864,6 +1933,7 @@ function loadUserPosts(uid) {
             <div class="empty-state">
                 <i class="fas fa-exclamation-triangle empty-icon"></i>
                 <p>Erreur lors du chargement de vos posts.</p>
+                <p>Veuillez réessayer plus tard.</p>
             </div>
         `;
     });
@@ -1882,9 +1952,32 @@ function loadUserLikedPosts(uid) {
     const q = query(postsCol, where("likes", "array-contains", uid), orderBy("createdAt", "desc"));
 
     userLikedPostListeners[uid] = onSnapshot(q, (snapshot) => {
-        userLikesContainer.innerHTML = ''; // Effacer le message de chargement
+        // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
+        const currentPostIds = Array.from(userLikesContainer.children)
+                                    .filter(el => el.classList.contains('post-card'))
+                                    .map(el => el.dataset.postId);
 
-        if (snapshot.empty) {
+        const newPostIds = new Set();
+        const postsToAdd = [];
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToAdd.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = userLikesContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToAdd.length === 0) {
             userLikesContainer.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-heart-broken empty-icon"></i>
@@ -1893,9 +1986,12 @@ function loadUserLikedPosts(uid) {
                 </div>
             `;
         } else {
-            userLikesContainer.innerHTML = ''; // Effacer les posts existants avant de re-rendre
-            snapshot.forEach(doc => {
-                renderPostCard(Object.assign({ id: doc.id }, doc.data()), userLikesContainer);
+            // Effacer l'état vide si des posts arrivent
+            const emptyState = userLikesContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            postsToAdd.forEach(post => {
+                renderPostCard(post, userLikesContainer);
             });
         }
     }, (error) => {
@@ -1904,32 +2000,14 @@ function loadUserLikedPosts(uid) {
             <div class="empty-state">
                 <i class="fas fa-exclamation-triangle empty-icon"></i>
                 <p>Erreur lors du chargement des posts aimés.</p>
+                <p>Veuillez réessayer plus tard.</p>
             </div>
         `;
     });
 }
-function setupCommentsListener(postId) {
-  const commentsList = document.getElementById(`comments-list-${postId}`);
-  const commentCount = document.getElementById(`comment-count-${postId}`);
-  const commentCountDisplay = document.getElementById(`comment-count-display-${postId}`);
 
-  const q = query(commentsCol, where("postId", "==", postId), orderBy("createdAt", "asc"));
 
-  onSnapshot(q, (snapshot) => {
-    commentsList.innerHTML = ''; // Vide tout pour re-rendre proprement
-    snapshot.forEach(doc => {
-      displayComment(Object.assign({ id: doc.id }, doc.data()), commentsList);
-    });
-
-    commentCount.textContent = snapshot.size;
-    commentCountDisplay.textContent = snapshot.size;
-  }, (error) => {
-    console.error("Erreur lors du chargement des commentaires :", error);
-  });
-}
-
-loadPosts();
-// Charger tous les posts pour le fil principal
+// Charger tous les posts pour le fil principal (MAINTENANT AVEC ON SNAPSHOT)
 function loadPosts() {
     postsContainer.innerHTML = `
         <div class="loading">
@@ -1938,11 +2016,46 @@ function loadPosts() {
         </div>
     `;
 
-    const q = query(postsCol, orderBy("createdAt", "desc"));
-    getDocs(q).then(querySnapshot => {
-        postsContainer.innerHTML = '';
+    // Désabonner l'ancien listener si présent
+    if (mainPostsListenerUnsubscribe) {
+        mainPostsListenerUnsubscribe();
+        mainPostsListenerUnsubscribe = null;
+    }
 
-        if (querySnapshot.empty) {
+    const q = query(postsCol, orderBy("createdAt", "desc"));
+
+    mainPostsListenerUnsubscribe = onSnapshot(q, (snapshot) => {
+        // Obtenir les IDs des posts actuellement affichés
+        const currentPostIds = Array.from(postsContainer.children)
+                                    .filter(el => el.classList.contains('post-card'))
+                                    .map(el => el.dataset.postId);
+
+        const newPostIds = new Set();
+        const postsToProcess = []; // Stocke les posts pour un traitement ordonné
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToProcess.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = postsContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                    // Désabonner le listener de commentaires pour le post supprimé
+                    if (commentListeners[id]) {
+                        commentListeners[id]();
+                        delete commentListeners[id];
+                    }
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToProcess.length === 0) {
             postsContainer.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-box-open empty-icon"></i>
@@ -1950,13 +2063,19 @@ function loadPosts() {
                     ${currentUser ? '<p>Soyez le premier à partager une publication !</p>' : '<p>Connectez-vous pour pouvoir créer des publications !</p>'}
                 </div>
             `;
-            return;
-        }
+        } else {
+            // Effacer l'état vide ou le message de chargement si des posts arrivent
+            const emptyState = postsContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+            const loadingMessage = postsContainer.querySelector('.loading');
+            if (loadingMessage) loadingMessage.remove();
 
-        querySnapshot.forEach(doc => {
-            renderPostCard(Object.assign({ id: doc.id }, doc.data()), postsContainer);
-        });
-    }).catch(error => {
+            // Rendre ou mettre à jour les posts. Utiliser une approche qui préserve l'ordre et le DOM existant.
+            postsToProcess.forEach(post => {
+                renderPostCard(post, postsContainer);
+            });
+        }
+    }, (error) => {
         console.error("Erreur lors du chargement des posts :", error);
         postsContainer.innerHTML = `
             <div class="empty-state">
@@ -1974,12 +2093,33 @@ loadPosts();
 // --- Fonctionnalités supplémentaires (si vous les aviez) ---
 newPostBtn.addEventListener('click', () => {
     if (currentUser) {
-        showNotification("Fonctionnalité 'Nouveau Post' à implémenter.");
+        // Ici, vous devrez ouvrir un modal ou rediriger vers une page pour créer un nouveau post.
+        // Exemple basique:
+        const postTitle = prompt("Titre de votre nouveau post :");
+        const postContent = prompt("Contenu de votre nouveau post :");
+
+        if (postTitle && postContent) {
+            addDoc(postsCol, {
+                title: postTitle,
+                content: postContent,
+                author: currentUser.displayName || currentUser.email.split('@')[0],
+                authorUid: currentUser.uid,
+                authorPhotoURL: currentUser.photoURL || null,
+                createdAt: serverTimestamp(),
+                likes: []
+            }).then(() => {
+                showNotification("✅ Post créé avec succès !");
+            }).catch(error => {
+                console.error("Erreur lors de la création du post:", error);
+                showNotification("🚫 Erreur lors de la création du post : " + error.message);
+            });
+        } else {
+            showNotification("ℹ️ Création de post annulée.");
+        }
+
     } else {
         showNotification("🚫 Connectez-vous pour créer un nouveau post.");
         loginModal.style.display = 'flex';
     }
 });
 </script>
-</body>
-</html>
