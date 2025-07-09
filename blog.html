@@ -750,14 +750,14 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user.uid;
     updateUserProfileUI(user);
-    loadPosts();
+    loadPosts(); // <--- Se déclenche ici si connecté
   } else {
     currentUser = null;
     postsContainer.innerHTML = '<p>Veuillez vous connecter pour voir les posts.</p>';
     updateUserProfileUI(null);
   }
 });
-
+  
 googleLoginBtn.addEventListener('click', async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -947,24 +947,41 @@ cancelEditProfile.addEventListener('click', () => {
 
 
 async function loadPosts() {
-  const q = query(postsCol, orderBy("createdAt", "desc"));
-  const querySnapshot = await getDocs(q);
-  const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  postsContainer.innerHTML = posts.map(post => `
-  
-    <div data-post-id="${post.id}">
-      <h4>${post.title}</h4>
-      <p>${post.content}</p>
-      <button onclick="toggleLike('${post.id}')">Like</button>
-      <button onclick="toggleReplyForm('${post.id}')">Répondre</button>
-      <button onclick="deletePost('${post.id}', '${post.authorUid}')">Supprimer</button>
-      <div class="reply-form" style="display:none;">
-        <textarea class="reply-input" rows="2" placeholder="Votre réponse..."></textarea>
-        <button onclick="submitReply('${post.id}')">Envoyer</button>
+  try {
+    const q = query(postsCol, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    console.log("Posts récupérés :", posts); // Pour le débogage
+
+    if (posts.length === 0) {
+      postsContainer.innerHTML = "<p>Aucun post trouvé.</p>";
+      return;
+    }
+
+    postsContainer.innerHTML = posts.map(post => `
+      <div class="post-item" data-post-id="${post.id}">
+        <h4>${post.title}</h4>
+        <p>${post.content}</p>
+        <button onclick="toggleLike('${post.id}')">Like</button>
+        <button onclick="toggleReplyForm('${post.id}')">Répondre</button>
+        <button onclick="deletePost('${post.id}', '${post.authorUid}')">Supprimer</button>
+        <div class="reply-form" style="display:none;">
+          <textarea class="reply-input" rows="2" placeholder="Votre réponse..."></textarea>
+          <button onclick="submitReply('${post.id}')">Envoyer</button>
+        </div>
+        <div class="replies-list"></div>
       </div>
-      <div class="replies-list"></div>
-    </div>`).join('');
+    `).join(''); // <-- Le .join('') est crucial ici, il ferme la chaîne
+
+  } catch (error) {
+    console.error("Erreur lors du chargement des posts :", error);
+    postsContainer.innerHTML = "<p>Erreur lors du chargement des posts.</p>";
+  }
 }
+
+// Assurez-vous que ces lignes sont bien PRÉSENTES à la fin de votre script
+// et qu'elles ne sont pas dupliquées ou mal placées.
 window.toggleLike = toggleLike;
 window.deletePost = deletePost;
 window.toggleReplyForm = toggleReplyForm;
