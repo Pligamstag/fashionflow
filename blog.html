@@ -985,35 +985,29 @@ window.toggleReplies = toggleReplies;
 </script>
 </div>
 
-<script>
-document.addEventListener('mousemove', function(e) {
-  const particle = document.createElement('div');
-  particle.className = 'mouse-particle';
-  particle.style.left = e.clientX + 'px';
-  particle.style.top = e.clientY + 'px';
-  document.body.appendChild(particle);
-  
-  setTimeout(() => {
-    particle.remove();
-  }, 1000);
-});
-</script>
 <style>
-.mouse-particle {
+#mouse-light {
   position: fixed;
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  animation: fadeOut 1s forwards;
-}
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; transform: scale(2); }
+  background: radial-gradient(
+    circle 150px at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.1),
+    transparent 80%
+  );
+  transition: background-position 0.1s;
+  z-index: 0; /* Ajuste si besoin */
 }
 </style>
 
-</body>
-</html>
+<div id="mouse-light"></div>
+
+<script>
+document.addEventListener('mousemove', function(e) {
+  document.documentElement.style.setProperty('--x', `${e.clientX}px`);
+  document.documentElement.style.setProperty('--y', `${e.clientY}px`);
+});
+</script>
