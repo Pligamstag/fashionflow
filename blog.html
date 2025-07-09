@@ -983,3 +983,21 @@ window.toggleReplyForm = toggleReplyForm;
 window.submitReply = submitReply;
 window.toggleReplies = toggleReplies;
 </script>
+</div>
+
+<script>
+document.addEventListener('mousemove', function(e) {
+  const particle = document.createElement('div');
+  particle.className = 'mouse-particle';
+  particle.style.left = e.clientX + 'px';
+  particle.style.top = e.clientY + 'px';
+  document.body.appendChild(particle);
+  
+  setTimeout(() => {
+    particle.remove();
+  }, 1000);
+});
+</script>
+
+</body>
+</html>
