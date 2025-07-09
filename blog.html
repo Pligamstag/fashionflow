@@ -729,7 +729,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const postsCol = collection(db, "devloppement");
+const postsCol = collection(db, "posts");
 const repliesCol = collection(db, "replies");
 const storage = getStorage(app);  // <-- INIT STORAGE
 
@@ -985,42 +985,458 @@ window.toggleReplies = toggleReplies;
 </script>
 </div>
 
-<style>
-  #mouse-glow {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100px;
-    height: 100px;
-    pointer-events: none;
-    z-index: 9999;
-    border-radius: 50%;
-    filter: blur(25px);
-    opacity: 0.35;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, #0066ff 0%, #00ff33 100%);
-    animation: colorShift 90s linear infinite;
-  }
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Effet de souris lumineux animé</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #000428, #004e92);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-  @keyframes colorShift {
-    0%   { background: radial-gradient(circle, #0066ff 0%, #0077dd 30%, #0088cc 60%, #0099bb 90%, #00aaaa 100%); }
-    11%  { background: radial-gradient(circle, #0077dd 0%, #0088cc 30%, #0099bb 60%, #00aaaa 90%, #00bb99 100%); }
-    22%  { background: radial-gradient(circle, #0088cc 0%, #0099bb 30%, #00aaaa 60%, #00bb99 90%, #00cc88 100%); }
-    33%  { background: radial-gradient(circle, #0099bb 0%, #00aaaa 30%, #00bb99 60%, #00cc88 90%, #00dd77 100%); }
-    44%  { background: radial-gradient(circle, #00aaaa 0%, #00bb99 30%, #00cc88 60%, #00dd77 90%, #00ee66 100%); }
-    55%  { background: radial-gradient(circle, #00bb99 0%, #00cc88 30%, #00dd77 60%, #00ee66 90%, #00ff55 100%); }
-    66%  { background: radial-gradient(circle, #00cc88 0%, #00dd77 30%, #00ee66 60%, #00ff55 90%, #00ff33 100%); }
-    77%  { background: radial-gradient(circle, #00dd77 0%, #00ee66 30%, #00ff55 60%, #00ff33 90%, #0066ff 100%); }
-    88%  { background: radial-gradient(circle, #00ee66 0%, #00ff55 30%, #00ff33 60%, #0066ff 90%, #0077dd 100%); }
-    100% { background: radial-gradient(circle, #00ff55 0%, #00ff33 30%, #0066ff 60%, #0077dd 90%, #0088cc 100%); }
-  }
-</style>
+        /* Effet de souris principal */
+        #mouse-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            filter: blur(25px);
+            opacity: 0.35;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #0066ff 0%, #00ff33 100%);
+            animation: colorShift 90s linear infinite, pulse 3s ease-in-out infinite;
+        }
 
-<div id="mouse-glow"></div>
+        @keyframes colorShift {
+            0%   { background: radial-gradient(circle, #0066ff 0%, #0077dd 30%, #0088cc 60%, #0099bb 90%, #00aaaa 100%); }
+            11%  { background: radial-gradient(circle, #0077dd 0%, #0088cc 30%, #0099bb 60%, #00aaaa 90%, #00bb99 100%); }
+            22%  { background: radial-gradient(circle, #0088cc 0%, #0099bb 30%, #00aaaa 60%, #00bb99 90%, #00cc88 100%); }
+            33%  { background: radial-gradient(circle, #0099bb 0%, #00aaaa 30%, #00bb99 60%, #00cc88 90%, #00dd77 100%); }
+            44%  { background: radial-gradient(circle, #00aaaa 0%, #00bb99 30%, #00cc88 60%, #00dd77 90%, #00ee66 100%); }
+            55%  { background: radial-gradient(circle, #00bb99 0%, #00cc88 30%, #00dd77 60%, #00ee66 90%, #00ff55 100%); }
+            66%  { background: radial-gradient(circle, #00cc88 0%, #00dd77 30%, #00ee66 60%, #00ff55 90%, #00ff33 100%); }
+            77%  { background: radial-gradient(circle, #00dd77 0%, #00ee66 30%, #00ff55 60%, #00ff33 90%, #0066ff 100%); }
+            88%  { background: radial-gradient(circle, #00ee66 0%, #00ff55 30%, #00ff33 60%, #0066ff 90%, #0077dd 100%); }
+            100% { background: radial-gradient(circle, #00ff55 0%, #00ff33 30%, #0066ff 60%, #0077dd 90%, #0088cc 100%); }
+        }
 
-<script>
-  const mouseGlow = document.getElementById('mouse-glow');
-  document.addEventListener('mousemove', e => {
-    mouseGlow.style.left = e.clientX + 'px';
-    mouseGlow.style.top = e.clientY + 'px';
-  });
-</script>
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* Particules flottantes */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Étoiles scintillantes */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Vagues animées */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(45deg, rgba(0, 255, 136, 0.1), rgba(0, 102, 255, 0.1));
+            animation: waveMove 6s ease-in-out infinite;
+        }
+
+        @keyframes waveMove {
+            0%, 100% { transform: translateY(0) rotateZ(0deg); }
+            50% { transform: translateY(-20px) rotateZ(1deg); }
+        }
+
+        /* Orbes flottants */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3), rgba(0, 102, 255, 0.1));
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.1); }
+        }
+
+        /* Traînées lumineuses */
+        .trail {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 998;
+            animation: trailFade 0.5s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.1); }
+        }
+
+        /* Spirales rotatives */
+        .spiral {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            animation: spiralRotate 10s linear infinite;
+        }
+
+        @keyframes spiralRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Contenu de démonstration */
+        .content {
+            position: relative;
+            z-index: 100;
+            padding: 50px;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(0, 102, 255, 0.8); }
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        /* Boutons animés */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #00ff88, #0066ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            animation: btnFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes btnFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        /* Grille hexagonale animée */
+        .hex-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .hex {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #00ff88;
+            transform: rotate(45deg);
+            animation: hexPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes hexPulse {
+            0%, 100% { opacity: 0.1; transform: rotate(45deg) scale(1); }
+            50% { opacity: 0.3; transform: rotate(45deg) scale(1.1); }
+        }
+
+        /* Laser scanning effect */
+        .laser-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            animation: laserScan 8s linear infinite;
+            z-index: 1001;
+        }
+
+        @keyframes laserScan {
+            0% { top: -2px; }
+            100% { top: 100vh; }
+        }
+
+        /* Halo effect */
+        .halo {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 997;
+            animation: haloExpand 2s ease-out infinite;
+        }
+
+        @keyframes haloExpand {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        /* Effet de matrice */
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.1;
+        }
+
+        .matrix-char {
+            position: absolute;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            animation: matrixFall 3s linear infinite;
+        }
+
+        @keyframes matrixFall {
+            0% { transform: translateY(-100px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Effet de souris principal -->
+    <div id="mouse-glow"></div>
+    
+    <!-- Ligne laser -->
+    <div class="laser-line"></div>
+    
+    <!-- Vagues animées -->
+    <div class="wave"></div>
+    
+    <!-- Grille hexagonale -->
+    <div class="hex-grid"></div>
+    
+    <!-- Effet matrice -->
+    <div class="matrix"></div>
+    <script>
+        const mouseGlow = document.getElementById('mouse-glow');
+        const trails = [];
+        const halos = [];
+        
+        // Suivi de la souris
+        document.addEventListener('mousemove', e => {
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+            
+            // Créer une traînée
+            createTrail(e.clientX, e.clientY);
+            
+            // Créer un halo occasionnellement
+            if (Math.random() < 0.1) {
+                createHalo(e.clientX, e.clientY);
+            }
+        });
+
+        // Fonction pour créer une traînée
+        function createTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.remove();
+            }, 500);
+        }
+
+        // Fonction pour créer un halo
+        function createHalo(x, y) {
+            const halo = document.createElement('div');
+            halo.className = 'halo';
+            halo.style.left = x + 'px';
+            halo.style.top = y + 'px';
+            document.body.appendChild(halo);
+            
+            setTimeout(() => {
+                halo.remove();
+            }, 2000);
+        }
+
+        // Créer des particules flottantes
+        function createParticles() {
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                document.body.appendChild(particle);
+            }
+        }
+
+        // Créer des étoiles scintillantes
+        function createStars() {
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(star);
+            }
+        }
+
+        // Créer des orbes flottants
+        function createOrbs() {
+            for (let i = 0; i < 5; i++) {
+                const orb = document.createElement('div');
+                orb.className = 'orb';
+                orb.style.width = (Math.random() * 50 + 30) + 'px';
+                orb.style.height = orb.style.width;
+                orb.style.left = Math.random() * 100 + 'vw';
+                orb.style.top = Math.random() * 100 + 'vh';
+                orb.style.animationDelay = Math.random() * 8 + 's';
+                document.body.appendChild(orb);
+            }
+        }
+
+        // Créer des spirales
+        function createSpirals() {
+            for (let i = 0; i < 3; i++) {
+                const spiral = document.createElement('div');
+                spiral.className = 'spiral';
+                spiral.style.left = Math.random() * 100 + 'vw';
+                spiral.style.top = Math.random() * 100 + 'vh';
+                spiral.style.animationDelay = Math.random() * 10 + 's';
+                document.body.appendChild(spiral);
+            }
+        }
+
+        // Créer la grille hexagonale
+        function createHexGrid() {
+            const hexGrid = document.querySelector('.hex-grid');
+            for (let x = 0; x < window.innerWidth; x += 60) {
+                for (let y = 0; y < window.innerHeight; y += 60) {
+                    const hex = document.createElement('div');
+                    hex.className = 'hex';
+                    hex.style.left = x + 'px';
+                    hex.style.top = y + 'px';
+                    hex.style.animationDelay = Math.random() * 4 + 's';
+                    hexGrid.appendChild(hex);
+                }
+            }
+        }
+
+        // Créer l'effet matrice
+        function createMatrixEffect() {
+            const matrix = document.querySelector('.matrix');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 50; i++) {
+                const matrixChar = document.createElement('div');
+                matrixChar.className = 'matrix-char';
+                matrixChar.textContent = chars[Math.floor(Math.random() * chars.length)];
+                matrixChar.style.left = Math.random() * 100 + 'vw';
+                matrixChar.style.animationDelay = Math.random() * 3 + 's';
+                matrixChar.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                matrix.appendChild(matrixChar);
+            }
+        }
+
+        // Initialiser tous les effets
+        createParticles();
+        createStars();
+        createOrbs();
+        createSpirals();
+        createHexGrid();
+        createMatrixEffect();
+
+        // Effet de clic
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 10; i++) {
+                createTrail(e.clientX + Math.random() * 20 - 10, e.clientY + Math.random() * 20 - 10);
+            }
+            createHalo(e.clientX, e.clientY);
+        });
+    </script>
+</body>
+</html>
