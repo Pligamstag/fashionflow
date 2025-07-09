@@ -686,689 +686,661 @@
       </div>
     </div>
   </div>
+
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-  import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    updateProfile
-  } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
-  import {
-    getFirestore,
-    collection,
-    doc,
-    getDoc,
-    updateDoc,
-    addDoc,
-    deleteDoc,
-    query,
-    where,
-    orderBy,
-    getDocs, // Gardons getDocs pour les posts principaux
-    serverTimestamp,
-    arrayUnion,
-    arrayRemove,
-    onSnapshot // <-- Ajout de onSnapshot pour les commentaires en temps réel
-  } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        onAuthStateChanged,
+        updateProfile
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+    import {
+        getFirestore,
+        collection,
+        doc,
+        getDoc,
+        updateDoc,
+        addDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        getDocs,
+        serverTimestamp,
+        arrayUnion,
+        arrayRemove,
+        onSnapshot
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-    authDomain: "fashionflow-3db6b.firebaseapp.com",
-    projectId: "fashionflow-3db6b",
-    storageBucket: "fashionflow-3db6b.appspot.com",
-    messagingSenderId: "1073693995934",
-    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
-    measurementId: "G-P4DP02HQ75"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const postsCol = collection(db, "devloppement");
-  const commentsCol = collection(db, "comments"); // <-- Renommé et utilisé pour tous les commentaires
-  const storage = getStorage(app);
-
-  const auth = getAuth();
-  let currentUser = null; // Stocke l'objet User complet ici pour accéder à displayName, photoURL, uid
-  const ADMIN_PASSWORD = "FFLFKSprod"; // À déplacer dans une variable d'environnement en production !
-
-  const postsContainer = document.getElementById("postsContainer");
-  const loginModal = document.getElementById("loginModal");
-  const loginBtn = document.getElementById("loginBtn");
-  const userProfile = document.getElementById("userProfile");
-  const googleLoginBtn = document.getElementById('googleLoginBtn');
-  const registerBtn = document.getElementById('registerBtn');
-  const cancelLogin = document.getElementById('cancelLogin');
-  const loginForm = document.getElementById('loginForm');
-  const provider = new GoogleAuthProvider();
-
-  // Variables pour les modals d'édition de profil (assurez-vous que le HTML existe)
-  const editProfileModal = document.getElementById('editProfileModal');
-  const editProfileForm = document.getElementById('editProfileForm');
-  const cancelEditProfile = document.getElementById('cancelEditProfile');
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = user; // Stocke l'objet user complet
-      updateUserProfileUI(user);
-      loadPosts(); // Recharger les posts pour mettre à jour les boutons (likes, suppression)
-    } else {
-      currentUser = null;
-      postsContainer.innerHTML = '<p class="info-message">Veuillez vous connecter pour voir les posts.</p>';
-      updateUserProfileUI(null);
-    }
-  });
-
-  googleLoginBtn.addEventListener('click', async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      loginModal.style.display = 'none';
-      showNotification("Connexion réussie avec Google !");
-    } catch (error) {
-      console.error("Erreur de connexion Google:", error);
-      showNotification("Erreur de connexion : " + error.message);
-    }
-  });
-
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      loginModal.style.display = 'none';
-      showNotification("Connexion réussie !");
-    } catch (error) {
-      console.error("Erreur de connexion email/mdp:", error);
-      showNotification("Erreur de connexion : " + error.message);
-    }
-  });
-
-  registerBtn.addEventListener('click', async () => {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      // Optionnel: Demander displayName et photoURL après inscription
-      showNotification("Inscription réussie !");
-      loginModal.style.display = 'none';
-    } catch (error) {
-      console.error("Erreur d'inscription:", error);
-      showNotification("Erreur d'inscription : " + error.message);
-    }
-  });
-
-  loginBtn.addEventListener('click', () => {
-    loginModal.style.display = 'flex';
-  });
-
-  cancelLogin.addEventListener('click', () => {
-    loginModal.style.display = 'none';
-  });
-
-  function updateUserProfileUI(user) {
-    if (user) {
-      loginBtn.style.display = 'none';
-      userProfile.innerHTML = `
-        <div class="user-info">
-          <strong>${user.displayName || user.email}</strong>
-          <img src="${user.photoURL || 'https://via.placeholder.com/40'}" alt="Avatar" class="user-avatar">
-        </div>
-        <div class="profile-actions">
-          <button id="editProfileBtn" class="btn btn-info">Modifier Profil</button>
-          <button id="logoutBtn" class="btn btn-danger">Déconnexion</button>
-        </div>
-      `;
-      document.getElementById('logoutBtn').addEventListener('click', async () => {
-        try {
-          await signOut(auth);
-          showNotification("Déconnexion réussie.");
-        } catch (error) {
-          console.error("Erreur de déconnexion:", error);
-          showNotification("Erreur de déconnexion : " + error.message);
-        }
-      });
-      document.getElementById('editProfileBtn').addEventListener('click', () => {
-        editProfileModal.style.display = 'flex';
-        // Pré-remplir le formulaire d'édition
-        document.getElementById('displayNameInput').value = user.displayName || '';
-      });
-    } else {
-      userProfile.innerHTML = '';
-      loginBtn.style.display = 'inline-flex';
-    }
-  }
-
-  function getInitials(name) {
-    if (!name) return 'A';
-    const parts = name.split(' ');
-    if (parts.length > 1) {
-      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    }
-    return parts[0][0].toUpperCase();
-  }
-
-  // Ajout de la fonction showNotification pour des messages temporaires
-  function showNotification(message, duration = 3000) {
-    const notificationDiv = document.createElement('div');
-    notificationDiv.className = 'notification';
-    notificationDiv.textContent = message;
-    document.body.appendChild(notificationDiv);
-    setTimeout(() => {
-      notificationDiv.remove();
-    }, duration);
-  }
-
-  // --- Gestion du profil utilisateur ---
-  editProfileForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (!auth.currentUser) {
-      showNotification("Vous devez être connecté pour modifier votre profil.");
-      return;
-    }
-
-    const displayName = document.getElementById('displayNameInput').value.trim();
-    const photoFileInput = document.getElementById('photoFileInput');
-    const file = photoFileInput.files[0];
-
-    try {
-      let photoURL = auth.currentUser.photoURL; // Garde l'URL actuelle si pas de nouvelle image
-      if (file) {
-        const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}/${file.name}`);
-        await uploadBytes(storageRef, file);
-        photoURL = await getDownloadURL(storageRef);
-      }
-
-      await updateProfile(auth.currentUser, {
-        displayName: displayName || null, // null si vide pour réinitialiser
-        photoURL: photoURL // Utilise la nouvelle URL ou l'ancienne
-      });
-
-      showNotification('Profil mis à jour !');
-      editProfileModal.style.display = 'none';
-      updateUserProfileUI(auth.currentUser); // Met à jour l'UI avec les nouvelles infos
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil :", error);
-      showNotification("Erreur lors de la mise à jour du profil : " + error.message);
-    }
-  });
-
-  cancelEditProfile.addEventListener('click', () => {
-    editProfileModal.style.display = 'none';
-  });
-
-  // --- Fonctions de gestion des Posts (inchangées ou légèrement ajustées) ---
-  async function toggleLike(postId) {
-    if (!currentUser) {
-      showNotification("Vous devez être connecté pour liker.");
-      return;
-    }
-    try {
-      const postRef = doc(db, "devloppement", postId);
-      const postDoc = await getDoc(postRef);
-      if (!postDoc.exists()) {
-        showNotification("Post introuvable !");
-        return;
-      }
-      const postData = postDoc.data();
-      const currentLikes = postData.likes || [];
-      const hasLiked = currentLikes.includes(currentUser.uid); // Utilise currentUser.uid
-      if (hasLiked) {
-        await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
-      } else {
-        await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
-      }
-      // Pas besoin de loadPosts ici, les écouteurs de temps réel devraient gérer
-    } catch (error) {
-      console.error("Erreur lors du like:", error);
-      showNotification("Erreur lors du like : " + error.message);
-    }
-  }
-
-  async function deletePost(postId, postAuthorUid) {
-    if (!currentUser) {
-      showNotification("Vous devez être connecté pour supprimer un post.");
-      return;
-    }
-    // Vérification de l'auteur ou mot de passe admin
-    if (postAuthorUid !== currentUser.uid) { // Utilise currentUser.uid
-      const pass = prompt("Mot de passe administrateur requis pour supprimer le post d'un autre utilisateur :");
-      if (pass !== ADMIN_PASSWORD) {
-        showNotification("Mot de passe incorrect.");
-        return;
-      }
-    }
-    if (!confirm("Confirmer la suppression de ce post et de tous ses commentaires ?")) return;
-
-    try {
-      // Supprimer le post principal
-      await deleteDoc(doc(db, "devloppement", postId));
-
-      // Supprimer tous les commentaires associés à ce post
-      const commentsQuery = query(commentsCol, where("postId", "==", postId));
-      const commentsSnapshot = await getDocs(commentsQuery);
-      const deletePromises = commentsSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      await Promise.all(deletePromises);
-
-      showNotification("Post et commentaires supprimés avec succès !");
-      loadPosts(); // Recharger les posts pour que le post disparaisse
-    } catch (error) {
-      console.error("Erreur lors de la suppression du post:", error);
-      showNotification("Erreur lors de la suppression : " + error.message);
-    }
-  }
-
-  // --- Fonctions de gestion des Commentaires et Réponses ---
-
-  // Stocke les "unsubscribers" pour les listeners onSnapshot de commentaires
-  // afin de pouvoir les nettoyer quand un post est retiré ou mis à jour
-  const commentListeners = {};
-
-  /**
-   * Récupère et affiche les commentaires pour un post donné.
-   * Utilise onSnapshot pour les mises à jour en temps réel.
-   */
-  function setupCommentsListener(postId) {
-    // Si un listener existe déjà pour ce post, on le désabonne d'abord pour éviter les fuites
-    if (commentListeners[postId]) {
-      commentListeners[postId](); // Désabonne l'ancien listener
-    }
-
-    const commentsListContainer = document.getElementById(`comments-list-${postId}`);
-    const commentCountSpan = document.getElementById(`comment-count-${postId}`);
-    if (!commentsListContainer || !commentCountSpan) return;
-
-    commentsListContainer.innerHTML = ''; // Nettoie l'ancien contenu
-
-    // Requête pour tous les commentaires et réponses d'un post
-    const q = query(
-      commentsCol,
-      where("postId", "==", postId),
-      orderBy("createdAt", "asc")
-    );
-
-    commentListeners[postId] = onSnapshot(q, (snapshot) => {
-      const allComments = {}; // Map pour stocker tous les commentaires par leur ID
-      const rootComments = []; // Array pour les commentaires de niveau supérieur
-
-      snapshot.forEach(doc => {
-        const comment = { id: doc.id, ...doc.data() };
-        allComments[comment.id] = comment;
-        if (!comment.parentId) {
-          rootComments.push(comment);
-        }
-      });
-
-      // Fonction récursive pour construire la structure imbriquée des commentaires
-      function buildCommentTree(comments) {
-        const tree = [];
-        comments.forEach(comment => {
-          const children = Object.values(allComments).filter(c => c.parentId === comment.id);
-          // Trie les enfants par date de création
-          children.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0);
-          comment.replies = buildCommentTree(children); // Récursion pour les réponses
-          tree.push(comment);
-        });
-        return tree;
-      }
-
-      const commentTree = buildCommentTree(rootComments);
-      commentTree.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0);
-
-      commentsListContainer.innerHTML = ''; // Nettoyer pour la mise à jour complète
-      commentTree.forEach(comment => {
-        displayComment(comment, commentsListContainer);
-      });
-
-      // Mettre à jour le compteur global de commentaires pour ce post
-      commentCountSpan.textContent = snapshot.size;
-
-      if (snapshot.empty) {
-        commentsListContainer.innerHTML = '<p class="no-comments">Aucun commentaire pour le moment.</p>';
-      }
-
-    }, (error) => {
-      console.error("Erreur lors de la récupération des commentaires:", error);
-      showNotification("Erreur lors du chargement des commentaires.");
-    });
-  }
-
-
-  /**
-   * Affiche un commentaire (et ses réponses récursivement) dans le DOM.
-   * @param {object} comment Le document du commentaire de Firestore.
-   * @param {HTMLElement} parentContainer Le conteneur HTML où ajouter le commentaire.
-   */
-  function displayComment(comment, parentContainer) {
-    const commentItem = document.createElement("div");
-    commentItem.className = `comment-item ${comment.parentId ? 'reply' : ''}`;
-    commentItem.id = `comment-${comment.id}`;
-
-    const formattedDate = comment.createdAt ?
-      new Date(comment.createdAt.toDate()).toLocaleString('fr-FR', {
-        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-      }) : 'Date inconnue';
-
-    let actionButtonsHTML = `
-        <button class="action-btn reply-comment-btn" data-comment-id="${comment.id}" data-post-id="${comment.postId}">
-            Répondre
-        </button>
-    `;
-    if (currentUser && currentUser.uid === comment.authorUid) {
-      actionButtonsHTML += `
-            <button class="action-btn delete-comment-btn" data-comment-id="${comment.id}">
-                Supprimer
-            </button>
-        `;
-    }
-
-    // Récupération de l'avatar et du nom de l'auteur du commentaire
-    // Cela pourrait nécessiter une requête Firestore si l'info n'est pas stockée dans le commentaire
-    // Pour simplifier, on utilise getInitials et une photo par défaut si pas de currentUser.photoURL
-    const authorDisplayName = comment.author || 'Anonyme';
-    const authorPhotoURL = comment.authorPhotoURL || `https://via.placeholder.com/40?text=${getInitials(authorDisplayName)}`;
-
-    commentItem.innerHTML = `
-        <div class="comment-header">
-            <img src="${authorPhotoURL}" alt="Avatar de ${authorDisplayName}" class="comment-avatar">
-            <div class="comment-meta">
-                <div class="comment-author-name">${authorDisplayName}</div>
-                <div class="comment-date">${formattedDate}</div>
-            </div>
-        </div>
-        <div class="comment-content">${comment.content}</div>
-        <div class="comment-actions">
-            ${actionButtonsHTML}
-        </div>
-        <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
-            </div>
-        <div class="replies-list-nested" id="replies-list-nested-${comment.id}">
-            </div>
-    `;
-    parentContainer.appendChild(commentItem);
-
-    // Attacher les écouteurs d'événements
-    commentItem.querySelector('.reply-comment-btn')?.addEventListener('click', toggleReplyForm);
-    commentItem.querySelector('.delete-comment-btn')?.addEventListener('click', deleteComment);
-
-    // Afficher récursivement les réponses
-    const nestedRepliesList = commentItem.querySelector('.replies-list-nested');
-    if (comment.replies && comment.replies.length > 0) {
-      comment.replies.forEach(reply => displayComment(reply, nestedRepliesList));
-    }
-  }
-
-
-  /**
-   * Gère la soumission d'un nouveau commentaire ou d'une réponse.
-   */
-  async function submitComment(event) {
-    event.preventDefault();
-
-    if (!currentUser) {
-      showNotification("🚫 Vous devez être connecté pour commenter.");
-      return;
-    }
-
-    const form = event.target;
-    const postId = form.dataset.postId;
-    const parentId = form.dataset.parentId || null; // Si c'est une réponse
-
-    const textarea = form.querySelector('.comment-textarea');
-    const commentContent = textarea.value.trim();
-
-    if (!commentContent) {
-      showNotification("Veuillez écrire votre commentaire.");
-      return;
-    }
-
-    const newComment = {
-      postId: postId,
-      content: commentContent,
-      author: currentUser.displayName || currentUser.email || 'Anonyme',
-      authorUid: currentUser.uid,
-      authorPhotoURL: currentUser.photoURL || null, // Sauvegarde l'URL de la photo de profil
-      createdAt: serverTimestamp(),
-      parentId: parentId // Null pour les commentaires de premier niveau
+    const firebaseConfig = {
+        apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+        authDomain: "fashionflow-3db6b.firebaseapp.com",
+        projectId: "fashionflow-3db6b",
+        storageBucket: "fashionflow-3db6b.appspot.com",
+        messagingSenderId: "1073693995934",
+        appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+        measurementId: "G-P4DP02HQ75"
     };
 
-    try {
-      await addDoc(commentsCol, newComment);
-      showNotification("Commentaire posté !");
-      textarea.value = ''; // Vide le textarea
-      // Masquer le formulaire de réponse si c'était une réponse
-      if (parentId) {
-        document.getElementById(`reply-form-container-${parentId}`).style.display = 'none';
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'ajout du commentaire:", error);
-      showNotification("❌ Erreur lors de l'ajout du commentaire : " + error.message);
-    }
-  }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const postsCol = collection(db, "devloppement");
+    const commentsCol = collection(db, "comments");
+    const storage = getStorage(app);
 
+    const auth = getAuth();
+    let currentUser = null;
+    const ADMIN_PASSWORD = "FFLFKSprod"; // À déplacer dans une variable d'environnement en production !
 
-  /**
-   * Affiche ou masque le formulaire de réponse pour un commentaire donné.
-   */
-  function toggleReplyForm(event) {
-    if (!currentUser) {
-        showNotification("Vous devez être connecté pour répondre.");
-        return;
-    }
+    const postsContainer = document.getElementById("postsContainer");
+    const loginModal = document.getElementById("loginModal");
+    const loginBtn = document.getElementById("loginBtn");
+    const userProfile = document.getElementById("userProfile");
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const cancelLogin = document.getElementById('cancelLogin');
+    const loginForm = document.getElementById('loginForm');
+    const provider = new GoogleAuthProvider();
 
-    const commentId = event.target.dataset.commentId;
-    const postId = event.target.dataset.postId;
-    const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
+    const editProfileModal = document.getElementById('editProfileModal');
+    const editProfileForm = document.getElementById('editProfileForm');
+    const cancelEditProfile = document.getElementById('cancelEditProfile');
 
-    if (replyFormContainer.style.display === 'block') {
-      replyFormContainer.style.display = 'none';
-      replyFormContainer.innerHTML = '';
-    } else {
-      replyFormContainer.innerHTML = `
-            <form class="comment-form reply-form-actual" data-post-id="${postId}" data-parent-id="${commentId}">
-                <textarea class="comment-textarea" placeholder="Votre réponse..." required></textarea>
-                <button type="submit" class="btn comment-submit-btn">Répondre</button>
-                <button type="button" class="btn btn-secondary cancel-reply-btn">Annuler</button>
-            </form>
-        `;
-      replyFormContainer.style.display = 'block';
-
-      // Attacher l'écouteur d'événement au nouveau formulaire
-      const newReplyForm = replyFormContainer.querySelector('.reply-form-actual');
-      newReplyForm.addEventListener('submit', submitComment);
-
-      // Attacher l'écouteur d'événement au bouton Annuler
-      newReplyForm.querySelector('.cancel-reply-btn').addEventListener('click', () => {
-        replyFormContainer.style.display = 'none';
-        replyFormContainer.innerHTML = '';
-      });
-
-      newReplyForm.querySelector('.comment-textarea').focus();
-    }
-  }
-
-
-  /**
-   * Supprime un commentaire si l'utilisateur est l'auteur ou un admin.
-   * Gère également la suppression des réponses si un commentaire est supprimé.
-   */
-  async function deleteComment(event) {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce commentaire et toutes ses réponses ?")) {
-      return;
-    }
-
-    const commentId = event.target.dataset.commentId;
-
-    if (!currentUser) {
-      showNotification("🚫 Vous devez être connecté pour supprimer un commentaire.");
-      return;
-    }
-
-    try {
-      const commentRef = doc(db, "comments", commentId);
-      const commentDoc = await getDoc(commentRef);
-
-      if (!commentDoc.exists()) {
-        showNotification("Commentaire introuvable.");
-        return;
-      }
-
-      const commentData = commentDoc.data();
-
-      // Vérifier si l'utilisateur est l'auteur ou un admin
-      if (commentData.authorUid !== currentUser.uid) {
-        const pass = prompt("Mot de passe administrateur requis pour supprimer ce commentaire :");
-        if (pass !== ADMIN_PASSWORD) {
-          showNotification("Mot de passe incorrect.");
-          return;
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            updateUserProfileUI(user);
+            loadPosts();
+        } else {
+            currentUser = null;
+            postsContainer.innerHTML = '<p class="info-message">Veuillez vous connecter pour voir les posts.</p>';
+            updateUserProfileUI(null);
         }
-      }
+    });
 
-      // Supprimer le commentaire principal
-      await deleteDoc(commentRef);
+    googleLoginBtn.addEventListener('click', async () => {
+        try {
+            await signInWithPopup(auth, provider);
+            loginModal.style.display = 'none';
+            showNotification("Connexion réussie avec Google !");
+        } catch (error) {
+            console.error("Erreur de connexion Google:", error);
+            showNotification("Erreur de connexion : " + error.message);
+        }
+    });
 
-      // Supprimer toutes les réponses (enfants) de ce commentaire
-      // Une requête pour tous les descendants directs et indirects serait plus complexe.
-      // Pour l'instant, on va supprimer uniquement les commentaires qui ont ce commentId comme parent.
-      // Pour une suppression cascade complète (enfants des enfants, etc.), une Cloud Function serait idéale.
-      const repliesToDeleteQuery = query(commentsCol, where("parentId", "==", commentId));
-      const repliesSnapshot = await getDocs(repliesToDeleteQuery);
-      const deleteRepliesPromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-      await Promise.all(deleteRepliesPromises);
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            loginModal.style.display = 'none';
+            showNotification("Connexion réussie !");
+        } catch (error) {
+            console.error("Erreur de connexion email/mdp:", error);
+            showNotification("Erreur de connexion : " + error.message);
+        }
+    });
 
+    registerBtn.addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            showNotification("Inscription réussie !");
+            loginModal.style.display = 'none';
+        } catch (error) {
+            console.error("Erreur d'inscription:", error);
+            showNotification("Erreur d'inscription : " + error.message);
+        }
+    });
 
-      showNotification("Commentaire supprimé avec succès !");
-      // La mise à jour est gérée par onSnapshot, pas besoin de recharger explicitement
-    } catch (error) {
-      console.error("Erreur lors de la suppression du commentaire:", error);
-      showNotification("❌ Erreur lors de la suppression : " + error.message);
+    loginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'flex';
+    });
+
+    cancelLogin.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+    });
+
+    function updateUserProfileUI(user) {
+        if (user) {
+            loginBtn.style.display = 'none';
+            userProfile.innerHTML = `
+                <div class="user-info">
+                    <strong>${user.displayName || user.email}</strong>
+                    <img src="${user.photoURL || 'https://via.placeholder.com/40'}" alt="Avatar" class="user-avatar">
+                </div>
+                <div class="profile-actions">
+                    <button id="editProfileBtn" class="btn btn-info">Modifier Profil</button>
+                    <button id="logoutBtn" class="btn btn-danger">Déconnexion</button>
+                </div>
+            `;
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    showNotification("Déconnexion réussie.");
+                } catch (error) {
+                    console.error("Erreur de déconnexion:", error);
+                    showNotification("Erreur de déconnexion : " + error.message);
+                }
+            });
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                editProfileModal.style.display = 'flex';
+                document.getElementById('displayNameInput').value = user.displayName || '';
+            });
+        } else {
+            userProfile.innerHTML = '';
+            loginBtn.style.display = 'inline-flex';
+        }
     }
-  }
+
+    function getInitials(name) {
+        if (!name) return 'A';
+        const parts = name.split(' ');
+        if (parts.length > 1) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return parts[0][0].toUpperCase();
+    }
+
+    function showNotification(message, duration = 3000) {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.className = 'notification';
+        notificationDiv.textContent = message;
+        document.body.appendChild(notificationDiv);
+        setTimeout(() => {
+            notificationDiv.remove();
+        }, duration);
+    }
+
+    editProfileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!auth.currentUser) {
+            showNotification("Vous devez être connecté pour modifier votre profil.");
+            return;
+        }
+
+        const displayName = document.getElementById('displayNameInput').value.trim();
+        const photoFileInput = document.getElementById('photoFileInput');
+        const file = photoFileInput.files[0];
+
+        try {
+            let photoURL = auth.currentUser.photoURL;
+            if (file) {
+                const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}/${file.name}`);
+                await uploadBytes(storageRef, file);
+                photoURL = await getDownloadURL(storageRef);
+            }
+
+            await updateProfile(auth.currentUser, {
+                displayName: displayName || null,
+                photoURL: photoURL
+            });
+
+            showNotification('Profil mis à jour !');
+            editProfileModal.style.display = 'none';
+            updateUserProfileUI(auth.currentUser);
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du profil :", error);
+            showNotification("Erreur lors de la mise à jour du profil : " + error.message);
+        }
+    });
+
+    cancelEditProfile.addEventListener('click', () => {
+        editProfileModal.style.display = 'none';
+    });
+
+    async function toggleLike(postId) {
+        if (!currentUser) {
+            showNotification("Vous devez être connecté pour liker.");
+            return;
+        }
+        try {
+            const postRef = doc(db, "devloppement", postId);
+            const postDoc = await getDoc(postRef);
+            if (!postDoc.exists()) {
+                showNotification("Post introuvable !");
+                return;
+            }
+            const postData = postDoc.data();
+            const currentLikes = postData.likes || [];
+            const hasLiked = currentLikes.includes(currentUser.uid);
+            if (hasLiked) {
+                await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
+            } else {
+                await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
+            }
+        } catch (error) {
+            console.error("Erreur lors du like:", error);
+            showNotification("Erreur lors du like : " + error.message);
+        }
+    }
+
+    async function deletePost(postId, postAuthorUid) {
+        if (!currentUser) {
+            showNotification("Vous devez être connecté pour supprimer un post.");
+            return;
+        }
+        if (postAuthorUid !== currentUser.uid) {
+            const pass = prompt("Mot de passe administrateur requis pour supprimer le post d'un autre utilisateur :");
+            if (pass !== ADMIN_PASSWORD) {
+                showNotification("Mot de passe incorrect.");
+                return;
+            }
+        }
+        if (!confirm("Confirmer la suppression de ce post et de tous ses commentaires ?")) return;
+
+        try {
+            await deleteDoc(doc(db, "devloppement", postId));
+
+            const commentsQuery = query(commentsCol, where("postId", "==", postId));
+            const commentsSnapshot = await getDocs(commentsQuery);
+            const deletePromises = commentsSnapshot.docs.map(doc => deleteDoc(doc.ref));
+            await Promise.all(deletePromises);
+
+            showNotification("Post et commentaires supprimés avec succès !");
+            loadPosts();
+        } catch (error) {
+            console.error("Erreur lors de la suppression du post:", error);
+            showNotification("Erreur lors de la suppression : " + error.message);
+        }
+    }
+
+    const commentListeners = {};
+
+    // Nouvelle fonction utilitaire pour mettre à jour le compteur sur le bouton principal
+    function updateCommentCountDisplay(postId, count) {
+        const displaySpan = document.getElementById(`comment-count-display-${postId}`);
+        if (displaySpan) {
+            displaySpan.textContent = count;
+        }
+    }
+
+    function setupCommentsListener(postId) {
+        if (commentListeners[postId]) {
+            commentListeners[postId]();
+        }
+
+        const commentsListContainer = document.getElementById(`comments-list-${postId}`);
+        const commentCountSpan = document.getElementById(`comment-count-${postId}`);
+        // Il faut aussi récupérer le span du compteur du bouton principal
+        const mainButtonCountSpan = document.getElementById(`comment-count-display-${postId}`);
+
+        if (!commentsListContainer || !commentCountSpan || !mainButtonCountSpan) return; // S'assurer que tous les éléments existent
+
+        commentsListContainer.innerHTML = '';
+
+        const q = query(
+            commentsCol,
+            where("postId", "==", postId),
+            orderBy("createdAt", "asc")
+        );
+
+        commentListeners[postId] = onSnapshot(q, (snapshot) => {
+            const allComments = {};
+            const rootComments = [];
+
+            snapshot.forEach(doc => {
+                const comment = { id: doc.id, ...doc.data() };
+                allComments[comment.id] = comment;
+                if (!comment.parentId) {
+                    rootComments.push(comment);
+                }
+            });
+
+            function buildCommentTree(comments) {
+                const tree = [];
+                // Trier les commentaires à ce niveau avant de construire l'arbre
+                comments.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0);
+
+                comments.forEach(comment => {
+                    const children = Object.values(allComments).filter(c => c.parentId === comment.id);
+                    comment.replies = buildCommentTree(children);
+                    tree.push(comment);
+                });
+                return tree;
+            }
+
+            const commentTree = buildCommentTree(rootComments);
+            // Trier les commentaires de premier niveau aussi
+            commentTree.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0);
 
 
-  // --- Fonction principale pour charger et afficher les posts ---
-  async function loadPosts() {
-    try {
-      const q = query(postsCol, orderBy("createdAt", "desc")); // Trie par createdAt pour la cohérence
-      const querySnapshot = await getDocs(q);
-      const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            commentsListContainer.innerHTML = '';
 
-      postsContainer.innerHTML = ''; // Nettoyer avant d'ajouter les posts
+            if (commentTree.length === 0) {
+                commentsListContainer.innerHTML = '<p class="no-comments">Aucun commentaire pour le moment.</p>';
+            } else {
+                commentTree.forEach(comment => {
+                    displayComment(comment, commentsListContainer);
+                });
+            }
 
-      if (posts.length === 0) {
-        postsContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-box-open empty-icon"></i>
-            <p>Aucun post trouvé pour le moment.</p>
-            <p>Soyez le premier à partager une publication !</p>
-          </div>
-        `;
-        return;
-      }
-
-      posts.forEach(post => {
-        const postElement = document.createElement("div");
-        postElement.className = "post-card";
-        postElement.dataset.postId = post.id; // Utilisez data-post-id pour la cohérence
-
-        const postDate = post.createdAt ?
-          new Date(post.createdAt.toDate()).toLocaleDateString('fr-FR', {
-            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-          }) : (post.date ? new Date(post.date).toLocaleDateString('fr-FR', {
-            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-          }) : 'Date inconnue');
-
-        const isAuthor = currentUser && post.authorUid === currentUser.uid;
-        const likesCount = (post.likes && post.likes.length) ? post.likes.length : 0;
-        const hasLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
-        const likeButtonClass = `btn-small like-btn ${hasLiked ? 'liked' : ''}`;
-
-        const authorDisplayName = post.author || 'Anonyme';
-        const authorInitial = getInitials(authorDisplayName);
-        const authorPhoto = post.authorPhotoURL || `https://via.placeholder.com/40?text=${authorInitial}`;
-
-
-        postElement.innerHTML = `
-          <div class="post-header">
-            <img src="${authorPhoto}" alt="Avatar de ${authorDisplayName}" class="author-avatar">
-            <div class="post-meta">
-              <div class="post-author">${authorDisplayName}</div>
-              <div class="post-date">${postDate}</div>
-            </div>
-          </div>
-          <h3 class="post-title">${post.title}</h3>
-          <p class="post-content">${post.content}</p>
-
-          <div class="post-actions">
-            <button onclick="toggleLike('${post.id}')" class="${likeButtonClass}">
-              <i class="fas fa-heart"></i> ${likesCount} J'aime
-            </button>
-            <button class="btn-small btn-info main-comment-btn" data-post-id="${post.id}">
-              <i class="fas fa-comment"></i> Commenter
-            </button>
-            ${isAuthor ? `
-              <button onclick="deletePost('${post.id}', '${post.authorUid}')" class="btn-small btn-danger">
-                <i class="fas fa-trash"></i> Supprimer
-              </button>` : ''}
-          </div>
-
-          <div class="comments-section">
-            <h4 class="comments-title">Commentaires (<span id="comment-count-${post.id}">0</span>)</h4>
-            <div class="comment-form-main-container">
-                <form class="comment-form main-comment-form" data-post-id="${post.id}">
-                    <textarea class="comment-textarea" placeholder="Ajouter un commentaire..." required></textarea>
-                    <button type="submit" class="btn comment-submit-btn">Poster</button>
-                </form>
-            </div>
-            <div class="comments-list" id="comments-list-${post.id}">
-              </div>
-          </div>
-        `;
-        postsContainer.appendChild(postElement);
-
-        // Attacher les écouteurs pour les boutons de ce post
-        postElement.querySelector('.main-comment-btn')?.addEventListener('click', (e) => {
-            // Optionnel: faire défiler vers le formulaire de commentaire
-            const formContainer = postElement.querySelector('.comment-form-main-container');
-            if (formContainer) formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            formContainer.querySelector('.comment-textarea')?.focus();
+            // Mettre à jour les compteurs
+            commentCountSpan.textContent = snapshot.size; // Compteur dans la section ouverte
+            mainButtonCountSpan.textContent = snapshot.size; // Compteur sur le bouton principal
+            
+        }, (error) => {
+            console.error("Erreur lors de la récupération des commentaires:", error);
+            showNotification("Erreur lors du chargement des commentaires.");
         });
-
-        // Attacher l'écouteur pour le formulaire de commentaire principal
-        postElement.querySelector('.main-comment-form')?.addEventListener('submit', submitComment);
-
-        // Initialiser l'écoute des commentaires pour ce post
-        setupCommentsListener(post.id);
-      });
-
-    } catch (error) {
-      console.error("Erreur lors du chargement des posts :", error);
-      postsContainer.innerHTML = `
-        <div class="empty-state">
-          <i class="fas fa-exclamation-triangle empty-icon"></i>
-          <p>Erreur lors du chargement des posts : ${error.message}</p>
-          <p>Veuillez réessayer plus tard.</p>
-        </div>
-      `;
     }
-  }
+
+    function displayComment(comment, parentContainer) {
+        const commentItem = document.createElement("div");
+        commentItem.className = `comment-item ${comment.parentId ? 'reply' : ''}`;
+        commentItem.id = `comment-${comment.id}`;
+
+        const formattedDate = comment.createdAt ?
+            new Date(comment.createdAt.toDate()).toLocaleString('fr-FR', {
+                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            }) : 'Date inconnue';
+
+        let actionButtonsHTML = `
+            <button class="action-btn reply-comment-btn" data-comment-id="${comment.id}" data-post-id="${comment.postId}">
+                Répondre
+            </button>
+        `;
+        if (currentUser && currentUser.uid === comment.authorUid) {
+            actionButtonsHTML += `
+                <button class="action-btn delete-comment-btn" data-comment-id="${comment.id}">
+                    Supprimer
+                </button>
+            `;
+        }
+
+        const authorDisplayName = comment.author || 'Anonyme';
+        // Utilise authorPhotoURL si elle existe, sinon génère une image d'initiales
+        const authorPhotoURL = comment.authorPhotoURL && comment.authorPhotoURL !== 'null' ? comment.authorPhotoURL : `https://via.placeholder.com/40?text=${getInitials(authorDisplayName)}`;
 
 
-  // Initialisation au chargement de la page
-  // La logique onAuthStateChanged appellera loadPosts au démarrage si un user est connecté.
-  // Si pas connecté, postsContainer sera mis à jour par onAuthStateChanged.
+        commentItem.innerHTML = `
+            <div class="comment-header">
+                <img src="${authorPhotoURL}" alt="Avatar de ${authorDisplayName}" class="comment-avatar">
+                <div class="comment-meta">
+                    <div class="comment-author-name">${authorDisplayName}</div>
+                    <div class="comment-date">${formattedDate}</div>
+                </div>
+            </div>
+            <div class="comment-content">${comment.content}</div>
+            <div class="comment-actions">
+                ${actionButtonsHTML}
+            </div>
+            <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
+                </div>
+            <div class="replies-list-nested" id="replies-list-nested-${comment.id}">
+                </div>
+        `;
+        parentContainer.appendChild(commentItem);
 
-  // Exposons les fonctions globales (utilisées dans onclick)
-  window.toggleLike = toggleLike;
-  window.deletePost = deletePost;
-  window.toggleReplyForm = toggleReplyForm; // Pour les réponses imbriquées
-  // submitComment est lié par addEventListener, pas besoin de le mettre dans window
-  window.showNotification = showNotification; // Utile pour le débogage ou d'autres scripts
+        commentItem.querySelector('.reply-comment-btn')?.addEventListener('click', toggleReplyForm);
+        commentItem.querySelector('.delete-comment-btn')?.addEventListener('click', deleteComment);
+
+        const nestedRepliesList = commentItem.querySelector('.replies-list-nested');
+        if (comment.replies && comment.replies.length > 0) {
+            comment.replies.forEach(reply => displayComment(reply, nestedRepliesList));
+        }
+    }
+
+    async function submitComment(event) {
+        event.preventDefault();
+
+        if (!currentUser) {
+            showNotification("🚫 Vous devez être connecté pour commenter.");
+            return;
+        }
+
+        const form = event.target;
+        const postId = form.dataset.postId;
+        const parentId = form.dataset.parentId || null;
+
+        const textarea = form.querySelector('.comment-textarea');
+        const commentContent = textarea.value.trim();
+
+        if (!commentContent) {
+            showNotification("Veuillez écrire votre commentaire.");
+            return;
+        }
+
+        const newComment = {
+            postId: postId,
+            content: commentContent,
+            author: currentUser.displayName || currentUser.email || 'Anonyme',
+            authorUid: currentUser.uid,
+            authorPhotoURL: currentUser.photoURL || null,
+            createdAt: serverTimestamp(),
+            parentId: parentId
+        };
+
+        try {
+            await addDoc(commentsCol, newComment);
+            showNotification("Commentaire posté !");
+            textarea.value = '';
+            if (parentId) {
+                document.getElementById(`reply-form-container-${parentId}`).style.display = 'none';
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'ajout du commentaire:", error);
+            showNotification("❌ Erreur lors de l'ajout du commentaire : " + error.message);
+        }
+    }
+
+    function toggleReplyForm(event) {
+        if (!currentUser) {
+            showNotification("Vous devez être connecté pour répondre.");
+            return;
+        }
+
+        const commentId = event.target.dataset.commentId;
+        const postId = event.target.dataset.postId;
+        const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
+
+        if (replyFormContainer.style.display === 'block') {
+            replyFormContainer.style.display = 'none';
+            replyFormContainer.innerHTML = '';
+        } else {
+            replyFormContainer.innerHTML = `
+                <form class="comment-form reply-form-actual" data-post-id="${postId}" data-parent-id="${commentId}">
+                    <textarea class="comment-textarea" placeholder="Votre réponse..." required></textarea>
+                    <button type="submit" class="btn comment-submit-btn">Répondre</button>
+                    <button type="button" class="btn btn-secondary cancel-reply-btn">Annuler</button>
+                </form>
+            `;
+            replyFormContainer.style.display = 'block';
+
+            const newReplyForm = replyFormContainer.querySelector('.reply-form-actual');
+            newReplyForm.addEventListener('submit', submitComment);
+
+            newReplyForm.querySelector('.cancel-reply-btn').addEventListener('click', () => {
+                replyFormContainer.style.display = 'none';
+                replyFormContainer.innerHTML = '';
+            });
+
+            newReplyForm.querySelector('.comment-textarea').focus();
+        }
+    }
+
+    async function deleteComment(event) {
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce commentaire et toutes ses réponses ?")) {
+            return;
+        }
+
+        const commentId = event.target.dataset.commentId;
+
+        if (!currentUser) {
+            showNotification("🚫 Vous devez être connecté pour supprimer un commentaire.");
+            return;
+        }
+
+        try {
+            const commentRef = doc(db, "comments", commentId);
+            const commentDoc = await getDoc(commentRef);
+
+            if (!commentDoc.exists()) {
+                showNotification("Commentaire introuvable.");
+                return;
+            }
+
+            const commentData = commentDoc.data();
+
+            if (commentData.authorUid !== currentUser.uid) {
+                const pass = prompt("Mot de passe administrateur requis pour supprimer ce commentaire :");
+                if (pass !== ADMIN_PASSWORD) {
+                    showNotification("Mot de passe incorrect.");
+                    return;
+                }
+            }
+
+            await deleteDoc(commentRef);
+
+            // Ceci est une suppression "superficielle" des réponses.
+            // Pour une suppression en cascade complète de toutes les réponses imbriquées (enfants des enfants),
+            // une Cloud Function Firebase serait beaucoup plus robuste et recommandée.
+            const repliesToDeleteQuery = query(commentsCol, where("parentId", "==", commentId));
+            const repliesSnapshot = await getDocs(repliesToDeleteQuery);
+            const deleteRepliesPromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+            await Promise.all(deleteRepliesPromises);
+
+            showNotification("Commentaire supprimé avec succès !");
+        } catch (error) {
+            console.error("Erreur lors de la suppression du commentaire:", error);
+            showNotification("❌ Erreur lors de la suppression : " + error.message);
+        }
+    }
+
+    async function loadPosts() {
+        try {
+            const q = query(postsCol, orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            postsContainer.innerHTML = '';
+
+            if (posts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open empty-icon"></i>
+                        <p>Aucun post trouvé pour le moment.</p>
+                        <p>Soyez le premier à partager une publication !</p>
+                    </div>
+                `;
+                return;
+            }
+
+            posts.forEach(post => {
+                const postElement = document.createElement("div");
+                postElement.className = "post-card";
+                postElement.dataset.postId = post.id;
+
+                const postDate = post.createdAt ?
+                    new Date(post.createdAt.toDate()).toLocaleString('fr-FR', {
+                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : (post.date ? new Date(post.date).toLocaleString('fr-FR', {
+                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : 'Date inconnue');
+
+                const isAuthor = currentUser && post.authorUid === currentUser.uid;
+                const likesCount = (post.likes && post.likes.length) ? post.likes.length : 0;
+                const hasLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
+                const likeButtonClass = `btn-small like-btn ${hasLiked ? 'liked' : ''}`;
+
+                const authorDisplayName = post.author || 'Anonyme';
+                const authorInitial = getInitials(authorDisplayName);
+                const authorPhoto = post.authorPhotoURL || `https://via.placeholder.com/40?text=${authorInitial}`;
+
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <img src="${authorPhoto}" alt="Avatar de ${authorDisplayName}" class="author-avatar">
+                        <div class="post-meta">
+                            <div class="post-author">${authorDisplayName}</div>
+                            <div class="post-date">${postDate}</div>
+                        </div>
+                    </div>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-content">${post.content}</p>
+
+                    <div class="post-actions">
+                        <button onclick="toggleLike('${post.id}')" class="${likeButtonClass}">
+                            <i class="fas fa-heart"></i> ${likesCount} J'aime
+                        </button>
+                        <button class="btn-small btn-info toggle-comments-section-btn" data-post-id="${post.id}">
+                            <i class="fas fa-comment"></i> Commenter (<span id="comment-count-display-${post.id}">0</span>)
+                        </button>
+                        ${isAuthor ? `
+                          <button onclick="deletePost('${post.id}', '${post.authorUid}')" class="btn-small btn-danger">
+                            <i class="fas fa-trash"></i> Supprimer
+                          </button>` : ''}
+                    </div>
+
+                    <div class="comments-section" id="comments-section-${post.id}" style="display: none;">
+                        <h4 class="comments-title">Commentaires (<span id="comment-count-${post.id}">0</span>)</h4>
+                        <div class="comment-form-main-container">
+                            <form class="comment-form main-comment-form" data-post-id="${post.id}">
+                                <textarea class="comment-textarea" placeholder="Ajouter un commentaire..." required></textarea>
+                                <button type="submit" class="btn comment-submit-btn">Poster</button>
+                            </form>
+                        </div>
+                        <div class="comments-list" id="comments-list-${post.id}">
+                            </div>
+                    </div>
+                `;
+                postsContainer.appendChild(postElement);
+
+                // Attacher l'écouteur pour le bouton principal "Commenter" / "Masquer les commentaires"
+                const toggleCommentsBtn = postElement.querySelector('.toggle-comments-section-btn');
+                if (toggleCommentsBtn) {
+                    toggleCommentsBtn.addEventListener('click', () => {
+                        const commentsSection = document.getElementById(`comments-section-${post.id}`);
+                        if (commentsSection.style.display === 'none') {
+                            commentsSection.style.display = 'block';
+                            toggleCommentsBtn.innerHTML = `<i class="fas fa-comment"></i> Masquer les commentaires (<span id="comment-count-display-${post.id}">0</span>)`;
+                            commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            commentsSection.querySelector('.comment-textarea')?.focus();
+                        } else {
+                            commentsSection.style.display = 'none';
+                            toggleCommentsBtn.innerHTML = `<i class="fas fa-comment"></i> Commenter (<span id="comment-count-display-${post.id}">0</span>)`;
+                        }
+                        // Mettre à jour le compteur sur le bouton après avoir togglé
+                        updateCommentCountDisplay(post.id, document.getElementById(`comment-count-${post.id}`).textContent);
+                    });
+                }
+
+                // Attacher l'écouteur pour le formulaire de commentaire principal
+                postElement.querySelector('.main-comment-form')?.addEventListener('submit', submitComment);
+
+                // Initialiser l'écoute des commentaires pour ce post
+                setupCommentsListener(post.id);
+            });
+
+        } catch (error) {
+            console.error("Erreur lors du chargement des posts :", error);
+            postsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle empty-icon"></i>
+                    <p>Erreur lors du chargement des posts : ${error.message}</p>
+                    <p>Veuillez réessayer plus tard.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Initialisation au chargement de la page
+    // La logique onAuthStateChanged appellera loadPosts au démarrage si un user est connecté.
+    // Si pas connecté, postsContainer sera mis à jour par onAuthStateChanged.
+
+    // Exposons les fonctions globales (utilisées dans onclick)
+    window.toggleLike = toggleLike;
+    window.deletePost = deletePost;
+    window.toggleReplyForm = toggleReplyForm;
+    window.showNotification = showNotification;
 </script>
-```
