@@ -744,10 +744,12 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import {
-      getFirestore,
-      collection,
-      addDoc
-    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
 
     const firebaseConfig = {
       apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
@@ -788,17 +790,21 @@
     async function publishPost(event) {
       event.preventDefault();
 
-      const newPost = {
-        title: form.postTitle.value.trim(),
-        content: form.postContent.value.trim(),
-        tags: form.postTags.value
-          .split(",")
-          .map((tag) => tag.trim())
-          .filter((tag) => tag),
-        category: "general",
-        author: "Admin",
-        date: new Date().toISOString()
-      };
+    import { serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+const newPost = {
+  title: form.postTitle.value.trim(),
+  content: form.postContent.value.trim(),
+  tags: form.postTags.value
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag),
+  category: "general",
+  author: "Admin",
+  date: new Date().toISOString(),
+  createdAt: serverTimestamp()  // ✅ C'est ça qu'il faut pour Firestore
+};
+};
 
       try {
         await addDoc(postsCol, newPost);
