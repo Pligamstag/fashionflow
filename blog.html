@@ -989,44 +989,33 @@ window.toggleReplies = toggleReplies;
   #mouse-glow {
     position: fixed;
     top: 0; left: 0;
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    /* Dégradé radial avec deux couleurs variables */
-    background: radial-gradient(circle, var(--color-start, #0078ff) 0%, var(--color-end, transparent) 70%);
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 0 20px var(--color-start, #0078ff));
-    transform: translate(-90px, -90px); /* Centrer le rond sur la souris */
-    animation: colorShift 10s linear infinite;
+    background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
+    filter: blur(40px);
+    opacity: 0.7;
+    transform: translate(-100px, -100px);
+    animation: gradientShift 30s ease infinite;
   }
 
-  @keyframes colorShift {
+  @keyframes gradientShift {
     0% {
-      --color-start: #0078ff; /* bleu */
-      --color-end: rgba(0, 120, 255, 0);
-      filter: drop-shadow(0 0 20px #0078ff);
+      background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
     }
     25% {
-      --color-start: #00ffcc; /* turquoise */
-      --color-end: rgba(0, 255, 204, 0);
-      filter: drop-shadow(0 0 20px #00ffcc);
+      background: radial-gradient(circle, #00ffcc 0%, #00ff00 50%, #004d99 100%);
     }
     50% {
-      --color-start: #00ff00; /* vert */
-      --color-end: rgba(0, 255, 0, 0);
-      filter: drop-shadow(0 0 20px #00ff00);
+      background: radial-gradient(circle, #00ff00 0%, #004d99 50%, #0078ff 100%);
     }
     75% {
-      --color-start: #004d99; /* bleu foncé */
-      --color-end: rgba(0, 77, 153, 0);
-      filter: drop-shadow(0 0 20px #004d99);
+      background: radial-gradient(circle, #004d99 0%, #0078ff 50%, #00ffcc 100%);
     }
     100% {
-      --color-start: #0078ff; /* bleu */
-      --color-end: rgba(0, 120, 255, 0);
-      filter: drop-shadow(0 0 20px #0078ff);
+      background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
     }
   }
 </style>
@@ -1035,7 +1024,6 @@ window.toggleReplies = toggleReplies;
 
 <script>
   const mouseGlow = document.getElementById('mouse-glow');
-
   document.addEventListener('mousemove', e => {
     mouseGlow.style.left = e.clientX + 'px';
     mouseGlow.style.top = e.clientY + 'px';
