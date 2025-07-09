@@ -989,33 +989,27 @@ window.toggleReplies = toggleReplies;
   #mouse-glow {
     position: fixed;
     top: 0; left: 0;
-    width: 200px;
-    height: 200px;
+    width: 100px;            /* plus petit */
+    height: 100px;           /* plus petit */
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
-    filter: blur(40px);
-    opacity: 0.7;
-    transform: translate(-100px, -100px);
-    animation: gradientShift 30s ease infinite;
+    background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
+    filter: blur(30px);      /* un peu moins flou */
+    opacity: 0.4;            /* moins clair / plus discret */
+    transform: translate(-50px, -50px); /* centrer sur la souris */
+    animation: gradientShift 60s ease infinite; /* animation plus lente */
   }
 
   @keyframes gradientShift {
     0% {
-      background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
-    }
-    25% {
-      background: radial-gradient(circle, #00ffcc 0%, #00ff00 50%, #004d99 100%);
+      background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
     }
     50% {
-      background: radial-gradient(circle, #00ff00 0%, #004d99 50%, #0078ff 100%);
-    }
-    75% {
-      background: radial-gradient(circle, #004d99 0%, #0078ff 50%, #00ffcc 100%);
+      background: radial-gradient(circle, #3affbd 0%, #65ffa3 50%, #3affbd 70%, #3a80ff 100%);
     }
     100% {
-      background: radial-gradient(circle, #0078ff 0%, #00ffcc 50%, #00ff00 100%);
+      background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
     }
   }
 </style>
@@ -1029,8 +1023,3 @@ window.toggleReplies = toggleReplies;
     mouseGlow.style.top = e.clientY + 'px';
   });
 </script>
-
-
-
-
-
