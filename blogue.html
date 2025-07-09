@@ -907,16 +907,28 @@ async function toggleReplies(postId) {
   }
 }
 
-async function loadReplies(postId) {
-  const repliesQuery = query(repliesCol, where("postId", "==", postId), orderBy("createdAt", "desc"));
-  const repliesSnapshot = await getDocs(repliesQuery);
-  const replies = repliesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-  repliesList.innerHTML = replies.map(r => `
-    <div class="reply-item">
-      <strong>${getInitials(r.authorUid)}</strong>: ${r.content}
-    </div>`).join('');
+async function loadPosts() {
+  try {
+    const q = query(postsCol, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log("Posts récupérés :", posts); // <--- Ajoute ça pour voir dans la console
+    if (posts.length === 0) {
+      postsContainer.innerHTML = "<p>Aucun post trouvé.</p>";
+      return;
+    }
+    postsContainer.innerHTML = posts.map(post => `
+      <div data-post-id="${post.id}">
+        <h4>${post.title}</h4>
+        <p>${post.content}</p>
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error("Erreur lors du chargement des posts :", error);
+    postsContainer.innerHTML = "<p>Erreur lors du chargement des posts.</p>";
+  }
 }
+
   const editProfileForm = document.getElementById('editProfileForm');
 const cancelEditProfile = document.getElementById('cancelEditProfile');
 
