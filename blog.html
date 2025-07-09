@@ -948,35 +948,99 @@ cancelEditProfile.addEventListener('click', () => {
 
 async function loadPosts() {
   try {
-   const q = query(postsCol, orderBy("date", "desc")); // 
+    // La ligne suivante doit utiliser 'date' comme vous l'avez déjà corrigé
+    const q = query(postsCol, orderBy("date", "desc"));
     const querySnapshot = await getDocs(q);
     const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     console.log("Posts récupérés :", posts); // Pour le débogage
 
     if (posts.length === 0) {
-      postsContainer.innerHTML = "<p>Aucun post trouvé.</p>";
+      postsContainer.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-box-open empty-icon"></i>
+          <p>Aucun post trouvé pour le moment.</p>
+          <p>Soyez le premier à partager une publication !</p>
+        </div>
+      `;
       return;
     }
 
-    postsContainer.innerHTML = posts.map(post => `
-      <div class="post-item" data-post-id="${post.id}">
-        <h4>${post.title}</h4>
-        <p>${post.content}</p>
-        <button onclick="toggleLike('${post.id}')">Like</button>
-        <button onclick="toggleReplyForm('${post.id}')">Répondre</button>
-        <button onclick="deletePost('${post.id}', '${post.authorUid}')">Supprimer</button>
-        <div class="reply-form" style="display:none;">
-          <textarea class="reply-input" rows="2" placeholder="Votre réponse..."></textarea>
-          <button onclick="submitReply('${post.id}')">Envoyer</button>
-        </div>
-        <div class="replies-list"></div>
-      </div>
-    `).join(''); // <-- Le .join('') est crucial ici, il ferme la chaîne
+    // --- C'EST ICI QU'ON MODIFIE LE TEMPLATE HTML ---
+    postsContainer.innerHTML = posts.map(post => {
+      // Formatte la date
+      const postDate = post.date ? new Date(post.date).toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) : 'Date inconnue';
+
+      // Vérifie si l'utilisateur est l'auteur du post pour le bouton supprimer
+      const isAuthor = currentUser && post.authorUid === currentUser;
+      // Pour les likes
+      const likesCount = (post.likes && post.likes.length) ? post.likes.length : 0;
+      const hasLiked = currentUser && post.likes && post.likes.includes(currentUser);
+      const likeButtonClass = `btn-small like-btn ${hasLiked ? 'liked' : ''}`;
+      
+      // On suppose que post.author contient le nom de l'auteur (ou l'email si displayName non défini)
+      const authorName = post.author || 'Anonyme'; 
+      const authorInitial = getInitials(authorName); // Utilisez votre fonction getInitials
+
+      return `
+        <div class="post-card" data-post-id="${post.id}">
+          <div class="post-header">
+            <div class="author-avatar">${authorInitial}</div>
+            <div class="post-meta">
+              <div class="post-author">${authorName}</div>
+              <div class="post-date">${postDate}</div>
+            </div>
+          </div>
+          <h3 class="post-title">${post.title}</h3>
+          <p class="post-content">${post.content}</p>
+          
+          <div class="post-actions">
+            <button onclick="toggleLike('${post.id}')" class="${likeButtonClass}">
+              <i class="fas fa-heart"></i> ${likesCount} Like${likesCount > 1 ? 's' : ''}
+            </button>
+            <button onclick="toggleReplyForm('${post.id}')" class="btn-small btn-info">
+              <i class="fas fa-reply"></i> Répondre
+            </button>
+            ${isAuthor ? `
+              <button onclick="deletePost('${post.id}', '${post.authorUid}')" class="btn-small btn-danger">
+                <i class="fas fa-trash"></i> Supprimer
+              </button>` : ''}
+          </div>
+
+          <div class="replies-section">
+            <div class="replies-header">
+              <span class="replies-count">0 réponses</span>
+              <button onclick="toggleReplies('${post.id}')" class="toggle-replies">
+                Afficher les réponses
+              </button>
+            </div>
+            <div class="reply-form">
+              <textarea class="reply-input" rows="2" placeholder="Votre réponse..."></textarea>
+              <div class="reply-form-actions">
+                <button onclick="submitReply('${post.id}')" class="btn btn-success">Envoyer</button>
+                <button onclick="toggleReplyForm('${post.id}')" class="btn btn-secondary">Annuler</button>
+              </div>
+            </div>
+            <div class="replies-list"></div>
+          </div>
+        </div>`;
+    }).join('');
 
   } catch (error) {
     console.error("Erreur lors du chargement des posts :", error);
-    postsContainer.innerHTML = "<p>Erreur lors du chargement des posts.</p>";
+    postsContainer.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-exclamation-triangle empty-icon"></i>
+        <p>Erreur lors du chargement des posts : ${error.message}</p>
+        <p>Veuillez réessayer plus tard.</p>
+      </div>
+    `;
   }
 }
 
