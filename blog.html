@@ -811,9 +811,59 @@
                 padding: 25px;
             }
         }
+        /* ✅ Styles Mon Profil */
+#profileModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#profileModal .profile-content {
+    background: var(--dark-secondary);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    color: var(--text-light);
+}
+
+#profileModal .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#profileModal .tab-link {
+    flex: 1;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+#profileModal .tab-link.active {
+    background: var(--primary);
+}
+
+#profileModal .tab-content {
+    display: none;
+}
+
+#profileModal .tab-content.active {
+    display: block;
+}
+
     </style>
 </head>
 <body>
+<!-- ✅ Modal Connexion -->
 <div id="loginModal">
     <div>
         <h2>Connexion</h2>
@@ -827,6 +877,8 @@
         <button id="cancelLogin" class="btn btn-danger">X</button>
     </div>
 </div>
+
+<!-- ✅ Modal Modifier Profil -->
 <div id="editProfileModal">
     <div>
         <h3>Modifier le profil</h3>
@@ -840,13 +892,41 @@
     </div>
 </div>
 
+<!-- ✅ ✅ Nouveau Modal Mon Profil -->
+<div id="profileModal">
+    <div class="profile-content">
+        <button id="closeProfileModal" class="btn btn-danger" style="position: absolute; top: 15px; right: 15px;">X</button>
+        <h2>Mon Profil</h2>
+        <div class="tabs">
+            <button class="tab-link active" data-tab="postsTab">Mes Posts</button>
+            <button class="tab-link" data-tab="likesTab">Mes Likes</button>
+            <button class="tab-link" data-tab="editTab">Modifier Profil</button>
+        </div>
+        <div id="postsTab" class="tab-content active">
+            <p>Vos posts apparaîtront ici...</p>
+        </div>
+        <div id="likesTab" class="tab-content">
+            <p>Vos likes apparaîtront ici...</p>
+        </div>
+        <div id="editTab" class="tab-content">
+            <form id="profileEditForm">
+                <input type="text" placeholder="Votre bio">
+                <input type="text" placeholder="Changer de nom">
+                <input type="file" accept="image/*">
+                <button type="submit" class="btn btn-success">Sauvegarder</button>
+            </form>
+        </div>
+    </div>
+</div>
 
+<!-- ✅ Fond d'effets -->
 <div class="background-effects">
     <div class="bg-circle"></div>
     <div class="bg-circle"></div>
     <div class="bg-circle"></div>
 </div>
 
+<!-- ✅ Conteneur principal -->
 <div class="container">
     <nav class="navbar">
         <a href="#" class="logo">
@@ -864,10 +944,12 @@
             </a>
         </div>
         <div id="userProfile" style="color: white; display: flex; align-items: center; gap: 10px;">
-            </div>
+        </div>
 
+        <!-- ✅ Bouton Se connecter -->
         <button id="loginBtn" class="btn btn-secondary">Se connecter</button>
-
+        <!-- ✅ Nouveau bouton Mon Profil -->
+        <button id="profileBtn" class="btn btn-secondary" style="display: none;">Mon Profil</button>
     </nav>
 
     <section class="hero">
@@ -1826,7 +1908,27 @@ function loadUserLikedPosts(uid) {
         `;
     });
 }
+function setupCommentsListener(postId) {
+  const commentsList = document.getElementById(`comments-list-${postId}`);
+  const commentCount = document.getElementById(`comment-count-${postId}`);
+  const commentCountDisplay = document.getElementById(`comment-count-display-${postId}`);
 
+  const q = query(commentsCol, where("postId", "==", postId), orderBy("createdAt", "asc"));
+
+  onSnapshot(q, (snapshot) => {
+    commentsList.innerHTML = ''; // Vide tout pour re-rendre proprement
+    snapshot.forEach(doc => {
+      displayComment(Object.assign({ id: doc.id }, doc.data()), commentsList);
+    });
+
+    commentCount.textContent = snapshot.size;
+    commentCountDisplay.textContent = snapshot.size;
+  }, (error) => {
+    console.error("Erreur lors du chargement des commentaires :", error);
+  });
+}
+
+loadPosts();
 // Charger tous les posts pour le fil principal
 function loadPosts() {
     postsContainer.innerHTML = `
