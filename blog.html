@@ -992,23 +992,24 @@ window.toggleReplies = toggleReplies;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 9999; /* Passe au-dessus du fond, mais laisse le contenu cliquable */
+  z-index: 9999;
   background: radial-gradient(
-    circle 200px at var(--x, 50%) var(--y, 50%),
-    rgba(255,255,255,0.15),
+    circle 150px at var(--x, 50%) var(--y, 50%),
+    rgba(255,255,255,0.1),
     transparent 80%
   );
   mix-blend-mode: overlay;
-  backdrop-filter: blur(50px);
-  animation: wave 5s infinite linear alternate;
-}
-
-@keyframes wave {
-  0% { backdrop-filter: blur(40px); }
-  50% { backdrop-filter: blur(70px); }
-  100% { backdrop-filter: blur(40px); }
+  transition: background 0.1s ease;
 }
 </style>
 
 <div id="mouse-wave"></div>
+
+<script>
+document.addEventListener('mousemove', function(e) {
+  document.documentElement.style.setProperty('--x', `${e.clientX}px`);
+  document.documentElement.style.setProperty('--y', `${e.clientY}px`);
+});
+</script>
+
 
