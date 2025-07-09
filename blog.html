@@ -989,28 +989,29 @@ window.toggleReplies = toggleReplies;
   #mouse-glow {
     position: fixed;
     top: 0; left: 0;
-    width: 100px;            /* plus petit */
-    height: 100px;           /* plus petit */
+    width: 100px;
+    height: 100px;
     pointer-events: none;
     z-index: 9999;
     border-radius: 50%;
-    background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
-    filter: blur(30px);      /* un peu moins flou */
-    opacity: 0.4;            /* moins clair / plus discret */
-    transform: translate(-50px, -50px); /* centrer sur la souris */
-    animation: gradientShift 60s ease infinite; /* animation plus lente */
+    filter: blur(25px);
+    opacity: 0.35;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #0066ff 0%, #00ff33 100%);
+    animation: colorShift 90s linear infinite;
   }
 
-  @keyframes gradientShift {
-    0% {
-      background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
-    }
-    50% {
-      background: radial-gradient(circle, #3affbd 0%, #65ffa3 50%, #3affbd 70%, #3a80ff 100%);
-    }
-    100% {
-      background: radial-gradient(circle, #3a80ff 0%, #65a0ff 50%, #3a80ff 70%, #3affbd 100%);
-    }
+  @keyframes colorShift {
+    0%   { background: radial-gradient(circle, #0066ff 0%, #0077dd 30%, #0088cc 60%, #0099bb 90%, #00aaaa 100%); }
+    11%  { background: radial-gradient(circle, #0077dd 0%, #0088cc 30%, #0099bb 60%, #00aaaa 90%, #00bb99 100%); }
+    22%  { background: radial-gradient(circle, #0088cc 0%, #0099bb 30%, #00aaaa 60%, #00bb99 90%, #00cc88 100%); }
+    33%  { background: radial-gradient(circle, #0099bb 0%, #00aaaa 30%, #00bb99 60%, #00cc88 90%, #00dd77 100%); }
+    44%  { background: radial-gradient(circle, #00aaaa 0%, #00bb99 30%, #00cc88 60%, #00dd77 90%, #00ee66 100%); }
+    55%  { background: radial-gradient(circle, #00bb99 0%, #00cc88 30%, #00dd77 60%, #00ee66 90%, #00ff55 100%); }
+    66%  { background: radial-gradient(circle, #00cc88 0%, #00dd77 30%, #00ee66 60%, #00ff55 90%, #00ff33 100%); }
+    77%  { background: radial-gradient(circle, #00dd77 0%, #00ee66 30%, #00ff55 60%, #00ff33 90%, #0066ff 100%); }
+    88%  { background: radial-gradient(circle, #00ee66 0%, #00ff55 30%, #00ff33 60%, #0066ff 90%, #0077dd 100%); }
+    100% { background: radial-gradient(circle, #00ff55 0%, #00ff33 30%, #0066ff 60%, #0077dd 90%, #0088cc 100%); }
   }
 </style>
 
