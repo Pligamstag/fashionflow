@@ -1281,3 +1281,160 @@ window.toggleReplies = toggleReplies;
         }
     </style>
 </html>
+<body>
+  <!-- Conteneurs pour chaque effet -->
+  <div id="mouse-glow"></div>
+  <div id="effects">
+    <div class="laser-line"></div>
+    <div class="wave"></div>
+    <div class="hex-grid"></div>
+    <div class="matrix"></div>
+    <div class="particles"></div>
+    <div class="stars"></div>
+    <div class="orbs"></div>
+    <div class="spirals"></div>
+    <div class="trails"></div>
+    <div class="halos"></div>
+  </div>
+
+  <script>
+    const mouseGlow = document.getElementById('mouse-glow');
+    const trailsContainer = document.querySelector('.trails');
+    const halosContainer = document.querySelector('.halos');
+    let lastMouseMove = 0;
+
+    // Suivi de la souris optimisé
+    document.addEventListener('mousemove', (e) => {
+      if (Date.now() - lastMouseMove < 10) return; // limiter à ~100 FPS
+      lastMouseMove = Date.now();
+
+      mouseGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      createTrail(e.clientX, e.clientY);
+      if (Math.random() < 0.05) createHalo(e.clientX, e.clientY);
+    });
+
+    // Traînées
+    function createTrail(x, y) {
+      const trail = document.createElement('div');
+      trail.className = 'trail';
+      trail.style.left = `${x}px`;
+      trail.style.top = `${y}px`;
+      trailsContainer.appendChild(trail);
+
+      setTimeout(() => trail.remove(), 500);
+    }
+
+    // Halos
+    function createHalo(x, y) {
+      const halo = document.createElement('div');
+      halo.className = 'halo';
+      halo.style.left = `${x}px`;
+      halo.style.top = `${y}px`;
+      halosContainer.appendChild(halo);
+
+      setTimeout(() => halo.remove(), 2000);
+    }
+
+    // Particules flottantes
+    function createParticles() {
+      const particles = document.querySelector('.particles');
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.animationDelay = `${Math.random() * 15}s`;
+        particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+        particles.appendChild(particle);
+      }
+    }
+
+    // Étoiles
+    function createStars() {
+      const stars = document.querySelector('.stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.animationDelay = `${Math.random() * 2}s`;
+        stars.appendChild(star);
+      }
+    }
+
+    // Orbes
+    function createOrbs() {
+      const orbs = document.querySelector('.orbs');
+      for (let i = 0; i < 5; i++) {
+        const orb = document.createElement('div');
+        orb.className = 'orb';
+        const size = Math.random() * 50 + 30;
+        orb.style.width = `${size}px`;
+        orb.style.height = `${size}px`;
+        orb.style.left = `${Math.random() * 100}vw`;
+        orb.style.top = `${Math.random() * 100}vh`;
+        orb.style.animationDelay = `${Math.random() * 8}s`;
+        orbs.appendChild(orb);
+      }
+    }
+
+    // Spirales
+    function createSpirals() {
+      const spirals = document.querySelector('.spirals');
+      for (let i = 0; i < 3; i++) {
+        const spiral = document.createElement('div');
+        spiral.className = 'spiral';
+        spiral.style.left = `${Math.random() * 100}vw`;
+        spiral.style.top = `${Math.random() * 100}vh`;
+        spiral.style.animationDelay = `${Math.random() * 10}s`;
+        spirals.appendChild(spiral);
+      }
+    }
+
+    // Grille hexagonale
+    function createHexGrid() {
+      const hexGrid = document.querySelector('.hex-grid');
+      const size = 60;
+      for (let x = 0; x < window.innerWidth; x += size) {
+        for (let y = 0; y < window.innerHeight; y += size) {
+          const hex = document.createElement('div');
+          hex.className = 'hex';
+          hex.style.left = `${x}px`;
+          hex.style.top = `${y}px`;
+          hex.style.animationDelay = `${Math.random() * 4}s`;
+          hexGrid.appendChild(hex);
+        }
+      }
+    }
+
+    // Matrice
+    function createMatrixEffect() {
+      const matrix = document.querySelector('.matrix');
+      const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+      for (let i = 0; i < 50; i++) {
+        const matrixChar = document.createElement('div');
+        matrixChar.className = 'matrix-char';
+        matrixChar.textContent = chars[Math.floor(Math.random() * chars.length)];
+        matrixChar.style.left = `${Math.random() * 100}vw`;
+        matrixChar.style.animationDelay = `${Math.random() * 3}s`;
+        matrixChar.style.animationDuration = `${Math.random() * 2 + 2}s`;
+        matrix.appendChild(matrixChar);
+      }
+    }
+
+    // Initialisation
+    createParticles();
+    createStars();
+    createOrbs();
+    createSpirals();
+    createHexGrid();
+    createMatrixEffect();
+
+    // Clic
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < 10; i++) {
+        createTrail(e.clientX + Math.random() * 20 - 10, e.clientY + Math.random() * 20 - 10);
+      }
+      createHalo(e.clientX, e.clientY);
+    });
+  </script>
+</body>
