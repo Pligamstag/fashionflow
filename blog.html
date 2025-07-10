@@ -1,8 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<div id="old-interface">
   <meta charset="UTF-8" />
+  <title>Vague Transition</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    #old-interface {
+      background: #f0f0f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #new-interface {
+      background: #333;
+      color: #fff;
+      height: 100vh;
+      display: none; /* CACHÉ AU DÉPART ! */
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wave-transition {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: #00aaff;
+      transform: translateY(100%);
+      transition: transform 1s ease-in-out;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+ <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Le blog de FashionFLow</title>
   <style>
@@ -678,12 +715,10 @@ async function submitSubReply(parentReplyId, postId) {
   </script>
 </body>
 </html>
-  <button id="access-blog-btn">Accéder au blog</button>
 </div>
-
-<div id="new-interface" style="display: none;">
- <!DOCTYPE html>
-<html lang="fr">
+  <div id="old-interface">
+    <h1>Ancienne Interface</h1>
+  </div>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2806,41 +2841,31 @@ newPostBtn.addEventListener('click', () => {
     }
 });
 </script>
+  <div id="new-interface">
+    <h1>Nouvelle Interface</h1>
+  </div>
 
-</div>
+  <div class="wave-transition"></div>
 
-<div class="wave-transition"></div>
-<style>
-.wave-transition {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: #00aaff; /* couleur vague */
-  transform: translateY(100%);
-  transition: transform 1s ease-in-out;
-  z-index: 9999;
-}
+  <script>
+    window.addEventListener('load', () => {
+      const oldInterface = document.getElementById('old-interface');
+      const newInterface = document.getElementById('new-interface');
+      const wave = document.querySelector('.wave-transition');
 
-</style>
+      // Lance la vague après 0.5s
+      setTimeout(() => {
+        wave.style.transform = 'translateY(0)';
+      }, 500);
 
-<script>
-window.addEventListener('load', () => {
-  const oldInterface = document.getElementById('old-interface');
-  const newInterface = document.getElementById('new-interface');
-  const wave = document.querySelector('.wave-transition');
+      // Quand la vague recouvre tout, swap l'interface et remonte la vague
+      setTimeout(() => {
+        oldInterface.style.display = 'none';
+        newInterface.style.display = 'flex'; // Affiche la nouvelle
+        wave.style.transform = 'translateY(-100%)'; // Vague remonte
+      }, 1500);
+    });
+  </script>
 
-  // Lance la vague 0,5s après chargement pour être sûr que tout est prêt
-  setTimeout(() => {
-    wave.style.transform = 'translateY(0)';
-  }, 500);
-
-  // Quand la vague est en haut, bascule les interfaces
-  setTimeout(() => {
-    oldInterface.style.display = 'none';
-    newInterface.style.display = 'block';
-    // Remonte la vague
-    wave.style.transform = 'translateY(-100%)';
-  }, 1500); // 500ms + 1000ms (durée vague)
-});
-</script>
+</body>
+</html>
