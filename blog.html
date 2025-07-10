@@ -1,9 +1,13 @@
-<body>
-  <!-- Ancienne interface -->
-  <div id="old-interface">
-     <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Le blog de FashionFLow</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Transition Interface Automatique</title>
+<style>
+  /* --- ANCIEN CSS --- */
+  /* Colle ici ton ancien CSS pour #old-interface */
+  #old-interface {
   <style>
     * {
       margin: 0;
@@ -310,387 +314,12 @@
       color: #666;
       margin-top: 5px;
       font-style: italic;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
-      <p>Tous vos posts de développement en un seul endroit</p>
-      <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
-      <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
-    </div>
-<div id="postsContainer" class="posts-grid"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      addDoc,
-      deleteDoc,
-      doc,
-      query,
-      orderBy,
-      where,
-      serverTimestamp,
-      updateDoc,
-      arrayUnion,
-      arrayRemove,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-      authDomain: "fashionflow-3db6b.firebaseapp.com",
-      projectId: "fashionflow-3db6b",
-      storageBucket: "fashionflow-3db6b.firebasestorage.app",
-      messagingSenderId: "1073693995934",
-      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
-      measurementId: "G-P4DP02HQ75"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const postsCol = collection(db, "devloppement");
-    const repliesCol = collection(db, "replies");
-
-    const postsContainer = document.getElementById("postsContainer");
-    const currentUser = "Samy";
-    const ADMIN_PASSWORD = "LucieKaraoui";
-
-    async function toggleLike(postId) {
-      try {
-        const postRef = doc(db, "devloppement", postId);
-        const postDoc = await getDoc(postRef);
-        
-        if (!postDoc.exists()) {
-          alert("Post introuvable !");
-          return;
-        }
-
-        const postData = postDoc.data();
-        const currentLikes = postData.likes || [];
-        const hasLiked = currentLikes.includes(currentUser);
-
-        if (hasLiked) {
-          // Retirer le like
-          await updateDoc(postRef, {
-            likes: arrayRemove(currentUser)
-          });
-        } else {
-          // Ajouter le like
-          await updateDoc(postRef, {
-            likes: arrayUnion(currentUser)
-          });
-        }
-
-        // Recharger les posts pour mettre à jour l'affichage
-        loadPosts();
-        
-        // Animation de feedback
-        const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
-        if (likeBtn && !hasLiked) {
-          likeBtn.classList.add('liked');
-          setTimeout(() => likeBtn.classList.remove('liked'), 300);
-        }
-
-      } catch (error) {
-        console.error("Erreur lors du toggle like:", error);
-        alert("Erreur lors de la mise à jour du like : " + error.message);
-      }
-    }
-
-    async function deletePost(postId, postAuthor) {
-      if (postAuthor === currentUser) {
-        if (!confirm("Supprimer ton post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          // Supprimer toutes les réponses associées
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur suppression : " + error.message);
-        }
-      } else {
-        const pass = prompt("Ce post n'est pas à toi, entre le mot de passe admin pour supprimer :");
-        if (pass !== ADMIN_PASSWORD) {
-          alert("Mot de passe incorrect, suppression annulée.");
-          return;
-        }
-        if (!confirm("Supprimer ce post ?")) return;
-        try {
-          await deleteDoc(doc(db, "devloppement", postId));
-          
-          // Supprimer toutes les réponses associées
-          const repliesQuery = query(repliesCol, where("postId", "==", postId));
-          const repliesSnapshot = await getDocs(repliesQuery);
-          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
-          await Promise.all(deletePromises);
-          
-          alert("Post et réponses supprimés !");
-          loadPosts();
-        } catch (error) {
-          alert("Erreur suppression : " + error.message);
-        }
-      }
-    }
-
-    async function toggleReplyForm(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      form.classList.toggle('active');
-      
-      if (form.classList.contains('active')) {
-        const textarea = form.querySelector('.reply-input');
-        textarea.focus();
-      }
-    }
-
-    async function submitReply(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      const textarea = form.querySelector('.reply-input');
-      const content = textarea.value.trim();
-      
-      if (!content) {
-        alert("Veuillez écrire quelque chose avant de publier !");
-        return;
-      }
-
-      try {
-        await addDoc(repliesCol, {
-          postId: postId,
-          content: content,
-          author: currentUser,
-          date: new Date().toISOString(),
-          timestamp: serverTimestamp()
-        });
-        
-        textarea.value = '';
-        form.classList.remove('active');
-        loadReplies(postId);
-        alert("Réponse publiée avec succès !");
-      } catch (error) {
-        alert("Erreur lors de la publication : " + error.message);
-      }
-    }
-
-    async function cancelReply(postId) {
-      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
-      const textarea = form.querySelector('.reply-input');
-      textarea.value = '';
-      form.classList.remove('active');
-    }
-
-    async function toggleReplies(postId) {
-      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-      const toggleBtn = document.querySelector(`[data-post-id="${postId}"] .toggle-replies`);
-      
-      if (repliesList.classList.contains('active')) {
-        repliesList.classList.remove('active');
-        toggleBtn.textContent = 'Voir les réponses';
-      } else {
-        repliesList.classList.add('active');
-        toggleBtn.textContent = 'Masquer les réponses';
-        loadReplies(postId);
-      }
-    }
-
-    async function loadReplies(postId) {
-      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
-      const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
-      
-      try {
-        const q = query(repliesCol, where("postId", "==", postId), orderBy("date", "asc"));
-        const snapshot = await getDocs(q);
-        const replies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        repliesCount.textContent = `${replies.length} réponse(s)`;
-        
-        if (replies.length === 0) {
-          repliesList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Aucune réponse pour le moment.</p>';
-          return;
-        }
-
-        repliesList.innerHTML = replies.map(reply => `
-          <div class="reply-item">
-            <div class="reply-header">
-              <span class="reply-author">👤 ${reply.author || 'Anonyme'}</span>
-              <span class="reply-date">${new Date(reply.date).toLocaleDateString('fr-FR')} à ${new Date(reply.date).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</span>
-            </div>
-            <div class="reply-content">${reply.content}</div>
-          </div>
-        `).join('');
-      } catch (error) {
-        console.error("Erreur lors du chargement des réponses:", error);
-        repliesList.innerHTML = '<p style="color: #e74c3c;">Erreur lors du chargement des réponses.</p>';
-      }
-    }
-
-    async function loadPosts() {
-      postsContainer.innerHTML = "<p style='text-align: center; color: white;'>Chargement des posts...</p>";
-      
-      try {
-        const q = query(postsCol, orderBy("date", "desc"));
-        const snapshot = await getDocs(q);
-        const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-        if (posts.length === 0) {
-          postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
-          return;
-        }
-
-      // Charger le nombre de réponses pour chaque post
-const postsWithReplies = await Promise.all(posts.map(async (post) => {
-  const repliesQuery = query(repliesCol, where("postId", "==", post.id));
-  const repliesSnapshot = await getDocs(repliesQuery);
-  return { ...post, repliesCount: repliesSnapshot.size };
-}));
-
-postsContainer.innerHTML = postsWithReplies
-  .map((post) => {
-    const likes = post.likes || [];
-    const likesCount = likes.length;
-    const hasLiked = likes.includes(currentUser);
-    const likedUsers = likes.length > 0 ? `Aimé par : ${likes.join(', ')}` : '';
-
-    return `
-    <div class="post-card" data-post-id="${post.id}">
-      <div class="post-header">
-        <div class="post-title">${post.title}</div>
-        <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
-      </div>
-      <div class="author-info">👤 Par : ${post.author || 'Anonyme'}</div>
-      <div class="post-content">${post.content}</div>
-      <div class="post-tags">
-        ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
-      </div>
-      <div class="post-stats">
-        <div class="like-section">
-          <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
-            ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
-          </button>
-          <span class="like-count">${likesCount} like(s)</span>
-        </div>
-      </div>
-      ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
-      <div class="post-actions">
-        <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
-        <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
-      </div>
-      <div class="replies-section">
-        <div class="replies-header">
-          <span class="replies-count">${post.repliesCount} réponse(s)</span>
-          <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
-        </div>
-        <div class="reply-form">
-          <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
-          <div class="reply-form-actions">
-            <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
-            <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
-          </div>
-        </div>
-        <div class="replies-list"></div>
-      </div>
-    </div>
-    `;
-  })
-  .join("");
-} catch (error) {
-  console.error("Erreur lors du chargement des posts:", error);
-  postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
-}
-
-    }
-async function toggleReplyLike(replyId) {
-  const replyRef = doc(repliesCol, replyId);
-  const replySnap = await getDoc(replyRef);
-  if (!replySnap.exists()) return alert("Commentaire introuvable.");
-
-  const replyData = replySnap.data();
-  const currentLikes = replyData.likes || [];
-  const hasLiked = currentLikes.includes(currentUser);
-
-  try {
-    await updateDoc(replyRef, {
-      likes: hasLiked ? arrayRemove(currentUser) : arrayUnion(currentUser)
-    });
-    loadReplies(replyData.postId);
-  } catch (e) {
-    alert("Erreur lors du like du commentaire : " + e.message);
   }
-}
 
-function toggleSubReplyForm(replyId, postId) {
-  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-function cancelSubReply(replyId) {
-  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
-  form.querySelector("textarea").value = "";
-  form.style.display = "none";
-}
-
-async function submitSubReply(parentReplyId, postId) {
-  const form = document.querySelector(`[data-reply-id="${parentReplyId}"] .sub-reply-form`);
-  const textarea = form.querySelector("textarea");
-  const content = textarea.value.trim();
-  if (!content) return alert("Écris un message !");
-
-  try {
-    await addDoc(repliesCol, {
-      postId,
-      content,
-      author: currentUser,
-      date: new Date().toISOString(),
-      timestamp: serverTimestamp(),
-      parentReplyId: parentReplyId,
-      likes: []
-    });
-    textarea.value = "";
-    form.style.display = "none";
-    loadReplies(postId);
-  } catch (e) {
-    alert("Erreur lors de la réponse au commentaire : " + e.message);
-  }
-}
-
-    // Rendre les fonctions accessibles globalement
-    window.deletePost = deletePost;
-    window.toggleReplies = toggleReplies;
-    window.toggleLike = toggleLike;
-    window.toggleReplyLike = toggleReplyLike;
-    window.toggleSubReplyForm = toggleSubReplyForm;
-    window.submitSubReply = submitSubReply;
-    window.cancelSubReply = cancelSubReply;
-
-    // Charger les posts au démarrage
-    window.addEventListener("DOMContentLoaded", loadPosts);
-  </script>
-</body>
-</html>
-</div>
-  </div>
-
-  <!-- Vague de transition -->
-  <div class="wave-transition"></div>
-
-  <!-- Nouvelle interface -->
-  <div id="new-interface">
-   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FashionFlow - Blog</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
+  /* --- NOUVEAU CSS --- */
+  /* Colle ici ton nouveau CSS pour #new-interface */
+  #new-interface {
+        <style>
         :root {
             --primary: #6366f1;
             --secondary: #8b5cf6;
@@ -1545,7 +1174,398 @@ async function submitSubReply(parentReplyId, postId) {
     display: block;
 }
 
-    </style>
+  /* Vague de transition */
+  .wave-transition {
+    position: fixed;
+    bottom: -100%; /* Commence hors écran, en bas */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #8b5cf6; /* Couleur de la vague */
+    clip-path: polygon(
+      0 100%, 10% 90%, 20% 95%, 30% 85%, 40% 90%,
+      50% 80%, 60% 85%, 70% 75%, 80% 80%, 90% 70%, 100% 75%,
+      100% 100%, 0% 100%
+    );
+    transition: bottom 1s ease-in-out; /* Animation de la vague (montée/descente) */
+    z-index: 1000; /* S'assure que la vague est au-dessus */
+  }
+
+  .wave-transition.active {
+    bottom: 0; /* La vague remonte pour couvrir l'écran */
+  }
+</style>
+</head>
+<body>
+
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📚 Bienvenue à la béta du blog de Fashion !</h1>
+      <p>Tous vos posts de développement en un seul endroit</p>
+      <a href="creerunposte.html" class="back-link">← Créer un nouveau post</a>
+      <a href="index.html" class="back-link">🏠 Retour à l'accueil</a>
+    </div>
+<div id="postsContainer" class="posts-grid"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      deleteDoc,
+      doc,
+      query,
+      orderBy,
+      where,
+      serverTimestamp,
+      updateDoc,
+      arrayUnion,
+      arrayRemove,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+      authDomain: "fashionflow-3db6b.firebaseapp.com",
+      projectId: "fashionflow-3db6b",
+      storageBucket: "fashionflow-3db6b.firebasestorage.app",
+      messagingSenderId: "1073693995934",
+      appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+      measurementId: "G-P4DP02HQ75"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const postsCol = collection(db, "devloppement");
+    const repliesCol = collection(db, "replies");
+
+    const postsContainer = document.getElementById("postsContainer");
+    const currentUser = "Samy";
+    const ADMIN_PASSWORD = "LucieKaraoui";
+
+    async function toggleLike(postId) {
+      try {
+        const postRef = doc(db, "devloppement", postId);
+        const postDoc = await getDoc(postRef);
+        
+        if (!postDoc.exists()) {
+          alert("Post introuvable !");
+          return;
+        }
+
+        const postData = postDoc.data();
+        const currentLikes = postData.likes || [];
+        const hasLiked = currentLikes.includes(currentUser);
+
+        if (hasLiked) {
+          // Retirer le like
+          await updateDoc(postRef, {
+            likes: arrayRemove(currentUser)
+          });
+        } else {
+          // Ajouter le like
+          await updateDoc(postRef, {
+            likes: arrayUnion(currentUser)
+          });
+        }
+
+        // Recharger les posts pour mettre à jour l'affichage
+        loadPosts();
+        
+        // Animation de feedback
+        const likeBtn = document.querySelector(`[data-post-id="${postId}"] .like-btn`);
+        if (likeBtn && !hasLiked) {
+          likeBtn.classList.add('liked');
+          setTimeout(() => likeBtn.classList.remove('liked'), 300);
+        }
+
+      } catch (error) {
+        console.error("Erreur lors du toggle like:", error);
+        alert("Erreur lors de la mise à jour du like : " + error.message);
+      }
+    }
+
+    async function deletePost(postId, postAuthor) {
+      if (postAuthor === currentUser) {
+        if (!confirm("Supprimer ton post ?")) return;
+        try {
+          await deleteDoc(doc(db, "devloppement", postId));
+          
+          // Supprimer toutes les réponses associées
+          const repliesQuery = query(repliesCol, where("postId", "==", postId));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+          await Promise.all(deletePromises);
+          
+          alert("Post et réponses supprimés !");
+          loadPosts();
+        } catch (error) {
+          alert("Erreur suppression : " + error.message);
+        }
+      } else {
+        const pass = prompt("Ce post n'est pas à toi, entre le mot de passe admin pour supprimer :");
+        if (pass !== ADMIN_PASSWORD) {
+          alert("Mot de passe incorrect, suppression annulée.");
+          return;
+        }
+        if (!confirm("Supprimer ce post ?")) return;
+        try {
+          await deleteDoc(doc(db, "devloppement", postId));
+          
+          // Supprimer toutes les réponses associées
+          const repliesQuery = query(repliesCol, where("postId", "==", postId));
+          const repliesSnapshot = await getDocs(repliesQuery);
+          const deletePromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+          await Promise.all(deletePromises);
+          
+          alert("Post et réponses supprimés !");
+          loadPosts();
+        } catch (error) {
+          alert("Erreur suppression : " + error.message);
+        }
+      }
+    }
+
+    async function toggleReplyForm(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      form.classList.toggle('active');
+      
+      if (form.classList.contains('active')) {
+        const textarea = form.querySelector('.reply-input');
+        textarea.focus();
+      }
+    }
+
+    async function submitReply(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      const textarea = form.querySelector('.reply-input');
+      const content = textarea.value.trim();
+      
+      if (!content) {
+        alert("Veuillez écrire quelque chose avant de publier !");
+        return;
+      }
+
+      try {
+        await addDoc(repliesCol, {
+          postId: postId,
+          content: content,
+          author: currentUser,
+          date: new Date().toISOString(),
+          timestamp: serverTimestamp()
+        });
+        
+        textarea.value = '';
+        form.classList.remove('active');
+        loadReplies(postId);
+        alert("Réponse publiée avec succès !");
+      } catch (error) {
+        alert("Erreur lors de la publication : " + error.message);
+      }
+    }
+
+    async function cancelReply(postId) {
+      const form = document.querySelector(`[data-post-id="${postId}"] .reply-form`);
+      const textarea = form.querySelector('.reply-input');
+      textarea.value = '';
+      form.classList.remove('active');
+    }
+
+    async function toggleReplies(postId) {
+      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+      const toggleBtn = document.querySelector(`[data-post-id="${postId}"] .toggle-replies`);
+      
+      if (repliesList.classList.contains('active')) {
+        repliesList.classList.remove('active');
+        toggleBtn.textContent = 'Voir les réponses';
+      } else {
+        repliesList.classList.add('active');
+        toggleBtn.textContent = 'Masquer les réponses';
+        loadReplies(postId);
+      }
+    }
+
+    async function loadReplies(postId) {
+      const repliesList = document.querySelector(`[data-post-id="${postId}"] .replies-list`);
+      const repliesCount = document.querySelector(`[data-post-id="${postId}"] .replies-count`);
+      
+      try {
+        const q = query(repliesCol, where("postId", "==", postId), orderBy("date", "asc"));
+        const snapshot = await getDocs(q);
+        const replies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        repliesCount.textContent = `${replies.length} réponse(s)`;
+        
+        if (replies.length === 0) {
+          repliesList.innerHTML = '<p style="color: #666; font-style: italic; text-align: center; padding: 20px;">Aucune réponse pour le moment.</p>';
+          return;
+        }
+
+        repliesList.innerHTML = replies.map(reply => `
+          <div class="reply-item">
+            <div class="reply-header">
+              <span class="reply-author">👤 ${reply.author || 'Anonyme'}</span>
+              <span class="reply-date">${new Date(reply.date).toLocaleDateString('fr-FR')} à ${new Date(reply.date).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</span>
+            </div>
+            <div class="reply-content">${reply.content}</div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error("Erreur lors du chargement des réponses:", error);
+        repliesList.innerHTML = '<p style="color: #e74c3c;">Erreur lors du chargement des réponses.</p>';
+      }
+    }
+
+    async function loadPosts() {
+      postsContainer.innerHTML = "<p style='text-align: center; color: white;'>Chargement des posts...</p>";
+      
+      try {
+        const q = query(postsCol, orderBy("date", "desc"));
+        const snapshot = await getDocs(q);
+        const posts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        if (posts.length === 0) {
+          postsContainer.innerHTML = "<p class='empty-state'>Aucun post disponible.</p>";
+          return;
+        }
+
+      // Charger le nombre de réponses pour chaque post
+const postsWithReplies = await Promise.all(posts.map(async (post) => {
+  const repliesQuery = query(repliesCol, where("postId", "==", post.id));
+  const repliesSnapshot = await getDocs(repliesQuery);
+  return { ...post, repliesCount: repliesSnapshot.size };
+}));
+
+postsContainer.innerHTML = postsWithReplies
+  .map((post) => {
+    const likes = post.likes || [];
+    const likesCount = likes.length;
+    const hasLiked = likes.includes(currentUser);
+    const likedUsers = likes.length > 0 ? `Aimé par : ${likes.join(', ')}` : '';
+
+    return `
+    <div class="post-card" data-post-id="${post.id}">
+      <div class="post-header">
+        <div class="post-title">${post.title}</div>
+        <div class="post-date">${new Date(post.date).toLocaleDateString("fr-FR")}</div>
+      </div>
+      <div class="author-info">👤 Par : ${post.author || 'Anonyme'}</div>
+      <div class="post-content">${post.content}</div>
+      <div class="post-tags">
+        ${(post.tags || []).map((tag) => `<span class="tag">${tag}</span>`).join("")}
+      </div>
+      <div class="post-stats">
+        <div class="like-section">
+          <button class="like-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+            ${hasLiked ? '❤️ Aimé' : '🤍 J\'aime'}
+          </button>
+          <span class="like-count">${likesCount} like(s)</span>
+        </div>
+      </div>
+      ${likedUsers ? `<div class="liked-users">${likedUsers}</div>` : ''}
+      <div class="post-actions">
+        <button class="btn delete-btn" onclick="deletePost('${post.id}', '${post.author || ''}')">🗑️ Supprimer</button>
+        <button class="btn reply-btn" onclick="toggleReplyForm('${post.id}')">💬 Répondre</button>
+      </div>
+      <div class="replies-section">
+        <div class="replies-header">
+          <span class="replies-count">${post.repliesCount} réponse(s)</span>
+          <button class="toggle-replies" onclick="toggleReplies('${post.id}')">Voir les réponses</button>
+        </div>
+        <div class="reply-form">
+          <textarea class="reply-input" placeholder="Écrivez votre réponse..."></textarea>
+          <div class="reply-form-actions">
+            <button class="submit-reply" onclick="submitReply('${post.id}')">Publier</button>
+            <button class="cancel-reply" onclick="cancelReply('${post.id}')">Annuler</button>
+          </div>
+        </div>
+        <div class="replies-list"></div>
+      </div>
+    </div>
+    `;
+  })
+  .join("");
+} catch (error) {
+  console.error("Erreur lors du chargement des posts:", error);
+  postsContainer.innerHTML = "<p class='empty-state'>Erreur lors du chargement des posts.</p>";
+}
+
+    }
+async function toggleReplyLike(replyId) {
+  const replyRef = doc(repliesCol, replyId);
+  const replySnap = await getDoc(replyRef);
+  if (!replySnap.exists()) return alert("Commentaire introuvable.");
+
+  const replyData = replySnap.data();
+  const currentLikes = replyData.likes || [];
+  const hasLiked = currentLikes.includes(currentUser);
+
+  try {
+    await updateDoc(replyRef, {
+      likes: hasLiked ? arrayRemove(currentUser) : arrayUnion(currentUser)
+    });
+    loadReplies(replyData.postId);
+  } catch (e) {
+    alert("Erreur lors du like du commentaire : " + e.message);
+  }
+}
+
+function toggleSubReplyForm(replyId, postId) {
+  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+function cancelSubReply(replyId) {
+  const form = document.querySelector(`[data-reply-id="${replyId}"] .sub-reply-form`);
+  form.querySelector("textarea").value = "";
+  form.style.display = "none";
+}
+
+async function submitSubReply(parentReplyId, postId) {
+  const form = document.querySelector(`[data-reply-id="${parentReplyId}"] .sub-reply-form`);
+  const textarea = form.querySelector("textarea");
+  const content = textarea.value.trim();
+  if (!content) return alert("Écris un message !");
+
+  try {
+    await addDoc(repliesCol, {
+      postId,
+      content,
+      author: currentUser,
+      date: new Date().toISOString(),
+      timestamp: serverTimestamp(),
+      parentReplyId: parentReplyId,
+      likes: []
+    });
+    textarea.value = "";
+    form.style.display = "none";
+    loadReplies(postId);
+  } catch (e) {
+    alert("Erreur lors de la réponse au commentaire : " + e.message);
+  }
+}
+
+    // Rendre les fonctions accessibles globalement
+    window.deletePost = deletePost;
+    window.toggleReplies = toggleReplies;
+    window.toggleLike = toggleLike;
+    window.toggleReplyLike = toggleReplyLike;
+    window.toggleSubReplyForm = toggleSubReplyForm;
+    window.submitSubReply = submitSubReply;
+    window.cancelSubReply = cancelSubReply;
+
+    // Charger les posts au démarrage
+    window.addEventListener("DOMContentLoaded", loadPosts);
+  </script>
+</body>
+</html>
+</div>
+
+  <div class="wave-transition"></div>
 </head>
 <body>
 <!-- ✅ Modal Connexion -->
@@ -2806,44 +2826,42 @@ newPostBtn.addEventListener('click', () => {
         loginModal.style.display = 'flex';
     }
 });
-</script>>
-  </div>
+</script>
 
-  <!-- Ton CSS de vague dans <style> ou fichier CSS -->
-  <style>
-    /* Ex : */
-    #new-interface { display: none; }
-    .wave-transition {
-      position: fixed;
-      bottom: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #3498db;
-      transition: bottom 1s ease-in-out;
-      z-index: 1000;
-    }
-    .wave-transition.active {
-      bottom: 0;
-    }
-  </style>
+<script>
+  window.addEventListener('load', () => {
+    const wave = document.querySelector('.wave-transition');
+    const oldInterface = document.getElementById('old-interface');
+    const newInterface = document.getElementById('new-interface');
 
-  <!-- Ton script pour lancer la transition -->
-  <script>
-    window.addEventListener('load', () => {
-      const wave = document.querySelector('.wave-transition');
-      const oldInterface = document.getElementById('old-interface');
-      const newInterface = document.getElementById('new-interface');
+    // Étape 1: La vague monte
+    wave.classList.add('active');
 
-      // Lance la vague
-      wave.classList.add('active');
+    // On écoute la fin de l'animation de la vague qui monte
+    wave.addEventListener('transitionend', function waveUpHandler(event) {
+      // S'assurer que c'est bien la transition 'bottom' qui est finie et que la vague est 'active' (en haut)
+      if (event.propertyName === 'bottom' && wave.classList.contains('active')) {
+        // Supprime cet écouteur pour éviter qu'il ne se déclenche à nouveau inutilement
+        wave.removeEventListener('transitionend', waveUpHandler);
 
-      // Quand l'animation est finie (1s ici)
-      setTimeout(() => {
-        oldInterface.style.display = 'none';
-        newInterface.style.display = 'block';
-        wave.classList.remove('active');
-      }, 1000);
+        // Étape 2: Cache l'ancienne interface et montre la nouvelle
+        oldInterface.style.display = 'none'; // Cache immédiatement l'ancienne interface
+        newInterface.style.display = 'flex'; // Affiche la nouvelle interface (ou 'block' selon ton besoin)
+
+        // Force le navigateur à "re-calculer" le style pour que la transition d'opacité fonctionne
+        // Un petit délai ou un accès à une propriété de style peut suffire
+        void newInterface.offsetWidth; // Force un reflow/repaint
+
+        newInterface.style.opacity = '1'; // Rend la nouvelle interface visible via une transition
+
+        // Étape 3: La vague redescend (après un court délai pour laisser la nouvelle interface apparaître)
+        setTimeout(() => {
+          wave.classList.remove('active');
+        }, 100); // Court délai pour que la nouvelle interface soit visible avant que la vague ne descende
+      }
     });
-  </script>
+  });
+</script>
+
 </body>
+</html>
