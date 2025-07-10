@@ -1,45 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Vague Transition</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-    }
-
-    #old-interface {
-      background: #f0f0f0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #new-interface {
-      background: #333;
-      color: #fff;
-      height: 100vh;
-      display: none; /* CACHÉ AU DÉPART ! */
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wave-transition {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: #00aaff;
-      transform: translateY(100%);
-      transition: transform 1s ease-in-out;
-      z-index: 9999;
-    }
-  </style>
-</head>
 <body>
- <meta charset="UTF-8" />
+  <!-- Ancienne interface -->
+  <div id="old-interface">
+     <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Le blog de FashionFLow</title>
   <style>
@@ -716,10 +678,14 @@ async function submitSubReply(parentReplyId, postId) {
 </body>
 </html>
 </div>
-  <div id="old-interface">
-    <h1>Ancienne Interface</h1>
   </div>
-<head>
+
+  <!-- Vague de transition -->
+  <div class="wave-transition"></div>
+
+  <!-- Nouvelle interface -->
+  <div id="new-interface">
+   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FashionFlow - Blog</title>
@@ -2840,32 +2806,44 @@ newPostBtn.addEventListener('click', () => {
         loginModal.style.display = 'flex';
     }
 });
-</script>
-  <div id="new-interface">
-    <h1>Nouvelle Interface</h1>
+</script>>
   </div>
 
-  <div class="wave-transition"></div>
+  <!-- Ton CSS de vague dans <style> ou fichier CSS -->
+  <style>
+    /* Ex : */
+    #new-interface { display: none; }
+    .wave-transition {
+      position: fixed;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #3498db;
+      transition: bottom 1s ease-in-out;
+      z-index: 1000;
+    }
+    .wave-transition.active {
+      bottom: 0;
+    }
+  </style>
 
+  <!-- Ton script pour lancer la transition -->
   <script>
     window.addEventListener('load', () => {
+      const wave = document.querySelector('.wave-transition');
       const oldInterface = document.getElementById('old-interface');
       const newInterface = document.getElementById('new-interface');
-      const wave = document.querySelector('.wave-transition');
 
-      // Lance la vague après 0.5s
-      setTimeout(() => {
-        wave.style.transform = 'translateY(0)';
-      }, 500);
+      // Lance la vague
+      wave.classList.add('active');
 
-      // Quand la vague recouvre tout, swap l'interface et remonte la vague
+      // Quand l'animation est finie (1s ici)
       setTimeout(() => {
         oldInterface.style.display = 'none';
-        newInterface.style.display = 'flex'; // Affiche la nouvelle
-        wave.style.transform = 'translateY(-100%)'; // Vague remonte
-      }, 1500);
+        newInterface.style.display = 'block';
+        wave.classList.remove('active');
+      }, 1000);
     });
   </script>
-
 </body>
-</html>
