@@ -2182,8 +2182,11 @@ newPostBtn.addEventListener('click', () => {
     }
 });
   // ✅ Faire disparaître l'écran d'accueil
-document.getElementById('discoverBtn').addEventListener('click', () => {
-  document.getElementById('welcomeScreen').style.display = 'none';
+document.getElementById('discoverBtn').addEventListener('click', function() {
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'none';  // cache l'écran d'accueil
+    }
 });
 
 </script>
