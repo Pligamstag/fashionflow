@@ -859,51 +859,6 @@
 #profileModal .tab-content.active {
     display: block;
 }
-/* ✅ Style écran d'accueil */
-#welcomeScreen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: hidden;
-}
-
-.welcome-overlay {
-  text-align: center;
-  color: #fff;
-}
-
-.welcome-overlay h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-
-#welcomeScreen .balloon {
-  position: absolute;
-  width: 50px; height: 70px;
-  background: radial-gradient(circle at 30% 30%, #ff6b81, #ff4757);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation: float 6s ease-in-out infinite;
-}
-
-#welcomeScreen .balloon:nth-child(2) {
-  left: 20%; animation-delay: 1s;
-}
-
-#welcomeScreen .balloon:nth-child(3) {
-  left: 70%; animation-delay: 2s;
-}
-
-@keyframes float {
-  0% { bottom: -100px; transform: translateX(0); }
-  50% { transform: translateX(20px); }
-  100% { bottom: 110%; transform: translateX(0); }
-}
    </style>
 </head>
 <body>
@@ -995,22 +950,6 @@
         <!-- ✅ Nouveau bouton Mon Profil -->
         <button id="profileBtn" class="btn btn-secondary" style="display: none;">Mon Profil</button>
     </nav>
-<!-- ✅ Écran d'accueil flouté -->
-<div id="welcomeScreen">
-  <div class="welcome-overlay">
-    <h1>Bienvenue sur FashionFlow</h1>
-    <button id="discoverBtn" class="btn btn-primary">Découvrir</button>
-  </div>
-  <!-- Exemple de ballons flottants -->
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-  <div class="balloon"></div>
-</div>
-
-<section class="hero">
-  <h1>Blog de Développement</h1>
-  <p>Partagez vos idées, découvertes et projets avec la communauté</p>
-</section>
 
     <section class="hero">
         <h1>Blog de Développement</h1>
@@ -2181,16 +2120,4 @@ newPostBtn.addEventListener('click', () => {
         loginModal.style.display = 'flex';
     }
 });
-  document.addEventListener('DOMContentLoaded', () => {
-    const discoverBtn = document.getElementById('discoverBtn');
-    const welcomeScreen = document.getElementById('welcomeScreen');
-
-    if (discoverBtn && welcomeScreen) {
-      discoverBtn.addEventListener('click', () => {
-        welcomeScreen.style.display = 'none';
-      });
-    } else {
-      console.error('Bouton Découvrir ou welcomeScreen introuvable !');
-    }
-  });
 </script>
