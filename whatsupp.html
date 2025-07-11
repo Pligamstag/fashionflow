@@ -72,16 +72,232 @@
     </div>
   </div>
   
-  <!-- Message d'absence de mises à jour -->
-  <div class="text-center py-12">
-    <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-      <span class="text-gray-400 text-4xl">📋</span>
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des mises à jour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animations pour les feux d'artifice */
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: fireworkBurst 2s infinite;
+        }
+
+        .firework:nth-child(1) { top: 10px; left: 20px; background: #ff4757; animation-delay: 0s; }
+        .firework:nth-child(2) { top: 15px; right: 30px; background: #3742fa; animation-delay: 0.5s; }
+        .firework:nth-child(3) { bottom: 20px; left: 50px; background: #2ed573; animation-delay: 1s; }
+        .firework:nth-child(4) { bottom: 15px; right: 20px; background: #ffa502; animation-delay: 1.5s; }
+
+        @keyframes fireworkBurst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(2); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* Animation pour le ballon */
+        .balloon {
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        /* Animation pour la grue */
+        .crane {
+            animation: swing 4s ease-in-out infinite;
+            display: inline-block;
+            transform-origin: center bottom;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        /* Bande de travaux */
+        .work-banner {
+            background: repeating-linear-gradient(
+                45deg,
+                #fbbf24,
+                #fbbf24 8px,
+                #000 8px,
+                #000 16px
+            );
+            height: 6px;
+            animation: slide 2s linear infinite;
+            border-radius: 3px;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0 0; }
+            100% { background-position: 22px 0; }
+        }
+
+        /* Confettis */
+        .confetti {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            animation: confettiFall 4s linear infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .notification-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pulse-ring {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 p-8">
+
+<section class="glass-effect rounded-2xl p-8 shadow-xl card-hover max-w-4xl mx-auto">
+  <div class="flex items-center mb-8">
+    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+      <span class="text-white text-xl">🛠️</span>
     </div>
-    <h3 class="text-xl font-semibold text-gray-700 mb-3">Aucune mise à jour récente</h3>
-    <p class="text-gray-500 max-w-md mx-auto leading-relaxed">
-      Aucune mise à jour n'a été réalisée ces derniers temps. Le système fonctionne de manière stable et toutes les fonctionnalités sont opérationnelles.
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Historique des mises à jour</h2>
+      <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
+    </div>
+  </div>
+  
+  <!-- Notification d'ouverture du blog -->
+  <div class="notification-card bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl p-6 mb-6 text-white relative">
+    <!-- Feux d'artifice -->
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    
+    <!-- Confettis -->
+    <div class="confetti bg-yellow-300" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="confetti bg-blue-300" style="left: 30%; animation-delay: 0.5s;"></div>
+    <div class="confetti bg-green-300" style="left: 50%; animation-delay: 1s;"></div>
+    <div class="confetti bg-purple-300" style="left: 70%; animation-delay: 1.5s;"></div>
+    <div class="confetti bg-red-300" style="left: 90%; animation-delay: 2s;"></div>
+    
+    <div class="flex items-center mb-3">
+      <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4 pulse-ring">
+        <span class="text-2xl">🎉</span>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold flex items-center gap-2">
+          Ouverture du Blog !!
+          <span class="balloon text-2xl">🎈</span>
+        </h3>
+        <p class="opacity-90 text-sm">Nouvelle fonctionnalité disponible</p>
+      </div>
+    </div>
+    <p class="text-white opacity-95 leading-relaxed">
+      🎆 Feu d'artifice ! Ballon qui vole ! C'est la fête !! 🎆<br>
+      Notre nouveau blog est maintenant ouvert et prêt à vous accueillir avec des articles passionnants !
     </p>
-    <div class="mt-6">
+    <div class="mt-4 flex items-center">
+      <span class="sparkle">✨</span>
+      <span class="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 text-white rounded-full text-sm font-medium ml-2">
+        <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-ring"></span>
+        Nouvellement ouvert
+      </span>
+      <span class="sparkle ml-2">✨</span>
+    </div>
+  </div>
+
+  <!-- Notification de fermeture du wiki -->
+  <div class="notification-card bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl p-6 mb-6 text-white relative">
+    <div class="flex items-center mb-3">
+      <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+        <span class="text-2xl">🚧</span>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold flex items-center gap-2">
+          Wiki en Rénovation
+          <span class="crane text-xl">🏗️</span>
+        </h3>
+        <p class="opacity-90 text-sm">Maintenance en cours</p>
+      </div>
+    </div>
+    
+    <div class="work-banner mb-3"></div>
+    
+    <p class="text-white opacity-95 leading-relaxed">
+      Le wiki vient de fermer pour rénovation.<br>
+      Merci de votre patience pendant les travaux !
+    </p>
+    
+    <div class="work-banner mt-3 mb-4"></div>
+    
+    <div class="flex items-center">
+      <span class="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 text-white rounded-full text-sm font-medium">
+        <span class="w-2 h-2 bg-orange-400 rounded-full mr-2 pulse-ring"></span>
+        Travaux en cours
+      </span>
+    </div>
+  </div>
+
+  <!-- Message d'absence d'autres mises à jour -->
+  <div class="text-center py-8">
+    <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+      <span class="text-gray-400 text-3xl">📋</span>
+    </div>
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">Autres mises à jour système</h3>
+    <p class="text-gray-500 max-w-md mx-auto leading-relaxed text-sm">
+      Le système fonctionne de manière stable et toutes les autres fonctionnalités sont opérationnelles.
+    </p>
+    <div class="mt-4">
       <span class="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
         <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
         Système stable
@@ -90,6 +306,40 @@
   </div>
 </section>
 
+<script>
+// Ajouter plus de confettis dynamiquement pour le blog
+function addExtraConfetti() {
+    const blogNotif = document.querySelector('.notification-card');
+    const colors = ['bg-yellow-300', 'bg-blue-300', 'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-pink-300'];
+    
+    for(let i = 0; i < 10; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = `confetti ${colors[Math.floor(Math.random() * colors.length)]}`;
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.borderRadius = '50%';
+        blogNotif.appendChild(confetti);
+        
+        // Supprimer après l'animation
+        setTimeout(() => {
+            if (confetti.parentNode) {
+                confetti.remove();
+            }
+        }, 4000);
+    }
+}
+
+// Lancer les confettis supplémentaires périodiquement
+setInterval(addExtraConfetti, 6000);
+
+// Lancer au chargement
+window.addEventListener('load', () => {
+    setTimeout(addExtraConfetti, 1000);
+});
+</script>
+
+</body>
+</html>
 <style>
 .glass-effect {
   background: rgba(255, 255, 255, 0.25);
@@ -217,11 +467,11 @@
 
         <!-- Mise à jour du blogue -->
         <div class="feature-card bg-gradient-to-br from-pink-50 to-yellow-100 border border-pink-200 card-hover">
-          <div class="feature-icon">📝</div>
-          <h3 class="font-semibold text-gray-800 mb-2">Mise à jour du blogue</h3>
-          <p class="text-gray-600 text-sm mb-4">Améliorations à venir sur la section blogue et nouveaux articles à découvrir prochainement !</p>
+          <div class="feature-icon">📚</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Mise à jour du Wiki</h3>
+          <p class="text-gray-600 text-sm mb-4">Améliorations à venir sur la section wiki une refonte totale pour une meilleur approche</p>
           <div class="flex flex-wrap gap-2 mb-4">
-            <span class="tag tag-coming">Nouveaux articles</span>
+            <span class="tag tag-coming"> nouveau wiki </span>
             <span class="tag tag-plan">Interface améliorée</span>
           </div>
           <span class="tag tag-coming">À venir</span>
