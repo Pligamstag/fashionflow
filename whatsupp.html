@@ -60,17 +60,13 @@
 
   <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
     
-<!-- Historique des Mises à Jour -->
-<section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
-  <div class="flex items-center mb-8">
-    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-      <span class="text-white text-xl">🛠️</span>
-    </div>
-    <div>
-      <h2 class="text-2xl font-bold text-gray-800">Historique des mises à jour</h2>
-      <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
-    </div>
-  </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des mises à jour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .glass-effect {
             background: rgba(255, 255, 255, 0.25);
@@ -196,6 +192,7 @@
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-100 p-8">
 
+<!-- Historique des Mises à Jour -->
 <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover max-w-4xl mx-auto">
   <div class="flex items-center mb-8">
     <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
@@ -279,6 +276,58 @@
       </span>
     </div>
   </div>
+
+  <!-- Message pour autres mises à jour -->
+  <div class="text-center py-8">
+    <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+      <span class="text-gray-400 text-3xl">📋</span>
+    </div>
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">Autres mises à jour système</h3>
+    <p class="text-gray-500 max-w-md mx-auto leading-relaxed text-sm">
+      Le système fonctionne de manière stable et toutes les autres fonctionnalités sont opérationnelles.
+    </p>
+    <div class="mt-4">
+      <span class="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+        Système stable
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+// Ajouter plus de confettis dynamiquement pour le blog
+function addExtraConfetti() {
+    const blogNotif = document.querySelector('.notification-card');
+    if (!blogNotif) return;
+    
+    const colors = ['bg-yellow-300', 'bg-blue-300', 'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-pink-300'];
+    
+    for(let i = 0; i < 8; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = `confetti ${colors[Math.floor(Math.random() * colors.length)]}`;
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.borderRadius = '50%';
+        blogNotif.appendChild(confetti);
+        
+        // Supprimer après l'animation
+        setTimeout(() => {
+            if (confetti.parentNode) {
+                confetti.remove();
+            }
+        }, 4000);
+    }
+}
+
+// Lancer les confettis supplémentaires périodiquement
+setInterval(addExtraConfetti, 8000);
+
+// Lancer au chargement
+window.addEventListener('load', () => {
+    setTimeout(addExtraConfetti, 1000);
+});
+</script>
 
 <script>
 // Ajouter plus de confettis dynamiquement pour le blog
