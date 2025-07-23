@@ -779,11 +779,6 @@
     </header>
 
     <main class="main-content">
-        <!-- Navigation Buttons -->
-        <div class="nav-buttons" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;">
-            <button class="nav-button active" onclick="showSection('updates')" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius); cursor: pointer; font-weight: 600;">Dernières mises à jour</button>
-            <button class="nav-button" onclick="showSection('coming-soon')" style="padding: 12px 24px; background: var(--gray-200); color: var(--gray-700); border: none; border-radius: var(--radius); cursor: pointer; font-weight: 600;">Prochainement</button>
-        </div>
         <section class="whatsapp-banner">
             <div class="whatsapp-content">
                 <div class="whatsapp-header">
@@ -818,40 +813,12 @@
             </div>
         </section>
 
-        <!-- WhatsApp Banner -->
-        <section class="whatsapp-banner">
-            <div class="whatsapp-content">
-                <div class="whatsapp-header">
-                    <i data-lucide="message-circle" width="32" height="32" color="white"></i>
-                    <h2>Rejoignez notre communauté WhatsApp</h2>
-                </div>
-                <p class="whatsapp-subtitle">
-                    Soyez les premiers informés des nouvelles fonctionnalités et participez aux discussions avec notre équipe et d'autres utilisateurs.
-                </p>
-                <div class="features-list">
-                    <div class="feature-item">
-                        <i data-lucide="check-circle" width="20" height="20" color="white"></i>
-                        <span>Annonces en avant-première</span>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="check-circle" width="20" height="20" color="white"></i>
-                        <span>Support direct</span>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="check-circle" width="20" height="20" color="white"></i>
-                        <span>Sondages et feedback</span>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="check-circle" width="20" height="20" color="white"></i>
-                        <span>Communauté active</span>
-                    </div>
-                </div>
-                <button class="join-button" onclick="window.open('https://wa.me/tonnuméro', '_blank')">
-                    <i data-lucide="message-square" width="20" height="20"></i>
-                    Rejoindre le groupe
-                </button>
-            </div>
-        </section>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons" style="display: flex; justify-content: center; gap: 20px; margin: 40px 0;">
+            <button class="nav-button active" onclick="showSection('updates')" style="padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius); cursor: pointer; font-weight: 600;">Nouveautés récentes</button>
+            <button class="nav-button" onclick="showSection('coming-soon')" style="padding: 12px 24px; background: var(--gray-200); color: var(--gray-700); border: none; border-radius: var(--radius); cursor: pointer; font-weight: 600;">Prochainement</button>
+        </div>
 
         <!-- Latest Updates -->
         <section class="updates-section">
@@ -1096,9 +1063,9 @@
             document.querySelector(`.nav-button[onclick="showSection('${sectionId}')"]`).style.background = 'var(--primary)';
             document.querySelector(`.nav-button[onclick="showSection('${sectionId}')"]`).style.color = 'white';
             
-            document.querySelectorAll('.main-content > section').forEach(section => {
-                section.style.display = 'none';
-            });
+            // Hide only the sections we want to toggle
+            document.querySelector('.updates-section').style.display = 'none';
+            document.querySelector('.coming-soon').style.display = 'none';
             
             if (sectionId === 'updates') {
                 document.querySelector('.updates-section').style.display = 'block';
