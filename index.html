@@ -1,1121 +1,623 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FashionFlow</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&display=swap');
-    
-    *, *::before, *::after { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
-    
-    :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
-      --text-light: #ffffff;
-      --text-dark: #1a1a2e;
-      --shadow: 0 20px 40px rgba(0,0,0,0.1);
-      --glow: 0 0 20px rgba(102, 126, 234, 0.3);
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background: var(--dark-gradient);
-      color: var(--text-light);
-      overflow: hidden;
-    }
-
-    /* Particules flottantes */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: radial-gradient(circle, #667eea, transparent);
-      border-radius: 50%;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-      50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
-    }
-
-    /* Container principal */
-    .main-container {
-      height: 100vh;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .main-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Sections */
-    .section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      scroll-snap-align: start;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      padding: 1rem;
-    }
-
-    .section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0.1;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 70%);
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.1; }
-      50% { transform: scale(1.1); opacity: 0.2; }
-    }
-
-    /* Styles spécifiques par section */
-    .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 8s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .wiki-section {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    }
-
-    .dev-section {
-      background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
-    }
-
-    .support-section {
-      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
-    }
-
-    .news-section {
-      background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-    }
-
-    .contact-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 8s ease infinite;
-    }
-
-    /* Contenu des sections */
-    .section-content {
-      text-align: center;
-      max-width: 800px;
-      padding: 1rem;
-      z-index: 2;
-      position: relative;
-      width: 100%;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
-      text-shadow: 0 0 30px rgba(255,255,255,0.3);
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    .section-subtitle {
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      font-weight: 400;
-      margin-bottom: 1rem;
-      opacity: 0.9;
-      line-height: 1.4;
-    }
-
-    /* Icônes animées - RÉDUITES */
-    .icon-container {
-      width: 80px;
-      height: 80px;
-      margin: 1rem auto;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .icon-container:hover {
-      transform: scale(1.1);
-    }
-
-    .fashion-icon {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      animation: rotate 10s linear infinite;
-      box-shadow: var(--glow);
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .book-icon {
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      60% { transform: translateY(-10px); }
-    }
-
-    .rocket-icon {
-      background: linear-gradient(45deg, #4facfe, #00f2fe);
-      animation: rocket 3s ease-in-out infinite;
-    }
-
-    @keyframes rocket {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-30px) rotate(10deg); }
-    }
-
-    .money-icon {
-      background: linear-gradient(45deg, #f7971e, #ffd200);
-      animation: money 2.5s ease-in-out infinite;
-    }
-
-    @keyframes money {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(5deg); }
-    }
-
-    .news-icon {
-      background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-      animation: wave 3s ease-in-out infinite;
-    }
-
-    @keyframes wave {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(10px); }
-    }
-
-    .contact-icon {
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-      animation: contactPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes contactPulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
-      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
-    }
-
-    /* Boutons modernes */
-    .modern-button {
-      display: inline-block;
-      padding: 0.8rem 2rem;
-      margin: 0.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
-      border-radius: 50px;
-      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .modern-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .modern-button:hover::before {
-      left: 100%;
-    }
-
-    .modern-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    /* Contact buttons layout - TOTALEMENT REFAIT */
-    .contact-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .contact-buttons .modern-button {
-      margin: 0;
-      width: 100%;
-      padding: 0.6rem 1rem;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 45px;
-      white-space: nowrap;
-    }
-
-    /* Dernière ligne avec un seul bouton centré */
-    .contact-buttons .modern-button:last-child {
-      grid-column: 1 / -1;
-      max-width: 250px;
-      justify-self: center;
-    }
-
-    /* Indicateur de scroll - RÉDUIT */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: scrollHint 2s ease-in-out infinite;
-      font-size: 0.8rem;
-    }
-
-    @keyframes scrollHint {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
-      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
-    }
-
-    /* Popup moderne */
-    .popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(10px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-
-    .popup-content {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      padding: 2rem;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      transform: scale(0.8);
-      transition: transform 0.3s ease;
-    }
-
-    .popup-overlay.show .popup-content {
-      transform: scale(1);
-    }
-
-    /* Styles pour le popup email */
-    .email-popup-content {
-      background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-    }
-
-    .admin-input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 25px;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      font-size: 16px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
-      box-sizing: border-box;
-    }
-
-    .admin-input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-
-    .admin-input:focus {
-      outline: none;
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
-    }
-
-    /* Responsive - AMÉLIORÉ */
-    @media (max-width: 768px) {
-      .section {
-        padding: 0.5rem;
-      }
-      
-      .section-content {
-        padding: 0.5rem;
-        max-height: 95vh;
-      }
-      
-      .icon-container {
-        width: 60px;
-        height: 60px;
-        margin: 0.5rem auto;
-      }
-      
-      .fashion-icon {
-        font-size: 2rem;
-      }
-
-      .contact-buttons {
-        grid-template-columns: 1fr;
-        gap: 0.4rem;
-        margin-top: 0.8rem;
-        max-width: 280px;
-      }
-
-      .contact-buttons .modern-button {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
-        min-height: 40px;
-      }
-
-      .contact-buttons .modern-button:last-child {
-        grid-column: 1;
-        max-width: 100%;
-      }
-
-      .section-subtitle {
-        margin-bottom: 0.8rem;
-      }
-
-      .popup-content {
-        margin: 1rem;
-        max-width: calc(100% - 2rem);
-        padding: 1.5rem;
-      }
-
-      .scroll-indicator {
-        bottom: 0.5rem;
-        font-size: 0.7rem;
-      }
-
-      .scroll-indicator div:first-child {
-        font-size: 1.2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .contact-buttons .modern-button {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.8rem;
-        min-height: 35px;
-      }
-
-      .section-content {
-        padding: 0.3rem;
-      }
-
-      .popup-content {
-        padding: 1rem;
-      }
-
-      .icon-container {
-        width: 50px;
-        height: 50px;
-      }
-
-      .fashion-icon {
-        font-size: 1.5rem;
-      }
-    }
-
-    /* Style spécial pour la section contact */
-    .contact-section .section-content {
-      justify-content: space-evenly;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-    }
-
-    @media (max-width: 768px) {
-      .contact-section .section-content {
-        justify-content: center;
-        gap: 0.5rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionFlow - Révolutionnez votre style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: #f8f9fa;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .about-image {
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            background: #f8f9fa;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <!-- Particules flottantes -->
-  <div class="particles" id="particles"></div>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">FashionFlow</div>
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#apropos">À propos</a></li>
+                <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+                <li><a href="#galerie">Galerie</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Container principal -->
-  <div class="main-container" id="mainContainer">
-    
-   <!-- Section Hero -->
-    <section class="section hero-section">
-      <div class="section-content">
-        <h1 class="section-title">FashionFlow</h1>
-        <p class="section-subtitle">Swipe ton style ✨ L'appli qui rend ton shopping aussi fun que Tinder et aussi intelligent que TikTok.</p>
-        <div class="icon-container">
-          <div class="fashion-icon">👗</div>
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <div class="hero-content">
+            <h1>FashionFlow</h1>
+            <p>Révolutionnez votre expérience mode</p>
+            <a href="#apropos" class="cta-button">Découvrir le projet</a>
         </div>
-        <div class="scroll-indicator">
-          <div style="font-size: 2rem;">⬇️</div>
-          <div style="font-size: 0.9rem; margin-top: 0.5rem;">Swipe vers le haut</div>
-        </div>
-      </div>
     </section>
 
-    <!-- Section Wiki -->
-    <section class="section wiki-section">
-      <div class="section-content">
-        <h2 class="section-title">WikiFashion</h2>
-        <p class="section-subtitle">Qui sommes nous ?</p>
-        <div class="icon-container">
-          <div class="fashion-icon book-icon">📚</div>
+    <!-- About Section -->
+    <section id="apropos" class="about">
+        <div class="container">
+            <h2 class="section-title fade-in">À propos de FashionFlow</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>FashionFlow est un projet innovant qui transforme la façon dont nous interagissons avec la mode. Notre vision est de créer une expérience fluide et personnalisée pour chaque utilisateur.</p>
+                    <p>En combinant technologie de pointe et créativité, nous développons une solution qui répond aux besoins modernes de l'industrie de la mode.</p>
+                    <p>Rejoignez-nous dans cette révolution et découvrez comment FashionFlow peut transformer votre rapport à la mode.</p>
+                </div>
+                <div class="about-image fade-in">
+                    <div>
+                        <p>🎨 Votre image/vidéo</p>
+                        <p>sera ajoutée ici</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button class="modern-button" onclick="goToWiki()">Le Wiki !!</button>
-      </div>
     </section>
 
-    <!-- Section Blog -->
-    <section class="section dev-section">
-    <!-- Section Blog Stylée -->
-<section class="section dev-section blog-section-stylized">
-  <!-- Particules et effets -->
-  <div class="blog-particle blog-particle-1"></div>
-  <div class="blog-particle blog-particle-2"></div>
-  <div class="blog-particle blog-particle-3"></div>
-  <div class="blog-particle blog-particle-4"></div>
-  <div class="blog-particle blog-particle-5"></div>
-  
-  <!-- Orbes lumineux -->
-  <div class="blog-orb blog-orb-1"></div>
-  <div class="blog-orb blog-orb-2"></div>
-  <div class="blog-orb blog-orb-3"></div>
-  
-  <!-- Étoiles -->
-  <div class="blog-star blog-star-1">✦</div>
-  <div class="blog-star blog-star-2">✧</div>
-  <div class="blog-star blog-star-3">✦</div>
-  <div class="blog-star blog-star-4">✧</div>
-  <div class="blog-star blog-star-5">✦</div>
-  
-  <div class="section-content">
-    <h2 class="section-title blog-title-stylized">Blog</h2>
-    <p class="section-subtitle blog-subtitle-stylized">Avez-vous des idées au sujet de FashionFlow ??</p>
-    <div class="icon-container blog-icon-container">
-      <div class="fashion-icon rocket-icon blog-rocket-stylized">🚀</div>
-    </div>
-    <button class="modern-button blog-button-stylized" onclick="goToBlogue()">Déposez-les ici</button>
-  </div>
-</section>
-
-<style>
-/* CSS spécifique pour la section blog stylée */
-.blog-section-stylized {
-  position: relative;
-  overflow: hidden;
-}
-
-.blog-section-stylized::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255, 118, 117, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(17, 153, 142, 0.2) 0%, transparent 50%);
-  animation: blogBgShift 10s ease-in-out infinite;
-  z-index: 1;
-}
-
-@keyframes blogBgShift {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-  50% { transform: scale(1.05) rotate(1deg); opacity: 0.8; }
-}
-
-.blog-title-stylized {
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: blogGradientShift 3s ease-in-out infinite, blogTitleFloat 6s ease-in-out infinite;
-  text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
-  font-weight: 800;
-  position: relative;
-  z-index: 10;
-}
-
-.blog-subtitle-stylized {
-  animation: blogSubtitleFade 4s ease-in-out infinite;
-  font-weight: 300;
-  position: relative;
-  z-index: 10;
-}
-
-.blog-icon-container {
-  position: relative;
-  z-index: 15;
-  perspective: 1000px;
-}
-
-.blog-rocket-stylized {
-  animation: blogRocketLaunch 4s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 15;
-}
-
-.blog-rocket-stylized:hover {
-  transform: scale(1.2) rotateY(15deg);
-  filter: drop-shadow(0 0 40px rgba(255, 255, 255, 1));
-}
-
-.blog-button-stylized {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  background-size: 200% 200%;
-  color: white;
-  border: none;
-  padding: 18px 45px;
-  font-size: 1.3rem;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 
-    0 10px 30px rgba(102, 126, 234, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  animation: blogButtonGlow 3s ease-in-out infinite;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  z-index: 10;
-}
-
-.blog-button-stylized::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s;
-}
-
-.blog-button-stylized:hover::before {
-  left: 100%;
-}
-
-.blog-button-stylized:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 
-    0 20px 40px rgba(102, 126, 234, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  background-position: 100% 50%;
-}
-
-.blog-button-stylized:active {
-  transform: translateY(-2px) scale(1.02);
-}
-
-/* Particules spécifiques au blog */
-.blog-particle {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.blog-particle-1 {
-  width: 3px;
-  height: 3px;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  top: 20%;
-  left: 10%;
-  animation: blogFloat1 8s ease-in-out infinite;
-}
-
-.blog-particle-2 {
-  width: 2px;
-  height: 2px;
-  background: linear-gradient(45deg, #45b7d1, #f9ca24);
-  top: 60%;
-  right: 15%;
-  animation: blogFloat2 6s ease-in-out infinite;
-}
-
-.blog-particle-3 {
-  width: 4px;
-  height: 4px;
-  background: linear-gradient(45deg, #a55eea, #26de81);
-  bottom: 30%;
-  left: 20%;
-  animation: blogFloat3 10s ease-in-out infinite;
-}
-
-.blog-particle-4 {
-  width: 2px;
-  height: 2px;
-  background: linear-gradient(45deg, #fd79a8, #fdcb6e);
-  top: 40%;
-  right: 30%;
-  animation: blogFloat4 7s ease-in-out infinite;
-}
-
-.blog-particle-5 {
-  width: 3px;
-  height: 3px;
-  background: linear-gradient(45deg, #00b894, #0984e3);
-  bottom: 20%;
-  right: 10%;
-  animation: blogFloat5 9s ease-in-out infinite;
-}
-
-/* Orbes lumineux pour le blog */
-.blog-orb {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 3;
-  filter: blur(1px);
-}
-
-.blog-orb-1 {
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(255, 107, 107, 0.2) 0%, transparent 70%);
-  top: 10%;
-  left: 5%;
-  animation: blogOrbMove1 12s ease-in-out infinite;
-}
-
-.blog-orb-2 {
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(78, 205, 196, 0.2) 0%, transparent 70%);
-  bottom: 15%;
-  right: 5%;
-  animation: blogOrbMove2 10s ease-in-out infinite;
-}
-
-.blog-orb-3 {
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, rgba(69, 183, 209, 0.2) 0%, transparent 70%);
-  top: 50%;
-  left: 80%;
-  animation: blogOrbMove3 8s ease-in-out infinite;
-}
-
-/* Étoiles pour le blog */
-.blog-star {
-  position: absolute;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
-  pointer-events: none;
-  z-index: 8;
-}
-
-.blog-star-1 {
-  top: 15%;
-  left: 25%;
-  animation: blogStarTwinkle1 3s ease-in-out infinite;
-}
-
-.blog-star-2 {
-  top: 25%;
-  right: 20%;
-  animation: blogStarTwinkle2 4s ease-in-out infinite;
-}
-
-.blog-star-3 {
-  bottom: 35%;
-  left: 15%;
-  animation: blogStarTwinkle3 2.5s ease-in-out infinite;
-}
-
-.blog-star-4 {
-  bottom: 20%;
-  right: 25%;
-  animation: blogStarTwinkle4 3.5s ease-in-out infinite;
-}
-
-.blog-star-5 {
-  top: 40%;
-  left: 70%;
-  animation: blogStarTwinkle5 2.8s ease-in-out infinite;
-}
-
-/* Animations spécifiques au blog */
-@keyframes blogGradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes blogTitleFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes blogSubtitleFade {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-
-@keyframes blogRocketLaunch {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-20px) rotate(5deg); }
-  50% { transform: translateY(-10px) rotate(-5deg); }
-  75% { transform: translateY(-25px) rotate(3deg); }
-}
-
-@keyframes blogButtonGlow {
-  0%, 100% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-  50% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-}
-
-@keyframes blogFloat1 {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(30px, -30px) rotate(120deg); }
-  66% { transform: translate(-20px, 20px) rotate(240deg); }
-}
-
-@keyframes blogFloat2 {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(-40px, -40px) rotate(180deg); }
-}
-
-@keyframes blogFloat3 {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(20px, -50px) rotate(90deg); }
-  50% { transform: translate(-30px, -20px) rotate(180deg); }
-  75% { transform: translate(40px, 30px) rotate(270deg); }
-}
-
-@keyframes blogFloat4 {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(25px, 35px) rotate(180deg); }
-}
-
-@keyframes blogFloat5 {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(-35px, -25px) rotate(120deg); }
-  66% { transform: translate(25px, -40px) rotate(240deg); }
-}
-
-@keyframes blogOrbMove1 {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(50px, 100px); }
-  66% { transform: translate(-30px, 50px); }
-}
-
-@keyframes blogOrbMove2 {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-80px, -60px); }
-}
-
-@keyframes blogOrbMove3 {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-40px, 30px); }
-  50% { transform: translate(20px, -50px); }
-  75% { transform: translate(-60px, -20px); }
-}
-
-@keyframes blogStarTwinkle1 {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-@keyframes blogStarTwinkle2 {
-  0%, 100% { opacity: 0.5; transform: scale(1) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
-}
-
-@keyframes blogStarTwinkle3 {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-
-@keyframes blogStarTwinkle4 {
-  0%, 100% { opacity: 0.6; transform: scale(1.1) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.4) rotate(360deg); }
-}
-
-@keyframes blogStarTwinkle5 {
-  0%, 100% { opacity: 0.2; transform: scale(0.7); }
-  50% { opacity: 0.9; transform: scale(1.5); }
-}
-
-/* Animations d'explosion pour le blog */
-@keyframes blogExplode {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--vx), var(--vy)) scale(0);
-    opacity: 0;
-  }
-}
-
-@keyframes blogShockwave {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(20);
-    opacity: 0;
-  }
-}
-
-@keyframes blogShake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-  20%, 40%, 60%, 80% { transform: translateX(2px); }
-}
-
-/* Responsive pour le blog */
-@media (max-width: 768px) {
-  .blog-rocket-stylized {
-    font-size: 3.5rem;
-  }
-  
-  .blog-button-stylized {
-    padding: 15px 35px;
-    font-size: 1.1rem;
-  }
-  
-  .blog-orb-1, .blog-orb-2, .blog-orb-3 {
-    width: 80px;
-    height: 80px;
-  }
-}
-</style>
-
-<script>
-// JavaScript spécifique pour la section blog
-function createBlogParticleExplosion(x, y) {
-  const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#a55eea'];
-  
-  for (let i = 0; i < 30; i++) {
-    const particle = document.createElement('div');
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    
-    particle.style.position = 'fixed';
-    particle.style.left = x + 'px';
-    particle.style.top = y + 'px';
-    particle.style.width = '4px';
-    particle.style.height = '4px';
-    particle.style.backgroundColor = color;
-    particle.style.borderRadius = '50%';
-    particle.style.pointerEvents = 'none';
-    particle.style.zIndex = '1000';
-    particle.style.boxShadow = `0 0 10px ${color}`;
-    
-    const angle = (Math.PI * 2 * i) / 30;
-    const velocity = Math.random() * 200 + 100;
-    const vx = Math.cos(angle) * velocity;
-    const vy = Math.sin(angle) * velocity;
-    
-    particle.style.animation = `blogExplode 1.5s ease-out forwards`;
-    particle.style.setProperty('--vx', vx + 'px');
-    particle.style.setProperty('--vy', vy + 'px');
-    
-    document.body.appendChild(particle);
-    
-    setTimeout(() => particle.remove(), 1500);
-  }
-}
-
-function createBlogShockwave(x, y) {
-  const shockwave = document.createElement('div');
-  shockwave.style.position = 'fixed';
-  shockwave.style.left = (x - 10) + 'px';
-  shockwave.style.top = (y - 10) + 'px';
-  shockwave.style.width = '20px';
-  shockwave.style.height = '20px';
-  shockwave.style.border = '2px solid rgba(255, 255, 255, 0.8)';
-  shockwave.style.borderRadius = '50%';
-  shockwave.style.pointerEvents = 'none';
-  shockwave.style.zIndex = '999';
-  shockwave.style.animation = 'blogShockwave 0.8s ease-out forwards';
-  
-  document.body.appendChild(shockwave);
-  setTimeout(() => shockwave.remove(), 800);
-}
-
-function goToBlogue() {
-  const button = document.querySelector('.blog-button-stylized');
-  const rect = button.getBoundingClientRect();
-  const x = rect.left + rect.width / 2;
-  const y = rect.top + rect.height / 2;
-  
-  createBlogParticleExplosion(x, y);
-  createBlogShockwave(x, y);
-  
-  // Effet de tremblement léger
-  const section = document.querySelector('.blog-section-stylized');
-  section.style.animation = 'blogShake 0.5s ease-in-out';
-  setTimeout(() => {
-    section.style.animation = '';
-  }, 500);
-  
-  console.log("🚀 Redirection vers le blog avec style !");
-}
-
-// Interaction avec la fusée du blog
-document.addEventListener('DOMContentLoaded', function() {
-  const rocket = document.querySelector('.blog-rocket-stylized');
-  if (rocket) {
-    rocket.addEventListener('click', function() {
-      const rect = this.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-      
-      createBlogParticleExplosion(x, y);
-      this.style.animation = 'none';
-      setTimeout(() => {
-        this.style.animation = 'blogRocketLaunch 4s ease-in-out infinite';
-      }, 100);
-    });
-  }
-});
-</script>
-    </section>
-
-    <!-- Section Soutiens -->
-    <section class="section support-section">
-      <div class="section-content">
-        <h2 class="section-title">Soutiens</h2>
-        <p class="section-subtitle">Un peu d'argent suffit pour nous faire évoluer !</p>
-        <div class="icon-container">
-          <div class="fashion-icon money-icon">💰</div>
+    <!-- Features Section -->
+    <section id="fonctionnalites">
+        <div class="container">
+            <h2 class="section-title fade-in">Fonctionnalités Clés</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Innovation</h3>
+                    <p>Technologie de pointe pour une expérience utilisateur exceptionnelle et des fonctionnalités révolutionnaires.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Personnalisation</h3>
+                    <p>Chaque expérience est unique et adaptée aux préférences individuelles de nos utilisateurs.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p>Rapidité et efficacité au cœur de notre solution pour une utilisation fluide et intuitive.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Qualité</h3>
+                    <p>Excellence dans chaque détail, de la conception à l'implémentation finale du projet.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Sécurité</h3>
+                    <p>Protection des données et confidentialité garanties avec les plus hauts standards de sécurité.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📱</div>
+                    <h3>Accessibilité</h3>
+                    <p>Compatible sur tous les appareils pour une expérience uniforme partout et à tout moment.</p>
+                </div>
+            </div>
         </div>
-        <button class="modern-button" onclick="donate()">Faire un don PayPal !</button>
-      </div>
     </section>
 
-    <!-- Section What's Up -->
-    <section class="section news-section">
-      <div class="section-content">
-        <div class="icon-container">
-          <div class="fashion-icon news-icon">📰</div>
+    <!-- Gallery Section -->
+    <section id="galerie" class="gallery">
+        <div class="container">
+            <h2 class="section-title fade-in">Galerie du Projet</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in">
+                    <span>📸 Image 1</span>
+                </div>
+                <div class="gallery-item fade-in">
+                    <span>🎥 Vidéo 1</span>
+                </div>
+                <div class="gallery-item fade-in">
+                    <span>📸 Image 2</span>
+                </div>
+                <div class="gallery-item fade-in">
+                    <span>🎥 Vidéo 2</span>
+                </div>
+                <div class="gallery-item fade-in">
+                    <span>📸 Image 3</span>
+                </div>
+                <div class="gallery-item fade-in">
+                    <span>🎥 Vidéo 3</span>
+                </div>
+            </div>
         </div>
-        <h2 class="section-title">What's Up ?</h2>
-        <p class="section-subtitle">Restez informés des dernières nouveautés et événements à venir.</p>
-        <button class="modern-button" onclick="goToNews()">Voir les news</button>
-      </div>
     </section>
 
-   <!-- Section Nous contacter -->
-<section class="section contact-section">
-  <div class="section-content">
-    <div class="icon-container">
-      <div class="fashion-icon contact-icon">📧</div>
-    </div>
-    <h2 class="section-title">Nous contacter</h2>
-    <p class="section-subtitle">Des questions ? Une suggestion ? Contactez-nous !</p>
-    <div class="contact-buttons">
-      <button class="modern-button" onclick="contactEmail()">📧 Email</button>
-      <button class="modern-button" onclick="showTempMessage()">📸 Instagram</button>
-      <button class="modern-button" onclick="showTempMessage()">🐦 Twitter</button>
-      <button class="modern-button" onclick="showTempMessage()">📘 Facebook</button>
-      <button class="modern-button" onclick="contactFAQ()">❓ FAQ</button>
-    </div>
-  </div>
-</section>
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Contactez-nous</h2>
+            <div class="contact-content">
+                <div class="contact-info fade-in">
+                    <h3>Informations de Contact</h3>
+                    <p><strong>Email:</strong> contact@fashionflow.com</p>
+                    <p><strong>Téléphone:</strong> +33 (0)1 23 45 67 89</p>
+                    <p><strong>Adresse:</strong> 123 Rue de la Mode, 75001 Paris, France</p>
+                    
+                    <h3>Suivez-nous</h3>
+                    <p>Restez connecté pour les dernières actualités du projet FashionFlow.</p>
+                </div>
+                <div class="contact-form fade-in">
+                    <h3>Envoyez-nous un message</h3>
+                    <div class="form-group">
+                        <label for="name">Nom</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" onclick="handleSubmit()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 FashionFlow. Tous droits réservés.</p>
+        </div>
+    </footer>
 
-  <!-- Popup générique -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-content">
-      <h3 style="margin-bottom: 1rem;">Information</h3>
-      <p>Désolé, fonctionnalité désactivée temporairement.</p>
-      <button class="modern-button" onclick="closePopup()" style="margin-top: 1rem;">Fermer</button>
-    </div>
-  </div>
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
-  <!-- Popup Email avec authentification -->
-  <div class="popup-overlay" id="emailPopupOverlay">
-    <div class="popup-content email-popup-content">
-      <h3 style="margin-bottom: 1rem;">📧 Fonction Email</h3>
-      <p style="margin-bottom: 1rem;">Fonctionnalité désactivée pour bug</p>
-      <p style="margin-bottom: 1rem; font-size: 0.9rem;">Si vous êtes admin, entrez le mot de passe :</p>
-      <input type="password" class="admin-input" id="adminPassword" placeholder="Mot de passe admin" />
-      <div style="margin-top: 1rem;">
-        <button class="modern-button" onclick="checkAdminPassword()" style="margin: 0.5rem;">Vérifier</button>
-        <button class="modern-button" onclick="closeEmailPopup()" style="margin: 0.5rem;">Fermer</button>
-      </div>
-    </div>
-  </div>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Form submission handler
+        function handleSubmit() {
+            alert('Merci pour votre message ! Nous vous répondrons bientôt.');
+        }
+
+        // Gallery item click handler
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
+                alert('Fonctionnalité à venir : Aperçu des médias');
+            });
+        });
+    </script>
+</body>
+</html>
   <script>
     // Génération des particules
     function createParticles() {
