@@ -4,247 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maintenance en cours</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .maintenance-container, .admin-container {
-            text-align: center;
-            color: white;
-            z-index: 2;
-            position: relative;
-            max-width: 600px;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .admin-container {
-            max-width: 400px;
-            padding: 30px;
-        }
-
-        .gear-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-            animation: rotate 3s linear infinite;
-            display: inline-block;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
-        }
-
-        .lock-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
-        }
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            font-weight: 300;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-
-        .admin-title {
-            font-size: 2em;
-            margin-bottom: 20px;
-            font-weight: 300;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .subtitle {
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-
-        .admin-subtitle {
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
-            background-size: 200% 100%;
-            border-radius: 10px;
-            animation: progressMove 2s ease-in-out infinite, gradientMove 3s ease-in-out infinite;
-            width: 0;
-        }
-
-        .password-form {
-            margin: 30px 0;
-        }
-
-        .password-input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-align: center;
-            margin-bottom: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .password-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .password-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        .submit-btn {
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #333;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .error-message {
-            color: #ff6b6b;
-            margin-top: 15px;
-            font-size: 1em;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        .success-message {
-            color: #4ecdc4;
-            margin-top: 15px;
-            font-size: 1em;
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        .admin-link {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.9em;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .admin-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .floating-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) { width: 20px; height: 20px; left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { width: 15px; height: 15px; left: 20%; animation-delay: 1s; }
-        .particle:nth-child(3) { width: 25px; height: 25px; left: 70%; animation-delay: 2s; }
-        .particle:nth-child(4) { width: 18px; height: 18px; left: 80%; animation-delay: 3s; }
-        .particle:nth-child(5) { width: 22px; height: 22px; left: 50%; animation-delay: 4s; }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading-spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #ffd700;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
+        
         @keyframes pulse {
             from { transform: scale(1); }
             to { transform: scale(1.05); }
         }
-
+        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -255,98 +27,185 @@
                 transform: translateY(0);
             }
         }
-
+        
         @keyframes progressMove {
             0% { width: 0%; }
             50% { width: 70%; }
             100% { width: 100%; }
         }
-
+        
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
+        
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
             50% { transform: translateY(-100px) rotate(180deg); opacity: 0.8; }
         }
-
+        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
-
-        @media (max-width: 768px) {
-            .maintenance-container, .admin-container {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-            
-            h1, .admin-title {
-                font-size: 2.2em;
-            }
-            
-            .subtitle, .admin-subtitle {
-                font-size: 1.1em;
-            }
-            
-            .gear-icon {
-                font-size: 60px;
-            }
-
-            .admin-link {
-                position: relative;
-                margin-top: 20px;
-            }
+        
+        .gear-icon {
+            animation: rotate 3s linear infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+        
+        .progress-fill {
+            animation: progressMove 2s ease-in-out infinite, gradientMove 3s ease-in-out infinite;
+            width: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .vote-option:hover .vote-icon {
+            transform: scale(1.1);
+        }
+        
+        .vote-option.selected {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffd700;
+        }
+        
+        .vote-option.selected .vote-icon {
+            color: #ffd700;
         }
     </style>
 </head>
-<body>
-    <div class="floating-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+<body class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex justify-center items-center overflow-y-auto relative">
+    <!-- Particules flottantes -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="particle w-5 h-5 left-[10%]"></div>
+        <div class="particle w-4 h-4 left-[20%] animation-delay-1000"></div>
+        <div class="particle w-6 h-6 left-[70%] animation-delay-2000"></div>
+        <div class="particle w-5 h-5 left-[80%] animation-delay-3000"></div>
+        <div class="particle w-5 h-5 left-[50%] animation-delay-4000"></div>
     </div>
 
     <!-- Page de maintenance -->
-    <div id="maintenancePage" class="maintenance-container">
-        <div class="gear-icon">⚙️</div>
-        <h1>Maintenance en cours</h1>
-        <p class="subtitle">
-            Notre site est actuellement en maintenance pour vous offrir une meilleure expérience.
-            <br>Nous reviendrons très bientôt !
+    <div id="maintenancePage" class="text-center text-white z-10 relative max-w-2xl w-full mx-4 p-10 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
+        <i class="fas fa-cog gear-icon text-6xl mb-8"></i>
+        <h1 class="text-5xl font-light mb-6 text-shadow-md pulse-animation">Maintenance en cours</h1>
+        <p class="text-xl opacity-90 font-light mb-10 leading-relaxed">
+            Notre site est actuellement en maintenance pour une importante mise à jour.
+            <br>Nous travaillons sur des améliorations majeures qui seront déployées prochainement.
         </p>
         
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
+        <div id="eventSection" class="bg-white/10 p-8 rounded-xl border-2 border-yellow-400/50 mb-8 fade-in-up shadow-lg">
+            <h3 class="text-3xl font-bold mb-4 text-yellow-400 animate-pulse">Événements !</h3>
+            <p class="mb-6 text-lg">
+                <span class="text-yellow-300 font-bold">Une importante mise à jour</span> sera déployée entre le <span class="font-bold">1er et le 20 août</span> !
+                <br><br>Nous vous invitons à participer à notre <span class="underline">sondage exclusif disponible du 24 au 31 juillet</span> pour influencer les prochaines améliorations.
+            </p>
+            <a href="vote.html" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:translate-y-[-2px] hover:shadow-xl transition-all transform hover:scale-105 inline-block">
+                <i class="fas fa-vote-yea mr-3"></i>Voter maintenant !
+            </a>
         </div>
+        
+        <div id="nextVoteMessage" class="hidden bg-white/10 p-8 rounded-xl border-2 border-yellow-400/50 mb-8 fade-in-up shadow-lg">
+            <h3 class="text-3xl font-bold mb-4 text-yellow-400">Prochainement !</h3>
+            <p class="mb-6 text-lg">
+                Merci pour votre participation ! <br><br>
+                Une deuxième vague de vote arrivera avant septembre prochain !
+            </p>
+        </div>
+        
+        <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden my-8">
+            <div class="progress-fill h-full bg-gradient-to-r from-red-400 via-teal-400 to-blue-400 rounded-full"></div>
+        </div>
+    </div>
 
     <!-- Page de connexion admin -->
-    <div id="adminLogin" class="admin-container hidden">
-        <div class="lock-icon">🔐</div>
-        <h2 class="admin-title">Accès Administrateur</h2>
-        <p class="admin-subtitle">Entrez le mot de passe pour accéder au site</p>
+    <div id="adminLogin" class="hidden text-center text-white z-10 relative max-w-md w-full mx-4 p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
+        <i class="fas fa-lock text-5xl mb-6 filter drop-shadow-lg"></i>
+        <h2 class="text-3xl font-light mb-6 text-shadow-md">Accès Administrateur</h2>
+        <p class="text-lg opacity-90 font-light mb-8">Entrez le mot de passe pour accéder au site</p>
         
-        <div class="password-form">
-            <input type="password" id="passwordInput" class="password-input" placeholder="Mot de passe..." onkeypress="handleKeyPress(event)">
-            <button id="submitBtn" class="submit-btn" onclick="checkPassword()">Accéder</button>
-            <div id="errorMessage" class="error-message hidden">❌ Mot de passe incorrect</div>
-            <div id="successMessage" class="success-message hidden">✅ Accès autorisé, redirection...</div>
-            <div id="loadingSpinner" class="loading-spinner hidden"></div>
+        <div class="mb-6">
+            <input type="password" id="passwordInput" class="w-full px-5 py-4 text-lg border-none rounded-xl bg-white/20 text-white text-center placeholder-white/70 backdrop-blur-sm border border-white/30 focus:outline-none focus:bg-white/30 focus:border-yellow-400 focus:ring-0 transition-all" placeholder="Mot de passe..." onkeypress="handleKeyPress(event)">
+            <button id="submitBtn" class="mt-4 px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-200 text-gray-800 uppercase tracking-wider hover:translate-y-[-2px] hover:shadow-lg transition-all" onclick="checkPassword()">Accéder</button>
+            <div id="errorMessage" class="mt-4 text-red-400 hidden shake-animation"><i class="fas fa-times-circle mr-2"></i>Mot de passe incorrect</div>
+            <div id="successMessage" class="mt-4 text-teal-300 hidden fade-in-up"><i class="fas fa-check-circle mr-2"></i>Accès autorisé, redirection...</div>
+            <div id="loadingSpinner" class="mt-4 w-8 h-8 border-4 border-white/30 border-t-yellow-400 rounded-full animate-spin mx-auto hidden"></div>
         </div>
         
-        <a href="#" onclick="showMaintenance()" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9em;">← Retour</a>
+        <a href="#" onclick="showMaintenance()" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-arrow-left mr-2"></i>Retour</a>
+    </div>
+
+    <!-- Page de vote (cachée par défaut) -->
+    <div id="votePage" class="hidden text-center text-white z-10 relative max-w-2xl w-full mx-4 p-10 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
+        <h2 class="text-4xl font-light mb-6 text-shadow-md">Système de Vote</h2>
+        <p class="text-xl opacity-90 font-light mb-10 leading-relaxed">
+            Veuillez sélectionner votre option préférée.
+            <br>Votre vote est important pour nous !
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(1)">
+                <div class="vote-icon text-5xl mb-4 text-pink-400 transition-transform duration-300">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="text-xl font-medium mb-2">Option 1</h3>
+                <p class="text-white/80">Description de l'option 1</p>
+            </div>
+            
+            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(2)">
+                <div class="vote-icon text-5xl mb-4 text-blue-400 transition-transform duration-300">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="text-xl font-medium mb-2">Option 2</h3>
+                <p class="text-white/80">Description de l'option 2</p>
+            </div>
+            
+            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(3)">
+                <div class="vote-icon text-5xl mb-4 text-green-400 transition-transform duration-300">
+                    <i class="fas fa-thumbs-up"></i>
+                </div>
+                <h3 class="text-xl font-medium mb-2">Option 3</h3>
+                <p class="text-white/80">Description de l'option 3</p>
+            </div>
+        </div>
+        
+        <button id="voteButton" class="px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-purple-400 to-pink-400 text-white uppercase tracking-wider hover:translate-y-[-2px] hover:shadow-lg transition-all opacity-50 cursor-not-allowed" disabled onclick="submitVote()">
+            Voter
+        </button>
+        
+        <div id="voteSuccess" class="hidden mt-6 p-4 bg-green-500/20 rounded-xl border border-green-400/50 fade-in-up">
+            <i class="fas fa-check-circle mr-2"></i>Votre vote a été enregistré avec succès !
+        </div>
+        
+        <div class="mt-8">
+            <a href="#" onclick="returnToMaintenance()" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-arrow-left mr-2"></i>Retour à l'accueil</a>
+        </div>
     </div>
 
     <script>
         // Configuration - Modifiez ces valeurs selon vos besoins
         const ADMIN_PASSWORD = "LucieKaraoui"; // Changez ce mot de passe
         const REDIRECT_URL = "blog.html"; // Changez cette URL vers votre page
+        let selectedOption = null;
 
         function showAdminLogin() {
             document.getElementById('maintenancePage').classList.add('hidden');
@@ -356,15 +215,30 @@
 
         function showMaintenance() {
             document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('votePage').classList.add('hidden');
             document.getElementById('maintenancePage').classList.remove('hidden');
             clearMessages();
             document.getElementById('passwordInput').value = '';
+        }
+
+        function showVotePage() {
+            document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('maintenancePage').classList.add('hidden');
+            document.getElementById('votePage').classList.remove('hidden');
+            clearMessages();
+        }
+
+        function returnToMaintenance() {
+            document.getElementById('votePage').classList.add('hidden');
+            document.getElementById('maintenancePage').classList.remove('hidden');
+            resetVotePage();
         }
 
         function clearMessages() {
             document.getElementById('errorMessage').classList.add('hidden');
             document.getElementById('successMessage').classList.add('hidden');
             document.getElementById('loadingSpinner').classList.add('hidden');
+            document.getElementById('voteSuccess').classList.add('hidden');
         }
 
         function checkPassword() {
@@ -382,16 +256,16 @@
             clearMessages();
             document.getElementById('loadingSpinner').classList.remove('hidden');
 
-            // Simuler un délai de vérification (optionnel)
+            // Simuler un délai de vérification
             setTimeout(() => {
                 if (password === ADMIN_PASSWORD) {
                     // Mot de passe correct
                     document.getElementById('loadingSpinner').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
                     
-                    // Redirection après un court délai
+                    // Ici on affiche la page de vote au lieu de rediriger
                     setTimeout(() => {
-                        window.location.href = REDIRECT_URL;
+                        showVotePage();
                     }, 1500);
                 } else {
                     // Mot de passe incorrect
@@ -406,12 +280,12 @@
                     document.getElementById('passwordInput').value = '';
                     document.getElementById('passwordInput').focus();
                 }
-            }, 1000); // Délai de 1 seconde pour la simulation
+            }, 1000);
         }
 
         function showError(message) {
             const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = "❌ " + message;
+            errorElement.innerHTML = `<i class="fas fa-times-circle mr-2"></i>${message}`;
             errorElement.classList.remove('hidden');
         }
 
@@ -419,6 +293,53 @@
             if (event.key === 'Enter') {
                 checkPassword();
             }
+        }
+
+        function selectOption(option) {
+            // Réinitialiser toutes les options
+            const options = document.querySelectorAll('.vote-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('.vote-icon').classList.remove('text-yellow-400');
+            });
+            
+            // Sélectionner l'option choisie
+            selectedOption = option;
+            const selectedElement = options[option-1];
+            selectedElement.classList.add('selected');
+            selectedElement.querySelector('.vote-icon').classList.add('text-yellow-400');
+            
+            // Activer le bouton de vote
+            document.getElementById('voteButton').disabled = false;
+            document.getElementById('voteButton').classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('voteButton').classList.add('opacity-100', 'cursor-pointer');
+        }
+
+        function submitVote() {
+            if (!selectedOption) return;
+            
+            const voteButton = document.getElementById('voteButton');
+            voteButton.disabled = true;
+            voteButton.textContent = "Redirection...";
+            
+            // Rediriger vers vote.html après un court délai
+            setTimeout(() => {
+                window.location.href = "vote.html";
+            }, 1000);
+        }
+
+        function resetVotePage() {
+            selectedOption = null;
+            const options = document.querySelectorAll('.vote-option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            const voteButton = document.getElementById('voteButton');
+            voteButton.disabled = true;
+            voteButton.classList.remove('opacity-100', 'cursor-pointer');
+            voteButton.classList.add('opacity-50', 'cursor-not-allowed');
+            voteButton.textContent = "Voter";
         }
 
         // Empêcher l'envoi du formulaire par défaut
