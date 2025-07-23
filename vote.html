@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votez pour votre interface préférée</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .vote-btn:hover {
+            transform: scale(1.05);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold text-indigo-900 mb-4">Votez pour votre interface préférée</h1>
+            <p class="text-lg text-indigo-700 max-w-2xl mx-auto">Découvrez nos deux propositions et choisissez celle qui vous plaît le plus !</p>
+        </header>
+
+        <!-- Cards Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <!-- Card 1 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
+                <div class="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <i class="fas fa-book text-white text-6xl"></i>
+                </div>
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Interface Ancienne</h2>
+                    <p class="text-gray-600 mb-6">Une interface épurée avec des animations fluides et un design contemporain qui met l'accent sur l'expérience utilisateur.</p>
+                    <div class="flex justify-between items-center">
+                        <a href="adex.html" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+                            Voir l'interface
+                        </a>
+                        <span class="text-sm text-gray-500">Cliquez pour explorer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
+                <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                    <i class="fas fa-rocket text-white text-6xl"></i>
+                </div>
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Interface Nouvelle</h2>
+                    <p class="text-gray-600 mb-6">Une approche simplifiée avec un design épuré, des couleurs douces et une navigation intuitive pour une expérience sans distraction.</p>
+                    <div class="flex justify-between items-center">
+                        <a href="ndex.html" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                            Voir l'interface
+                        </a>
+                        <span class="text-sm text-gray-500">Cliquez pour explorer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting Section -->
+        <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 fade-in">
+            <h2 id="voteQuestion" class="text-2xl font-bold text-center text-gray-800 mb-6">Vote 1/3 : Quelle interface préférez-vous ?</h2>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+                <button id="voteModern" class="vote-btn px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-book"></i>
+                    Interface Ancienne
+                </button>
+                
+                <button id="voteMinimal" class="vote-btn px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i class="fas fa-rocket"></i>
+                    Interface Nouvelle
+                </button>
+            </div>
+
+            <div id="voteProgress" class="text-center hidden">
+                <p class="text-lg font-semibold text-gray-700 mb-2">Merci pour votre vote !</p>
+                <p class="text-gray-600">Progression: <span id="voteCount">1</span>/3 votes</p>
+            </div>
+
+            <div id="finalConfirmation" class="text-center hidden">
+                <p class="text-lg font-semibold text-gray-700 mb-6">Merci pour votre participation ! Une deuxième vague arrive bientôt.</p>
+                <p class="text-gray-600 mb-6">Voulez-vous voir les résultats maintenant ?</p>
+                <div class="flex justify-center gap-4">
+                    <button id="viewResultsYes" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300">
+                        Oui
+                    </button>
+                    <button id="viewResultsNo" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300">
+                        Non
+                    </button>
+                </div>
+            </div>
+
+            <div id="voteResult" class="text-center hidden">
+                <p class="text-lg font-semibold text-gray-700 mb-2">Résultats finaux</p>
+                <p id="resultText" class="text-gray-600"></p>
+                <div class="mt-4 h-4 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width: 50%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-sm text-gray-500">
+                    <span id="modernPercent">50%</span>
+                    <span id="minimalPercent">50%</span>
+                </div>
+                <button id="continueBtn" class="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 hidden">
+                    Continuer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let votes = {
+                adex: 0,
+                ndex: 0,
+                anews: 0,
+                nnews: 0,
+                awiki: 0,
+                nwiki: 0
+            };
+            
+            let currentVote = 0;
+            const totalVotes = 3;
+            
+            const voteModernBtn = document.getElementById('voteModern');
+            const voteMinimalBtn = document.getElementById('voteMinimal');
+            const voteQuestion = document.getElementById('voteQuestion');
+            const voteProgress = document.getElementById('voteProgress');
+            const voteCount = document.getElementById('voteCount');
+            const finalConfirmation = document.getElementById('finalConfirmation');
+            const voteResult = document.getElementById('voteResult');
+            const resultText = document.getElementById('resultText');
+            const progressBar = document.getElementById('progressBar');
+            const modernPercent = document.getElementById('modernPercent');
+            const minimalPercent = document.getElementById('minimalPercent');
+            const viewResultsYes = document.getElementById('viewResultsYes');
+            const viewResultsNo = document.getElementById('viewResultsNo');
+            const continueBtn = document.getElementById('continueBtn');
+            
+            function updateResults() {
+                const totalOld = votes.adex + votes.anews + votes.awiki;
+                const totalNew = votes.ndex + votes.nnews + votes.nwiki;
+                const total = totalOld + totalNew;
+                const oldPct = Math.round((totalOld / total) * 100);
+                const newPct = 100 - oldPct;
+                
+                progressBar.style.width = `${oldPct}%`;
+                modernPercent.textContent = `${oldPct}%`;
+                minimalPercent.textContent = `${newPct}%`;
+                
+                if (oldPct > newPct) {
+                    resultText.textContent = `L'Interface Ancienne mène avec ${oldPct}% des votes !`;
+                    progressBar.className = 'h-full bg-gradient-to-r from-indigo-500 to-indigo-400 transition-all duration-500';
+                } else if (newPct > oldPct) {
+                    resultText.textContent = `L'Interface Nouvelle mène avec ${newPct}% des votes !`;
+                    progressBar.className = 'h-full bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-500';
+                } else {
+                    resultText.textContent = `C'est une égalité parfaite à ${oldPct}% !`;
+                    progressBar.className = 'h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500';
+                }
+            }
+            
+            function handleVote(voteType) {
+                // Determine which vote type to increment based on current vote round
+                if (currentVote === 0) {
+                    votes[voteType === 'modern' ? 'adex' : 'ndex']++;
+                } else if (currentVote === 1) {
+                    votes[voteType === 'modern' ? 'anews' : 'nnews']++;
+                } else {
+                    votes[voteType === 'modern' ? 'awiki' : 'nwiki']++;
+                }
+                
+                currentVote++;
+                
+                if (currentVote < totalVotes) {
+                    // Show progress and prepare for next vote
+                    voteQuestion.classList.add('hidden');
+                    voteModernBtn.classList.add('hidden');
+                    voteMinimalBtn.classList.add('hidden');
+                    voteProgress.classList.remove('hidden');
+                    voteCount.textContent = currentVote;
+                    
+                    // Reset for next vote after short delay
+                    setTimeout(() => {
+                        voteQuestion.textContent = `Vote ${currentVote + 1}/${totalVotes} : Quelle interface préférez-vous ?`;
+                        voteQuestion.classList.remove('hidden');
+                        voteModernBtn.classList.remove('hidden');
+                        voteMinimalBtn.classList.remove('hidden');
+                        voteProgress.classList.add('hidden');
+                    }, 1500);
+                } else {
+                    // All votes completed
+                    voteQuestion.classList.add('hidden');
+                    voteModernBtn.classList.add('hidden');
+                    voteMinimalBtn.classList.add('hidden');
+                    finalConfirmation.classList.remove('hidden');
+                }
+            }
+            
+            voteModernBtn.addEventListener('click', () => handleVote('modern'));
+            voteMinimalBtn.addEventListener('click', () => handleVote('minimal'));
+            
+            viewResultsYes.addEventListener('click', function() {
+                finalConfirmation.classList.add('hidden');
+                voteResult.classList.remove('hidden');
+                updateResults();
+                continueBtn.classList.remove('hidden');
+            });
+            
+            viewResultsNo.addEventListener('click', function() {
+                finalConfirmation.classList.add('hidden');
+                document.body.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+                        <p class="text-xl text-gray-700 mb-6">Merci de votre participation !</p>
+                        <p class="text-gray-600">Retour à la page de maintenance dans <span id="countdown">3</span> secondes...</p>
+                    </div>
+                `;
+                
+                let seconds = 3;
+                const countdown = setInterval(() => {
+                    seconds--;
+                    document.getElementById('countdown').textContent = seconds;
+                    if (seconds <= 0) {
+                        clearInterval(countdown);
+                        window.location.href = 'maintenance.html';
+                    }
+                }, 1000);
+            });
+            
+            continueBtn.addEventListener('click', function() {
+                voteResult.classList.add('hidden');
+                document.body.innerHTML = `
+                    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+                        <p class="text-xl text-gray-700 mb-6">Merci de votre participation !</p>
+                        <p class="text-gray-600">Retour à la page de maintenance dans <span id="countdown">3</span> secondes...</p>
+                    </div>
+                `;
+                
+                let seconds = 3;
+                const countdown = setInterval(() => {
+                    seconds--;
+                    document.getElementById('countdown').textContent = seconds;
+                    if (seconds <= 0) {
+                        clearInterval(countdown);
+                        window.location.href = 'maintenance.html';
+                    }
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
