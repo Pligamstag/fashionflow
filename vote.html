@@ -102,19 +102,26 @@
                 </div>
             </div>
 
-            <div id="voteResult" class="text-center hidden">
-                <p class="text-lg font-semibold text-gray-700 mb-2">Résultats finaux</p>
-                <p id="resultText" class="text-gray-600"></p>
-                <div class="mt-4 h-4 bg-gray-200 rounded-full overflow-hidden">
-                    <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width: 50%"></div>
+            <div id="voteResult" class="hidden">
+                <div class="text-center">
+                    <p class="text-lg font-semibold text-gray-700 mb-2">Résultats finaux</p>
+                    <div id="resultText" class="text-gray-600 text-left max-w-2xl mx-auto"></div>
+                    
+                    <div class="mt-6">
+                        <p class="font-medium mb-2">Résumé global:</p>
+                        <div class="h-4 bg-gray-200 rounded-full overflow-hidden mx-auto max-w-md">
+                            <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width: 50%"></div>
+                        </div>
+                        <div class="flex justify-between mt-1 text-sm text-gray-500 max-w-md mx-auto">
+                            <span id="modernPercent">50%</span>
+                            <span id="minimalPercent">50%</span>
+                        </div>
+                    </div>
+                    
+                    <button id="continueBtn" class="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                        Continuer
+                    </button>
                 </div>
-                <div class="flex justify-between mt-2 text-sm text-gray-500">
-                    <span id="modernPercent">50%</span>
-                    <span id="minimalPercent">50%</span>
-                </div>
-                <button id="continueBtn" class="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 hidden">
-                    Continuer
-                </button>
             </div>
         </div>
     </div>
@@ -159,14 +166,51 @@
                 modernPercent.textContent = `${oldPct}%`;
                 minimalPercent.textContent = `${newPct}%`;
                 
+                // Calculate percentages for each vote
+                const vote1OldPct = votes.adex > 0 ? Math.round((votes.adex / (votes.adex + votes.ndex)) * 100) : 0;
+                const vote1NewPct = 100 - vote1OldPct;
+                
+                const vote2OldPct = votes.anews > 0 ? Math.round((votes.anews / (votes.anews + votes.nnews)) * 100) : 0;
+                const vote2NewPct = 100 - vote2OldPct;
+                
+                const vote3OldPct = votes.awiki > 0 ? Math.round((votes.awiki / (votes.awiki + votes.nwiki)) * 100) : 0;
+                const vote3NewPct = 100 - vote3OldPct;
+                
+                let resultHTML = `
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-2">Résultats globaux</h3>
+                        <p class="mb-4">${oldPct > newPct ? `L'Interface Ancienne mène avec ${oldPct}%` : 
+                                        newPct > oldPct ? `L'Interface Nouvelle mène avec ${newPct}%` : 
+                                        `Égalité parfaite à ${oldPct}%`}</p>
+                        
+                        <h3 class="text-lg font-semibold mb-2 mt-4">Détails par vote</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-medium">Vote 1 (Page d'accueil):</p>
+                                <p>Ancienne: ${vote1OldPct}% (${votes.adex} vote${votes.adex > 1 ? 's' : ''})</p>
+                                <p>Nouvelle: ${vote1NewPct}% (${votes.ndex} vote${votes.ndex > 1 ? 's' : ''})</p>
+                            </div>
+                            <div>
+                                <p class="font-medium">Vote 2 (Page actualités):</p>
+                                <p>Ancienne: ${vote2OldPct}% (${votes.anews} vote${votes.anews > 1 ? 's' : ''})</p>
+                                <p>Nouvelle: ${vote2NewPct}% (${votes.nnews} vote${votes.nnews > 1 ? 's' : ''})</p>
+                            </div>
+                            <div>
+                                <p class="font-medium">Vote 3 (Page wiki):</p>
+                                <p>Ancienne: ${vote3OldPct}% (${votes.awiki} vote${votes.awiki > 1 ? 's' : ''})</p>
+                                <p>Nouvelle: ${vote3NewPct}% (${votes.nwiki} vote${votes.nwiki > 1 ? 's' : ''})</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                resultText.innerHTML = resultHTML;
+                
                 if (oldPct > newPct) {
-                    resultText.textContent = `L'Interface Ancienne mène avec ${oldPct}% des votes !`;
                     progressBar.className = 'h-full bg-gradient-to-r from-indigo-500 to-indigo-400 transition-all duration-500';
                 } else if (newPct > oldPct) {
-                    resultText.textContent = `L'Interface Nouvelle mène avec ${newPct}% des votes !`;
                     progressBar.className = 'h-full bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-500';
                 } else {
-                    resultText.textContent = `C'est une égalité parfaite à ${oldPct}% !`;
                     progressBar.className = 'h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500';
                 }
             }
