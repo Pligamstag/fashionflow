@@ -32,40 +32,8 @@
         </header>
 
         <!-- Cards Container -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <!-- Card 1 -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
-                <div class="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
-                    <i class="fas fa-book text-white text-6xl"></i>
-                </div>
-                <div class="p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Interface Ancienne</h2>
-                    <p class="text-gray-600 mb-6">Une interface épurée avec des animations fluides et un design contemporain qui met l'accent sur l'expérience utilisateur.</p>
-                    <div class="flex justify-between items-center">
-                        <a href="adex.html" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300">
-                            Voir l'interface
-                        </a>
-                        <span class="text-sm text-gray-500">Cliquez pour explorer</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
-                <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                    <i class="fas fa-rocket text-white text-6xl"></i>
-                </div>
-                <div class="p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Interface Nouvelle</h2>
-                    <p class="text-gray-600 mb-6">Une approche simplifiée avec un design épuré, des couleurs douces et une navigation intuitive pour une expérience sans distraction.</p>
-                    <div class="flex justify-between items-center">
-                        <a href="ndex.html" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
-                            Voir l'interface
-                        </a>
-                        <span class="text-sm text-gray-500">Cliquez pour explorer</span>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12" id="cardsContainer">
+            <!-- Cards will be dynamically updated -->
         </div>
 
         <!-- Voting Section -->
@@ -140,6 +108,61 @@
             let currentVote = 0;
             const totalVotes = 3;
             
+            // Configuration pour chaque vote - liens HTML corrects
+            const voteConfigs = [
+                {
+                    question: "Vote 1/3 : Quelle page d'accueil préférez-vous ?",
+                    modernCard: {
+                        title: "Page d'accueil Ancienne",
+                        description: "Une page d'accueil avec des animations fluides et un design contemporain qui met l'accent sur l'expérience utilisateur.",
+                        link: "adex.html",  // Page d'accueil ancienne
+                        icon: "fas fa-home",
+                        gradient: "from-blue-500 to-indigo-600"
+                    },
+                    minimalCard: {
+                        title: "Page d'accueil Nouvelle", 
+                        description: "Une approche simplifiée avec un design épuré, des couleurs douces et une navigation intuitive pour une expérience sans distraction.",
+                        link: "ndex.html",  // Page d'accueil nouvelle
+                        icon: "fas fa-home",
+                        gradient: "from-purple-500 to-pink-500"
+                    }
+                },
+                {
+                    question: "Vote 2/3 : Quelle page actualités préférez-vous ?",
+                    modernCard: {
+                        title: "Actualités Anciennes",
+                        description: "Une page d'actualités riche en fonctionnalités avec des catégories détaillées et des options de filtrage avancées.",
+                        link: "anews.html",  // Page actualités ancienne
+                        icon: "fas fa-newspaper",
+                        gradient: "from-green-500 to-teal-600"
+                    },
+                    minimalCard: {
+                        title: "Actualités Nouvelles",
+                        description: "Une présentation claire et minimaliste des actualités, focalisée sur la lisibilité et la simplicité de navigation.",
+                        link: "nnews.html",  // Page actualités nouvelle
+                        icon: "fas fa-newspaper", 
+                        gradient: "from-orange-500 to-red-500"
+                    }
+                },
+                {
+                    question: "Vote 3/3 : Quelle page wiki préférez-vous ?",
+                    modernCard: {
+                        title: "Wiki Ancien",
+                        description: "Un wiki avec de nombreuses fonctionnalités, des options de recherche avancées et une interface riche en informations.",
+                        link: "awiki.html",  // Page wiki ancienne
+                        icon: "fas fa-book-open",
+                        gradient: "from-yellow-500 to-orange-600"
+                    },
+                    minimalCard: {
+                        title: "Wiki Nouveau",
+                        description: "Un wiki épuré qui privilégie la lecture et la recherche simple, avec une interface claire et sans distractions.",
+                        link: "nwiki.html",  // Page wiki nouvelle
+                        icon: "fas fa-book-open",
+                        gradient: "from-cyan-500 to-blue-500"
+                    }
+                }
+            ];
+            
             const voteModernBtn = document.getElementById('voteModern');
             const voteMinimalBtn = document.getElementById('voteMinimal');
             const voteQuestion = document.getElementById('voteQuestion');
@@ -154,6 +177,46 @@
             const viewResultsYes = document.getElementById('viewResultsYes');
             const viewResultsNo = document.getElementById('viewResultsNo');
             const continueBtn = document.getElementById('continueBtn');
+            const cardsContainer = document.getElementById('cardsContainer');
+            
+            function updateCards() {
+                const config = voteConfigs[currentVote];
+                cardsContainer.innerHTML = `
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
+                        <div class="h-48 bg-gradient-to-r ${config.modernCard.gradient} flex items-center justify-center">
+                            <i class="${config.modernCard.icon} text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">${config.modernCard.title}</h2>
+                            <p class="text-gray-600 mb-6">${config.modernCard.description}</p>
+                            <div class="flex justify-between items-center">
+                                <a href="${config.modernCard.link}" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+                                    Voir l'interface
+                                </a>
+                                <span class="text-sm text-gray-500">Cliquez pour explorer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
+                        <div class="h-48 bg-gradient-to-r ${config.minimalCard.gradient} flex items-center justify-center">
+                            <i class="${config.minimalCard.icon} text-white text-6xl"></i>
+                        </div>
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">${config.minimalCard.title}</h2>
+                            <p class="text-gray-600 mb-6">${config.minimalCard.description}</p>
+                            <div class="flex justify-between items-center">
+                                <a href="${config.minimalCard.link}" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                                    Voir l'interface
+                                </a>
+                                <span class="text-sm text-gray-500">Cliquez pour explorer</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
             
             function updateResults() {
                 const totalOld = votes.adex + votes.anews + votes.awiki;
@@ -237,11 +300,12 @@
                     
                     // Reset for next vote after short delay
                     setTimeout(() => {
-                        voteQuestion.textContent = `Vote ${currentVote + 1}/${totalVotes} : Quelle interface préférez-vous ?`;
+                        voteQuestion.textContent = voteConfigs[currentVote].question;
                         voteQuestion.classList.remove('hidden');
                         voteModernBtn.classList.remove('hidden');
                         voteMinimalBtn.classList.remove('hidden');
                         voteProgress.classList.add('hidden');
+                        updateCards(); // Update cards for next vote
                     }, 1500);
                 } else {
                     // All votes completed
@@ -251,6 +315,9 @@
                     finalConfirmation.classList.remove('hidden');
                 }
             }
+            
+            // Initialize with first vote cards
+            updateCards();
             
             voteModernBtn.addEventListener('click', () => handleVote('modern'));
             voteMinimalBtn.addEventListener('click', () => handleVote('minimal'));
