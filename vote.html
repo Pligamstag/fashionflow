@@ -181,6 +181,8 @@
             
             function updateCards() {
                 const config = voteConfigs[currentVote];
+                console.log('Updating cards for vote:', currentVote + 1, config); // Debug
+                
                 cardsContainer.innerHTML = `
                     <!-- Card 1 -->
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 card-hover fade-in">
@@ -191,8 +193,8 @@
                             <h2 class="text-2xl font-bold text-gray-800 mb-3">${config.modernCard.title}</h2>
                             <p class="text-gray-600 mb-6">${config.modernCard.description}</p>
                             <div class="flex justify-between items-center">
-                                <a href="${config.modernCard.link}" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300">
-                                    Voir l'interface
+                                <a href="${config.modernCard.link}" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-300" target="_blank">
+                                    Voir l'interface (${config.modernCard.link})
                                 </a>
                                 <span class="text-sm text-gray-500">Cliquez pour explorer</span>
                             </div>
@@ -208,8 +210,8 @@
                             <h2 class="text-2xl font-bold text-gray-800 mb-3">${config.minimalCard.title}</h2>
                             <p class="text-gray-600 mb-6">${config.minimalCard.description}</p>
                             <div class="flex justify-between items-center">
-                                <a href="${config.minimalCard.link}" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
-                                    Voir l'interface
+                                <a href="${config.minimalCard.link}" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300" target="_blank">
+                                    Voir l'interface (${config.minimalCard.link})
                                 </a>
                                 <span class="text-sm text-gray-500">Cliquez pour explorer</span>
                             </div>
@@ -300,12 +302,12 @@
                     
                     // Reset for next vote after short delay
                     setTimeout(() => {
+                        updateCards(); // Update cards FIRST
                         voteQuestion.textContent = voteConfigs[currentVote].question;
                         voteQuestion.classList.remove('hidden');
                         voteModernBtn.classList.remove('hidden');
                         voteMinimalBtn.classList.remove('hidden');
                         voteProgress.classList.add('hidden');
-                        updateCards(); // Update cards for next vote
                     }, 1500);
                 } else {
                     // All votes completed
