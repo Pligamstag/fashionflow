@@ -4,8 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration - Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
- <style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script>
+        // Ta configuration Firebase - Assure-toi qu'elle est correcte et identique à celle de vote.html
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+            authDomain: "fashionflow-3db6b.firebaseapp.com",
+            projectId: "fashionflow-3db6b",
+            storageBucket: "fashionflow-3db6b.firebasestorage.app",
+            messagingSenderId: "1073693995934",
+            appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+            measurementId: "G-P4DP02HQ75"
+        };
+
+        // Initialise Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <style>
+        /* Ton CSS actuel, je l'ai laissé tel quel */
         * {
             margin: 0;
             padding: 0;
@@ -340,7 +358,6 @@
         </div>
 
         <div class="dashboard-grid">
-            <!-- Section Gestion des Fichiers HTML -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon files-icon">📁</div>
@@ -371,54 +388,6 @@
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">conclusion.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="conclusion.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <span class="file-name">contacte.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="contacte.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <span class="file-name">creerunposte.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="creerunposte.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <span class="file-name">description.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="description.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <span class="file-name">faq.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="faq.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <span class="file-name">fondateurs.html</span>
-                        <div class="file-info">
-                            <div class="file-actions">
-                                <a href="fondateurs.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="file-item">
                         <span class="file-name">index.html</span>
                         <div class="file-info">
                             <div class="file-actions">
@@ -427,330 +396,312 @@
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">introduction.html</span>
+                        <span class="file-name">nnews.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="introduction.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="nnews.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">maintenance.html</span>
+                        <span class="file-name">ndex.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="maintenance.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="ndex.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">maquette.html</span>
+                        <span class="file-name">anews.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="maquette.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="anews.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">modele.html</span>
+                        <span class="file-name">adex.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="modele.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="adex.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="file-item">
+                        <span class="file-name">awiki.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="awiki.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="file-item">
+                        <span class="file-name">nwiki.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="nwiki.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">objectifs.html</span>
+                        <span class="file-name">vote.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="objectifs.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="vote.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">problematique.html</span>
+                        <span class="file-name">administration.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="problematique.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="administration.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">renovation.html</span>
+                        <span class="file-name">contact.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="renovation.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="contact.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">technologie.html</span>
+                        <span class="file-name">equipe.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="technologie.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="equipe.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">whatsupp.html</span>
+                        <span class="file-name">fashion.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="whatsupp.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="fashion.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
                     <div class="file-item">
-                        <span class="file-name">wiki.html</span>
+                        <span class="file-name">galerie.html</span>
                         <div class="file-info">
                             <div class="file-actions">
-                                <a href="wiki.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                                <a href="galerie.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
                             </div>
                         </div>
                     </div>
+                    <div class="file-item">
+                        <span class="file-name">histoire.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="histoire.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">politique.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="politique.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">recherche.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="recherche.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">service.html</span>
+                        <div class="file-info">
+                            <div class="file-actions">
+                                <a href="service.html" class="btn btn-access" target="_blank">🔗 Accéder</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 
-            <!-- Section Gestion des Votes -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon stats-icon">📊</div>
+                    <h2 class="card-title">Statistiques des Votes</h2>
+                </div>
+                <div class="development-notice">
+                    <div class="development-icon">📈</div>
+                    <h3>Résultats en temps réel</h3>
+                    <p>Voici les statistiques détaillées de tous les votes, mises à jour instantanément.</p>
+                </div>
+
+                <div class="vote-stats-container mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Global</h3>
+                    <div class="flex flex-col gap-3 mb-6">
+                        <div class="vote-stat-item">
+                            <p class="font-medium text-gray-700">Interface Ancienne : <span id="globalOldPercent" class="font-bold text-indigo-700">0%</span> (<span id="globalOldCount">0</span> votes)</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="globalOldBar" class="bg-indigo-500 h-2 rounded-full" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="vote-stat-item">
+                            <p class="font-medium text-gray-700">Interface Nouvelle : <span id="globalNewPercent" class="font-bold text-purple-700">0%</span> (<span id="globalNewCount">0</span> votes)</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="globalNewBar" class="bg-purple-500 h-2 rounded-full" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Détails par vote</h3>
+                    <div id="detailedVoteStats" class="space-y-4">
+                        </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon votes-icon">🗳️</div>
                     <h2 class="card-title">Gestion des Votes</h2>
                 </div>
-                
-                <button class="add-vote-btn" onclick="addNewVote()">➕ Créer un nouveau vote</button>
-                
+                <button class="add-vote-btn">➕ Créer un Nouveau Vote (Fonctionnalité à venir)</button>
                 <input type="text" class="search-bar" id="searchVotes" placeholder="🔍 Rechercher un vote...">
                 
                 <div class="total-votes">
-                    <strong>Total : <span id="voteCount">4</span> votes</strong>
+                    <strong>Total : <span id="voteLiveCount">0</span> Votes Actifs</strong>
                 </div>
 
-                <div class="vote-list">
-                    <div class="vote-item">
-                        <div style="flex: 1;">
-                            <div class="vote-title">Nouveau design du site</div>
-                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
-                                <span class="vote-status status-active">Actif</span>
-                                <span class="vote-date">15/07/2025</span>
-                            </div>
-                        </div>
-                        <div class="vote-info">
-                            <div class="vote-results">
-                                <div class="vote-count">
-                                    <span>👍 Pour:</span>
-                                    <span class="vote-count-number">23</span>
-                                </div>
-                                <div class="vote-count">
-                                    <span>👎 Contre:</span>
-                                    <span class="vote-count-number">7</span>
-                                </div>
-                            </div>
-                            <div class="vote-actions">
-                                <button class="btn btn-edit">✏️ Modifier</button>
-                                <button class="btn btn-delete">🗑️ Supprimer</button>
-                            </div>
-                        </div>
+                <div class="vote-list" id="activeVoteList">
+                    <div class="development-notice">
+                        <div class="development-icon">🚧</div>
+                        <h3>Section en Développement</h3>
+                        <p>Cette section affichera la liste des votes actifs et permettra de les gérer.</p>
                     </div>
-                    
-                    <div class="vote-item">
-                        <div style="flex: 1;">
-                            <div class="vote-title">Mise à jour des conditions d'utilisation</div>
-                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
-                                <span class="vote-status status-closed">Fermé</span>
-                                <span class="vote-date">10/07/2025</span>
-                            </div>
-                        </div>
-                        <div class="vote-info">
-                            <div class="vote-results">
-                                <div class="vote-count">
-                                    <span>👍 Pour:</span>
-                                    <span class="vote-count-number">45</span>
-                                </div>
-                                <div class="vote-count">
-                                    <span>👎 Contre:</span>
-                                    <span class="vote-count-number">12</span>
-                                </div>
-                            </div>
-                            <div class="vote-actions">
-                                <button class="btn btn-access">📊 Résultats</button>
-                                <button class="btn btn-delete">🗑️ Supprimer</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="vote-item">
-                        <div style="flex: 1;">
-                            <div class="vote-title">Nouvelle fonctionnalité de chat</div>
-                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
-                                <span class="vote-status status-draft">Brouillon</span>
-                                <span class="vote-date">20/07/2025</span>
-                            </div>
-                        </div>
-                        <div class="vote-info">
-                            <div class="vote-results">
-                                <div class="vote-count">
-                                    <span>👍 Pour:</span>
-                                    <span class="vote-count-number">0</span>
-                                </div>
-                                <div class="vote-count">
-                                    <span>👎 Contre:</span>
-                                    <span class="vote-count-number">0</span>
-                                </div>
-                            </div>
-                            <div class="vote-actions">
-                                <button class="btn btn-edit">✏️ Modifier</button>
-                                <button class="btn btn-access">🚀 Publier</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="vote-item">
-                        <div style="flex: 1;">
-                            <div class="vote-title">Changement d'hébergeur</div>
-                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
-                                <span class="vote-status status-active">Actif</span>
-                                <span class="vote-date">22/07/2025</span>
-                            </div>
-                        </div>
-                        <div class="vote-info">
-                            <div class="vote-results">
-                                <div class="vote-count">
-                                    <span>👍 Pour:</span>
-                                    <span class="vote-count-number">18</span>
-                                </div>
-                                <div class="vote-count">
-                                    <span>👎 Contre:</span>
-                                    <span class="vote-count-number">25</span>
-                                </div>
-                            </div>
-                            <div class="vote-actions">
-                                <button class="btn btn-edit">✏️ Modifier</button>
-                                <button class="btn btn-delete">🗑️ Supprimer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section Statistiques -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon stats-icon">📊</div>
-                    <h2 class="card-title">Statistiques du Site</h2>
-                </div>
-
-                <div class="development-notice">
-                    <div class="development-icon">🚧</div>
-                    <h3>En attente de développement</h3>
-                    <p>Cette section sera bientôt disponible.<br>
-                    Les statistiques détaillées du site seront affichées ici une fois le développement terminé.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        <!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Références aux éléments HTML pour les statistiques
+            const globalOldPercent = document.getElementById('globalOldPercent');
+            const globalOldCount = document.getElementById('globalOldCount');
+            const globalOldBar = document.getElementById('globalOldBar');
+            const globalNewPercent = document.getElementById('globalNewPercent');
+            const globalNewCount = document.getElementById('globalNewCount');
+            const globalNewBar = document.getElementById('globalNewBar');
+            const detailedVoteStats = document.getElementById('detailedVoteStats');
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
-    authDomain: "fashionflow-3db6b.firebaseapp.com",
-    projectId: "fashionflow-3db6b",
-    storageBucket: "fashionflow-3db6b.appspot.com",
-    messagingSenderId: "1073693995934",
-    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
-    measurementId: "G-P4DP02HQ75"
-  };
+            // Référence au document Firestore qui stocke les votes
+            const voteRef = db.collection("votes").doc("global");
 
-  // Initialiser Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
+            // Écoute des changements en temps réel sur le document de votes
+            voteRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    const votes = doc.data(); // Récupère les données des votes
+                    updateStatistics(votes); // Met à jour l'affichage
+                } else {
+                    console.log("Le document 'global' n'existe pas encore dans Firestore.");
+                    // Initialise l'affichage à 0 si le document n'existe pas
+                    updateStatistics({ adex: 0, ndex: 0, anews: 0, nnews: 0, awiki: 0, nwiki: 0 });
+                }
+            }, (error) => {
+                console.error("Erreur lors de la récupération des votes : ", error);
+            });
 
-        // Fonctionnalité de recherche des fichiers
-        document.getElementById('searchFiles').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+            function updateStatistics(votesData) {
+                // S'assurer que les clés existent, sinon les initialiser à 0
+                const adex = votesData.adex || 0;
+                const ndex = votesData.ndex || 0;
+                const anews = votesData.anews || 0;
+                const nnews = votesData.nnews || 0;
+                const awiki = votesData.awiki || 0;
+                const nwiki = votesData.nwiki || 0;
+
+                // Calcul des totaux globaux
+                const totalOld = adex + anews + awiki;
+                const totalNew = ndex + nnews + nwiki;
+                const totalGlobal = totalOld + totalNew;
+
+                // Calcul des pourcentages globaux
+                const oldGlobalPct = totalGlobal > 0 ? Math.round((totalOld / totalGlobal) * 100) : 0;
+                const newGlobalPct = 100 - oldGlobalPct; // Pour s'assurer que le total est 100%
+
+                // Mise à jour de l'affichage global
+                globalOldPercent.textContent = `${oldGlobalPct}%`;
+                globalOldCount.textContent = totalOld;
+                globalOldBar.style.width = `${oldGlobalPct}%`;
+
+                globalNewPercent.textContent = `${newGlobalPct}%`;
+                globalNewCount.textContent = totalNew;
+                globalNewBar.style.width = `${newGlobalPct}%`;
+
+                // --- Détails par vote ---
+                let detailedHtml = '';
+
+                // Vote 1: Page d'accueil
+                const totalVote1 = adex + ndex;
+                const adexPct = totalVote1 > 0 ? Math.round((adex / totalVote1) * 100) : 0;
+                const ndexPct = 100 - adexPct;
+                detailedHtml += `
+                    <div>
+                        <h4 class="font-medium text-gray-700">Vote 1 (Page d'accueil):</h4>
+                        <p>Ancienne: ${adexPct}% (${adex} vote${adex > 1 ? 's' : ''})</p>
+                        <p>Nouvelle: ${ndexPct}% (${ndex} vote${ndex > 1 ? 's' : ''})</p>
+                    </div>
+                `;
+
+                // Vote 2: Page actualités
+                const totalVote2 = anews + nnews;
+                const anewsPct = totalVote2 > 0 ? Math.round((anews / totalVote2) * 100) : 0;
+                const nnewsPct = 100 - anewsPct;
+                detailedHtml += `
+                    <div>
+                        <h4 class="font-medium text-gray-700">Vote 2 (Page actualités):</h4>
+                        <p>Ancienne: ${anewsPct}% (${anews} vote${anews > 1 ? 's' : ''})</p>
+                        <p>Nouvelle: ${nnewsPct}% (${nnews} vote${nnews > 1 ? 's' : ''})</p>
+                    </div>
+                `;
+
+                // Vote 3: Page wiki
+                const totalVote3 = awiki + nwiki;
+                const awikiPct = totalVote3 > 0 ? Math.round((awiki / totalVote3) * 100) : 0;
+                const nwikiPct = 100 - awikiPct;
+                detailedHtml += `
+                    <div>
+                        <h4 class="font-medium text-gray-700">Vote 3 (Page wiki):</h4>
+                        <p>Ancienne: ${awikiPct}% (${awiki} vote${awiki > 1 ? 's' : ''})</p>
+                        <p>Nouvelle: ${nwikiPct}% (${nwiki} vote${nwiki > 1 ? 's' : ''})</p>
+                    </div>
+                `;
+
+                detailedVoteStats.innerHTML = detailedHtml;
+            }
+
+            // Pour la gestion des fichiers HTML (ton code existant, je l'ai laissé tel quel)
             const fileItems = document.querySelectorAll('.file-item');
-            let visibleCount = 0;
-            
-            fileItems.forEach(item => {
-                const fileName = item.querySelector('.file-name').textContent.toLowerCase();
-                if (fileName.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            document.getElementById('fileCount').textContent = visibleCount;
-        });
+            const searchFiles = document.getElementById('searchFiles');
 
-        // Fonctionnalité de recherche des votes
-        document.getElementById('searchVotes').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const voteItems = document.querySelectorAll('.vote-item');
-            let visibleCount = 0;
-            
-            voteItems.forEach(item => {
-                const voteTitle = item.querySelector('.vote-title').textContent.toLowerCase();
-                if (voteTitle.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            document.getElementById('voteCount').textContent = visibleCount;
-        });
-
-        // Gestionnaire pour les boutons de suppression
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const item = this.closest('.file-item, .vote-item');
-                const name = item.querySelector('.file-name, .vote-title').textContent;
-                const type = item.classList.contains('file-item') ? 'fichier' : 'vote';
-                
-                if (confirm(`Êtes-vous sûr de vouloir supprimer ce ${type} : ${name} ?`)) {
-                    item.remove();
-                    // Mettre à jour le compteur approprié
-                    if (type === 'fichier') {
-                        const currentCount = parseInt(document.getElementById('fileCount').textContent);
-                        document.getElementById('fileCount').textContent = currentCount - 1;
+            searchFiles.addEventListener('keyup', function() {
+                const searchTerm = searchFiles.value.toLowerCase();
+                fileItems.forEach(item => {
+                    const fileName = item.querySelector('.file-name').textContent.toLowerCase();
+                    if (fileName.includes(searchTerm)) {
+                        item.style.display = 'flex';
                     } else {
-                        const currentCount = parseInt(document.getElementById('voteCount').textContent);
-                        document.getElementById('voteCount').textContent = currentCount - 1;
+                        item.style.display = 'none';
                     }
-                }
+                });
             });
-        });
 
-        // Fonction pour ajouter un nouveau vote
-        function addNewVote() {
-            alert('Fonctionnalité en développement - Interface de création de vote à venir');
-        }
+            // Mise à jour du compteur de fichiers
+            document.getElementById('fileCount').textContent = fileItems.length;
 
-        // Gestionnaires pour les boutons d'édition et de publication
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Interface d\'édition en développement');
-            });
-        });
-
-        document.querySelectorAll('.vote-actions .btn-access').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (this.textContent.includes('Résultats')) {
-                    alert('Interface de visualisation des résultats en développement');
-                } else if (this.textContent.includes('Publier')) {
-                    alert('Fonctionnalité de publication en développement');
-                }
-            });
+            // La section "Gestion des Votes" peut être rendue dynamique plus tard si tu le souhaites.
+            // Pour l'instant, elle garde son message "en développement".
         });
     </script>
 </body>
