@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Firebase App (core) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<!-- Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+    authDomain: "fashionflow-3db6b.firebaseapp.com",
+    projectId: "fashionflow-3db6b",
+    storageBucket: "fashionflow-3db6b.firebasestorage.app",
+    messagingSenderId: "1073693995934",
+    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+    measurementId: "G-P4DP02HQ75"
+  };
+
+  // Initialise Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Votez pour votre interface préférée</title>
@@ -96,14 +118,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let votes = {
-                adex: 0,
-                ndex: 0,
-                anews: 0,
-                nnews: 0,
-                awiki: 0,
-                nwiki: 0
-            };
+           let votes = {
+    adex: 0,
+    ndex: 0,
+    anews: 0,
+    nnews: 0,
+    awiki: 0,
+    nwiki: 0
+};
+
+const voteRef = db.collection("votes").doc("global");
+
+// 🔄 Lire les votes en temps réel
+voteRef.onSnapshot((doc) => {
+    if (doc.exists) {
+        votes = doc.data();
+        updateResults(); // met à jour les pourcentages à l’écran
+    }
+});
+
             
             let currentVote = 0;
             const totalVotes = 3;
@@ -282,13 +315,18 @@
             
             function handleVote(voteType) {
                 // Determine which vote type to increment based on current vote round
-                if (currentVote === 0) {
-                    votes[voteType === 'modern' ? 'adex' : 'ndex']++;
-                } else if (currentVote === 1) {
-                    votes[voteType === 'modern' ? 'anews' : 'nnews']++;
-                } else {
-                    votes[voteType === 'modern' ? 'awiki' : 'nwiki']++;
-                }
+               let voteKey = "";
+
+if (currentVote === 0) {
+    voteKey = voteType === 'modern' ? 'adex' : 'ndex';
+} else if (currentVote === 1) {
+    voteKey = voteType === 'modern' ? 'anews' : 'nnews';
+} else {
+    voteKey = voteType === 'modern' ? 'awiki' : 'nwiki';
+}
+
+saveVoteToFirestore(voteKey); // envoie sur Firebase
+
                 
                 currentVote++;
                 
@@ -371,6 +409,29 @@
                 }, 1000);
             });
         });
+        function saveVoteToFirestore(voteKey) {
+    const voteRef = db.collection("votes").doc("global");
+
+    voteRef.get().then((doc) => {
+        if (doc.exists) {
+            const data = doc.data();
+            data[voteKey] = (data[voteKey] || 0) + 1;
+            voteRef.set(data);
+        } else {
+            let newData = {
+                adex: 0,
+                ndex: 0,
+                anews: 0,
+                nnews: 0,
+                awiki: 0,
+                nwiki: 0
+            };
+            newData[voteKey] = 1;
+            voteRef.set(newData);
+        }
+    });
+}
+
     </script>
 </body>
 </html>
