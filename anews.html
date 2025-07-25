@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Récapitulatif des Mises à Jour - FashionFlow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+    .btn-back { background: linear-gradient(135deg, #64748b 0%, #475569 100%); transition: all 0.3s ease; }
+    .btn-back:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4); }
+    .status-badge { background: linear-gradient(135deg, #10b981, #059669); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+    .feature-card { border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .feature-icon { font-size: 32px; margin-bottom: 12px; }
+    .tag { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .tag-new { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .tag-dev { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+    .tag-plan { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .tag-coming { background: linear-gradient(135deg, #ec4899, #be185d); color: white; }
+    .tag-high { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .timeline-item { position: relative; padding-left: 2rem; margin-bottom: 24px; }
+    .timeline-item::before { content: ''; position: absolute; left: 0; top: 0.5rem; width: 12px; height: 12px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
+    .timeline-item::after { content: ''; position: absolute; left: 5px; top: 1.5rem; width: 2px; height: calc(100% - 0.5rem); background: linear-gradient(to bottom, rgba(102, 126, 234, 0.3), transparent); }
+    .timeline-item:last-child::after { display: none; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+  
+  <!-- Header -->
+  <header class="gradient-bg text-white shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold mb-2">FashionFlow</h1>
+          <p class="text-lg opacity-90">Récapitulatif des Mises à Jour</p>
+        </div>
+        <div class="status-badge text-sm px-4 py-2 rounded-full text-white font-medium">
+          🚀 Système actif
+        </div>
+      </div>
+      <div class="mt-6">
+        <a href="index.html" class="btn-back inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Retour à l'accueil
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+    
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des mises à jour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animations pour les feux d'artifice */
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: fireworkBurst 2s infinite;
+        }
+
+        .firework:nth-child(1) { top: 10px; left: 20px; background: #ff4757; animation-delay: 0s; }
+        .firework:nth-child(2) { top: 15px; right: 30px; background: #3742fa; animation-delay: 0.5s; }
+        .firework:nth-child(3) { bottom: 20px; left: 50px; background: #2ed573; animation-delay: 1s; }
+        .firework:nth-child(4) { bottom: 15px; right: 20px; background: #ffa502; animation-delay: 1.5s; }
+
+        @keyframes fireworkBurst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(2); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        /* Animation pour le ballon */
+        .balloon {
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        /* Animation pour la grue */
+        .crane {
+            animation: swing 4s ease-in-out infinite;
+            display: inline-block;
+            transform-origin: center bottom;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        /* Bande de travaux */
+        .work-banner {
+            background: repeating-linear-gradient(
+                45deg,
+                #fbbf24,
+                #fbbf24 8px,
+                #000 8px,
+                #000 16px
+            );
+            height: 6px;
+            animation: slide 2s linear infinite;
+            border-radius: 3px;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0 0; }
+            100% { background-position: 22px 0; }
+        }
+
+        /* Confettis */
+        .confetti {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            animation: confettiFall 4s linear infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .notification-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pulse-ring {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .sparkle {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-100 p-8">
+
+<!-- Historique des Mises à Jour -->
+<section class="glass-effect rounded-2xl p-8 shadow-xl card-hover max-w-4xl mx-auto">
+  <div class="flex items-center mb-8">
+    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+      <span class="text-white text-xl">🛠️</span>
+    </div>
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Historique des mises à jour</h2>
+      <p class="text-gray-600 mt-1">Suivi détaillé des dernières améliorations</p>
+    </div>
+  </div>
+  
+  <!-- Notification d'ouverture du blog -->
+  <div class="notification-card bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl p-6 mb-6 text-white relative">
+    <!-- Feux d'artifice -->
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    
+    <!-- Confettis -->
+    <div class="confetti bg-yellow-300" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="confetti bg-blue-300" style="left: 30%; animation-delay: 0.5s;"></div>
+    <div class="confetti bg-green-300" style="left: 50%; animation-delay: 1s;"></div>
+    <div class="confetti bg-purple-300" style="left: 70%; animation-delay: 1.5s;"></div>
+    <div class="confetti bg-red-300" style="left: 90%; animation-delay: 2s;"></div>
+    
+    <div class="flex items-center mb-3">
+      <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4 pulse-ring">
+        <span class="text-2xl">🎉</span>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold flex items-center gap-2">
+          Ouverture du Blog !!
+          <span class="balloon text-2xl">🎈</span>
+        </h3>
+        <p class="opacity-90 text-sm">Nouvelle fonctionnalité disponible</p>
+      </div>
+    </div>
+    <p class="text-white opacity-95 leading-relaxed">
+      🎆 Feu d'artifice ! Ballon qui vole ! C'est la fête !! 🎆<br>
+      Notre nouveau blog est maintenant ouvert et prêt à vous accueillir avec des articles passionnants !
+    </p>
+    <div class="mt-4 flex items-center">
+      <span class="sparkle">✨</span>
+      <span class="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 text-white rounded-full text-sm font-medium ml-2">
+        <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-ring"></span>
+        Nouvellement ouvert
+      </span>
+      <span class="sparkle ml-2">✨</span>
+    </div>
+  </div>
+
+  <!-- Notification de fermeture du wiki -->
+  <div class="notification-card bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl p-6 mb-6 text-white relative">
+    <div class="flex items-center mb-3">
+      <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+        <span class="text-2xl">🚧</span>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold flex items-center gap-2">
+          Wiki en Rénovation
+          <span class="crane text-xl">🏗️</span>
+        </h3>
+        <p class="opacity-90 text-sm">Maintenance en cours</p>
+      </div>
+    </div>
+    
+    <div class="work-banner mb-3"></div>
+    
+    <p class="text-white opacity-95 leading-relaxed">
+      Le wiki vient de fermer pour rénovation.<br>
+      Merci de votre patience pendant les travaux !
+    </p>
+    
+    <div class="work-banner mt-3 mb-4"></div>
+    
+    <div class="flex items-center">
+      <span class="inline-flex items-center px-3 py-1 bg-white bg-opacity-20 text-white rounded-full text-sm font-medium">
+        <span class="w-2 h-2 bg-orange-400 rounded-full mr-2 pulse-ring"></span>
+        Travaux en cours
+      </span>
+    </div>
+  </div>
+
+<script>
+// Ajouter plus de confettis dynamiquement pour le blog
+function addExtraConfetti() {
+    const blogNotif = document.querySelector('.notification-card');
+    if (!blogNotif) return;
+    
+    const colors = ['bg-yellow-300', 'bg-blue-300', 'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-pink-300'];
+    
+    for(let i = 0; i < 8; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = `confetti ${colors[Math.floor(Math.random() * colors.length)]}`;
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.borderRadius = '50%';
+        blogNotif.appendChild(confetti);
+        
+        // Supprimer après l'animation
+        setTimeout(() => {
+            if (confetti.parentNode) {
+                confetti.remove();
+            }
+        }, 4000);
+    }
+}
+
+// Lancer les confettis supplémentaires périodiquement
+setInterval(addExtraConfetti, 8000);
+
+// Lancer au chargement
+window.addEventListener('load', () => {
+    setTimeout(addExtraConfetti, 1000);
+});
+</script>
+
+<script>
+// Ajouter plus de confettis dynamiquement pour le blog
+function addExtraConfetti() {
+    const blogNotif = document.querySelector('.notification-card');
+    const colors = ['bg-yellow-300', 'bg-blue-300', 'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-pink-300'];
+    
+    for(let i = 0; i < 10; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = `confetti ${colors[Math.floor(Math.random() * colors.length)]}`;
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.borderRadius = '50%';
+        blogNotif.appendChild(confetti);
+        
+        // Supprimer après l'animation
+        setTimeout(() => {
+            if (confetti.parentNode) {
+                confetti.remove();
+            }
+        }, 4000);
+    }
+}
+
+// Lancer les confettis supplémentaires périodiquement
+setInterval(addExtraConfetti, 6000);
+
+// Lancer au chargement
+window.addEventListener('load', () => {
+    setTimeout(addExtraConfetti, 1000);
+});
+</script>
+
+</body>
+</html>
+<style>
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+</style>
+<style>
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-new {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.tag-plan {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+</style>
+
+    <!-- Prochaines améliorations -->
+    <section class="glass-effect rounded-2xl p-8 shadow-xl card-hover">
+      <div class="flex items-center mb-8">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
+          <span class="text-white text-xl">🚀</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Prochaines améliorations prévues</h2>
+          <p class="text-gray-600 mt-1">Fonctionnalités en développement</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Système d'authentification -->
+        <div class="feature-card bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 card-hover">
+          <div class="feature-icon">🔑</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Système d'authentification</h3>
+          <p class="text-gray-600 text-sm mb-4">Connexion / inscription avec email ou Google pour faire des balises pour nos admins + système de profil pour le blog</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-new">Admin Dashboard</span>
+            <span class="tag tag-plan">Analytiques</span>
+            <span class="tag tag-dev">Profil utilisateur</span>
+          </div>
+          <span class="tag tag-high">Haute priorité</span>
+        </div>
+
+        <!-- Internationalisation -->
+        <div class="feature-card bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 card-hover">
+          <div class="feature-icon">🌐</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Internationalisation</h3>
+          <p class="text-gray-600 text-sm mb-4">Traduire toutes les pages en anglais et une page pour s'inscrire en tant que béta testeur admin</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-dev">Version anglaise</span>
+            <span class="tag tag-new">Béta testeur</span>
+            <span class="tag tag-plan">Sélecteur langue</span>
+          </div>
+          <span class="tag tag-plan">En planification</span>
+        </div>
+
+        <!-- Nous contacter -->
+        <div class="feature-card bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 card-hover">
+          <div class="feature-icon">📞</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Nous contacter</h3>
+          <p class="text-gray-600 text-sm mb-4">Ajout de la catégorie "Nous contacter" dans la page d'accueil</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-dev">Formulaire contact</span>
+            <span class="tag tag-plan">Gestion messages</span>
+          </div>
+          <span class="tag tag-dev">En développement</span>
+        </div>
+
+        <!-- Mise à jour du blogue -->
+        <div class="feature-card bg-gradient-to-br from-pink-50 to-yellow-100 border border-pink-200 card-hover">
+          <div class="feature-icon">📚</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Mise à jour du Wiki</h3>
+          <p class="text-gray-600 text-sm mb-4">Améliorations à venir sur la section wiki une refonte totale pour une meilleur approche</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-coming"> nouveau wiki </span>
+            <span class="tag tag-plan">Interface améliorée</span>
+          </div>
+          <span class="tag tag-coming">À venir</span>
+        </div>
+
+        <!-- Système de commentaires -->
+        <div class="feature-card bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 card-hover">
+          <div class="feature-icon">💬</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Système de commentaires</h3>
+          <p class="text-gray-600 text-sm mb-4">Ajout d'un système de commentaires sur chaque section du Wiki</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-dev">Commentaires Wiki</span>
+            <span class="tag tag-plan">Modération</span>
+          </div>
+          <span class="tag tag-plan">En planification</span>
+        </div>
+
+        <!-- Système de vote -->
+        <div class="feature-card bg-gradient-to-br from-rose-50 to-rose-100 border border-rose-200 card-hover">
+          <div class="feature-icon">🗳️</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Système de vote</h3>
+          <p class="text-gray-600 text-sm mb-4">Possibilité de voter pour les fonctionnalités à venir</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="tag tag-plan">Vote fonctionnalités</span>
+            <span class="tag tag-dev">Interface vote</span>
+          </div>
+          <span class="tag tag-plan">En planification</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bouton Archives -->
+    <div class="flex justify-center">
+      <button class="btn-primary inline-flex items-center px-6 py-3 rounded-lg text-white font-medium hover:text-white transition-colors">
+        <i class="fas fa-archive mr-2"></i>
+        Voir les archives complètes
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-12 text-center">
+      
+      <!-- Section WhatsApp -->
+      <div class="mb-8">
+        <div class="bg-gradient-to-r from-green-400 via-green-500 to-green-600 rounded-2xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-300 relative overflow-hidden">
+          <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-4 left-4 w-16 h-16 bg-white rounded-full"></div>
+            <div class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full"></div>
+            <div class="absolute top-1/2 right-8 w-8 h-8 bg-white rounded-full"></div>
+          </div>
+          <div class="relative z-10">
+            <div class="flex items-center justify-center mb-4">
+              <div class="bg-white rounded-full p-3 mr-4 shadow-lg">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516" fill="#25D366"></path>
+                </svg>
+              </div>
+              <h3 class="font-bold text-white text-2xl">Actualités en Direct</h3>
+            </div>
+            <p class="text-green-100 text-lg mb-6 font-medium">
+              🚀 Rejoignez notre communauté WhatsApp et soyez les premiers informés !
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">⚡</span>
+                <span class="font-medium">Mises à jour instantanées</span>
+              </div>
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">🔔</span>
+                <span class="font-medium">Notifications exclusives</span>
+              </div>
+              <div class="flex items-center text-green-100">
+                <span class="mr-2">👥</span>
+                <span class="font-medium">Communauté active</span>
+              </div>
+            </div>
+            <a href="https://chat.whatsapp.com/E3H2dr47fcS8A9v9W2E48i" target="_blank" class="inline-flex items-center bg-white text-green-600 font-bold px-8 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 hover:bg-green-50">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-3">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516"></path>
+              </svg>
+              Rejoindre le Groupe
+              <span class="ml-2">→</span>
+            </a>
+            <p class="text-green-200 text-sm mt-4 opacity-90">
+              Objectif : atteindre les 50 membres avant la fin de l'année ✨
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton retour -->
+      <div class="mb-8">
+        <a href="index.html" class="btn-back inline-flex items-center px-8 py-4 rounded-lg text-white font-medium hover:text-white transition-all duration-300 text-lg">
+          <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Retour à l'accueil
+        </a>
+      </div>
+<div class="border-t border-gray-200 pt-8">
+  <p class="text-gray-600 font-medium text-lg mb-2">
+    © 2025 FashionFlow - Tous droits réservés
+  </p>
+  <p class="text-gray-500">
+    Version 2.3.5 • Dernière mise à jour : 24 juin 2025
+  </p>
+<button id="adminLoginBtn" style="display:none;">Êtes-vous admin ?</button>
+
+<form id="adminLoginForm" class="max-w-md mx-auto p-4 border rounded shadow-md">
+  <h3 class="text-xl font-semibold mb-4">Connexion Admin</h3>
+  <div class="mb-3">
+    <label for="email" class="block mb-1">Email</label>
+    <input type="email" id="email" required class="w-full border px-3 py-2 rounded" />
+  </div>
+  <div class="mb-4">
+    <label for="password" class="block mb-1">Mot de passe</label>
+    <input type="password" id="password" required class="w-full border px-3 py-2 rounded" />
+  </div>
+  <button type="submit" class="btn-primary px-4 py-2 rounded text-white font-semibold">Se connecter</button>
+</form>
+<div id="loginMessage" class="text-red-600 mt-2 text-center"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+  authDomain: "fashionflow-3db6b.firebaseapp.com",
+  projectId: "fashionflow-3db6b",
+  storageBucket: "fashionflow-3db6b.appspot.com",
+  messagingSenderId: "1073693995934",
+  appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById('adminLoginForm');
+const messageDiv = document.getElementById('loginMessage');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  messageDiv.textContent = "";
+
+  const email = form.email.value;
+  const password = form.password.value;
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const userDocRef = doc(db, "User", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+
+      if (userData.role === "admin") {
+        alert("Bienvenue admin !");
+        window.location.href = "administration.html";
+      } else {
+        messageDiv.textContent = "Accès refusé : vous n'êtes pas admin.";
+        await auth.signOut(); // déconnexion car pas admin
+      }
+    } else {
+      messageDiv.textContent = "Aucun profil trouvé pour cet utilisateur.";
+      await auth.signOut();
+    }
+
+  } catch (error) {
+    console.error("Erreur connexion :", error.message);
+    messageDiv.textContent = "Erreur lors de la connexion : " + error.message;
+  }
+});
+
+</script>
+
+
+</div>
+</body>
+</html>
