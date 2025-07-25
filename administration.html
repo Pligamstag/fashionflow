@@ -585,9 +585,9 @@
     </div>
 
     <script>
-        // Initialisation de Firebase
+        // --- Configuration Firebase ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", // Remplacez par votre clé API
+            apiKey: "YOUR_API_KEY", // <-- REMPLACEZ PAR VOTRE CLÉ API
             authDomain: "YOUR_AUTH_DOMAIN",
             projectId: "YOUR_PROJECT_ID",
             storageBucket: "YOUR_STORAGE_BUCKET",
@@ -600,7 +600,9 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
-        const voteRef = db.collection('votes').doc('global'); // Supposons un document 'global' pour toutes les stats
+        // Cible le document 'global' dans la collection 'votes' pour les statistiques
+        // Cela suppose que toutes tes statistiques sont agrégées dans ce document.
+        const voteRef = db.collection('votes').doc('global');
 
         // --- Fonctions de gestion de l'affichage des fichiers HTML ---
         function filterFiles() {
@@ -622,7 +624,7 @@
             document.getElementById('totalFilesCount').textContent = visibleFilesCount;
         }
 
-        // --- Fonctions de gestion des sections de statistiques ---
+        // --- Fonctions de gestion des sections de statistiques du serveur ---
         const statsSiteContent = document.getElementById('statsSiteContent');
         const statsVotesContent = document.getElementById('statsVotesContent');
         const btnStatsSite = document.getElementById('btnStatsSite');
@@ -633,35 +635,53 @@
         const detailedVoteStats = document.getElementById('detailedVoteStats');
         const otherVotesList = document.getElementById('otherVotesList');
 
+        /**
+         * Affiche la section de statistiques spécifiée (site ou votes)
+         * et met à jour l'état des boutons.
+         * @param {string} section - 'site' pour les stats du site, 'votes' pour les stats des votes.
+         */
         function showStatsSection(section) {
-            // Masquer tout par défaut
+            // Masquer toutes les sections de contenu de stats
             statsSiteContent.classList.add('hidden');
             statsVotesContent.classList.add('hidden');
+            // Désactiver tous les boutons de sélection
             btnStatsSite.classList.remove('active');
             btnStatsVotes.classList.remove('active');
 
-            // Afficher la section sélectionnée
+            // Afficher la section et activer le bouton correspondant
             if (section === 'site') {
                 statsSiteContent.classList.remove('hidden');
                 btnStatsSite.classList.add('active');
             } else if (section === 'votes') {
                 statsVotesContent.classList.remove('hidden');
                 btnStatsVotes.classList.add('active');
-                // Lancer le chargement des stats de vote si ce n'est pas déjà fait
+                // Lancer le chargement des stats de vote si l'utilisateur y accède
                 fetchVoteStatistics();
             }
         }
 
-        // Fonction pour mettre à jour l'interface avec les données de vote
+        /**
+         * Calcule et met à jour les pourcentages d'une statistique de vote.
+         * @param {number} count - Le nombre de votes pour une option.
+         * @param {number} total - Le nombre total de votes pour cette catégorie.
+         * @returns {string} Le pourcentage formaté en chaîne de caractères (ex: "50.0%").
+         */
+        const calculatePercentage = (count, total) => total === 0 ? 0 : ((count / total) * 100).toFixed(1);
+
+        /**
+         * Met à jour l'interface utilisateur avec les données de vote reçues de Firestore.
+         * @param {Object} votesData - Les données de vote du document Firestore.
+         */
         function updateVoteStatistics(votesData) {
+            // Cacher le message de chargement et le spinner
             loadingStatsMessage.classList.add('hidden');
             statsLoadingSpinner.classList.add('hidden');
+            // Afficher les conteneurs de stats
             globalVoteStats.classList.remove('hidden');
             detailedVoteStats.classList.remove('hidden');
+            otherVotesList.classList.remove('hidden'); // S'assurer que la liste des autres votes est visible
 
-            const calculatePercentage = (count, total) => total === 0 ? 0 : ((count / total) * 100).toFixed(1);
-
-            // Global Stats
+            // --- Mise à jour des Statistiques Globales ---
             const totalGlobalVotes = (votesData.global?.ancienne || 0) + (votesData.global?.nouvelle || 0);
             const globalOldPercent = calculatePercentage(votesData.global?.ancienne || 0, totalGlobalVotes);
             const globalNewPercent = calculatePercentage(votesData.global?.nouvelle || 0, totalGlobalVotes);
@@ -670,11 +690,18 @@
             document.getElementById('globalOldVotes').textContent = votesData.global?.ancienne || 0;
             document.getElementById('globalNewPercent').textContent = `${globalNewPercent}%`;
             document.getElementById('globalNewVotes').textContent = votesData.global?.nouvelle || 0;
+
+            // Mettre à jour les barres de progression
             document.getElementById('progressOld').style.width = `${globalOldPercent}%`;
             document.getElementById('progressNew').style.width = `${globalNewPercent}%`;
 
-            // Detailed Stats
-            const updateDetailedVote = (voteId, prefix) => {
+            // --- Mise à jour des Statistiques Détaillées par Vote ---
+            /**
+             * Fonction utilitaire pour mettre à jour les détails d'un vote spécifique.
+             * @param {string} voteId - L'ID du vote dans les données (ex: 'vote1').
+             * @param {string} prefix - Le préfixe des IDs HTML (ex: 'vote1').
+             */
+            const updateDetailedVoteItem = (voteId, prefix) => {
                 const oldVotes = votesData[voteId]?.ancienne || 0;
                 const newVotes = votesData[voteId]?.nouvelle || 0;
                 const totalVote = oldVotes + newVotes;
@@ -687,45 +714,60 @@
                 document.getElementById(`${prefix}NewVotes`).textContent = newVotes;
             };
 
-            updateDetailedVote('vote1', 'vote1'); // Page d'accueil
-            updateDetailedVote('vote2', 'vote2'); // Page actualités
-            updateDetailedVote('vote3', 'vote3'); // Page wiki
-            updateDetailedVote('vote4', 'vote4'); // Page produit
-            updateDetailedVote('vote5', 'vote5'); // Page service
-            updateDetailedVote('vote6', 'vote6'); // Page portefeuille
+            updateDetailedVoteItem('vote1', 'vote1'); // Page d'accueil
+            updateDetailedVoteItem('vote2', 'vote2'); // Page actualités
+            updateDetailedVoteItem('vote3', 'vote3'); // Page wiki
+            updateDetailedVoteItem('vote4', 'vote4'); // Page produit
+            updateDetailedVoteItem('vote5', 'vote5'); // Page service
+            updateDetailedVoteItem('vote6', 'vote6'); // Page portefeuille
+
+            // Si tu as d'autres votes dans ton document 'global' que tu souhaites afficher dynamiquement
+            // tu pourrais itérer sur `votesData` ici pour les ajouter à `otherVotesList`.
+            // Pour l'instant, les éléments dans `otherVotesList` sont statiques.
         }
 
+        /**
+         * Fonction appelée quand l'utilisateur clique sur "Voir les stats" pour un vote spécifique.
+         * Pour l'instant, comme toutes les stats sont dans 'global', elle redirige vers les stats globales.
+         * Pour des votes séparés, elle chargerait les données spécifiques.
+         * @param {string} voteKey - La clé du vote à afficher (ex: 'global', 'vote1').
+         */
         function showSpecificVoteStats(voteKey) {
-            // Pour l'instant, comme les données sont toutes dans 'global',
-            // cette fonction peut simplement s'assurer que les stats globales sont visibles.
-            // Si tu avais des documents séparés pour chaque vote (ex: db.collection('votes').doc('vote1')),
-            // tu ferais ici une requête spécifique et mettrais à jour une zone d'affichage dédiée.
-            alert(`Affichage des statistiques pour : ${voteKey.toUpperCase()}. (Fonctionnalité à étendre pour des stats par vote distinctes)`);
-            // Tu pourrais ici cacher les stats globales et afficher un conteneur avec les stats du vote spécifique.
-            // Pour cet exemple, nous allons juste s'assurer que les stats globales et détaillées sont visibles.
+            // Ici, tu pourrais implémenter une logique plus complexe si tes votes étaient dans des documents Firestore séparés.
+            // Par exemple, tu cacherais `globalVoteStats` et `detailedVoteStats` et afficherais un nouveau conteneur
+            // rempli avec les données du vote `voteKey` après une nouvelle requête Firestore.
+            alert(`Affichage des statistiques pour "${voteKey.toUpperCase()}". \n(Cette fonction est un placeholder. Actuellement, toutes les statistiques sont affichées globalement.)`);
+            // S'assurer que la section des stats de vote est visible
             showStatsSection('votes');
         }
 
-
-        // Fonction pour récupérer les statistiques de vote depuis Firestore
+        /**
+         * Récupère les statistiques de vote depuis Firestore et met en place une écoute en temps réel.
+         */
         function fetchVoteStatistics() {
+            // Afficher le message de chargement et le spinner
             loadingStatsMessage.classList.remove('hidden');
             statsLoadingSpinner.classList.remove('hidden');
+            // Cacher les conteneurs de stats en attendant les données
             globalVoteStats.classList.add('hidden');
             detailedVoteStats.classList.add('hidden');
+            otherVotesList.classList.add('hidden');
 
+
+            // Écoute en temps réel des changements dans le document 'global'
             voteRef.onSnapshot((doc) => {
-                if (doc.exists) {
+                if (doc.exists && Object.keys(doc.data()).length > 0) {
                     const data = doc.data();
                     console.log("Données de vote reçues:", data);
                     updateVoteStatistics(data);
                 } else {
-                    console.log("Aucune statistique de vote trouvée!");
+                    console.log("Aucune statistique de vote trouvée ou le document est vide.");
                     loadingStatsMessage.textContent = "Aucune statistique de vote disponible.";
                     loadingStatsMessage.classList.remove('hidden');
-                    statsLoadingSpinner.classList.add('hidden');
+                    statsLoadingSpinner.classList.add('hidden'); // Cacher le spinner si pas de stats
                     globalVoteStats.classList.add('hidden');
                     detailedVoteStats.classList.add('hidden');
+                    otherVotesList.classList.add('hidden');
                 }
             }, (error) => {
                 console.error("Erreur de récupération des statistiques de vote:", error);
@@ -734,10 +776,11 @@
                 statsLoadingSpinner.classList.add('hidden');
                 globalVoteStats.classList.add('hidden');
                 detailedVoteStats.classList.add('hidden');
+                otherVotesList.classList.add('hidden');
             });
         }
 
-        // Initialisation : Afficher la section "Statistiques du Site" par défaut au chargement
+        // Initialisation : Afficher la section "Statistiques du Site" par défaut au chargement de la page
         document.addEventListener('DOMContentLoaded', () => {
             showStatsSection('site');
         });
