@@ -3,591 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administration</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Vote pour votre interface préférée</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
-            background-color: #f4f7f6;
+            padding: 20px;
+            background-color: #f0f2f5;
             color: #333;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
-        header {
-            background-image: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-        }
-
-        header h1 {
-            margin: 0;
+        h1 {
+            color: #4a4a4a;
+            margin-bottom: 10px;
             font-size: 2.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
         }
 
-        header h1 svg {
-            margin-right: 15px;
-            width: 40px;
-            height: 40px;
-            fill: white;
-        }
-
-        header p {
+        p.subtitle {
+            color: #666;
+            margin-bottom: 40px;
             font-size: 1.1em;
-            margin-top: 10px;
-            opacity: 0.9;
+            text-align: center;
         }
 
-        .container {
+        .cards-container {
             display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 30px;
-            gap: 25px;
-            flex-grow: 1;
         }
 
-        .card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            width: calc(33% - 25px);
-            min-width: 300px;
+        .interface-card {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            color: white;
+            padding: 30px;
+            width: 350px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-header {
-            display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
-        .card-header svg {
-            width: 30px;
-            height: 30px;
-            margin-right: 15px;
-            fill: #6a11cb;
+        .interface-card.new {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFB647 100%); /* New gradient for "Nouvelle" */
         }
 
-        .card-header h2 {
-            margin: 0;
-            font-size: 1.5em;
-            color: #444;
+        .interface-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
-        .card-content {
-            flex-grow: 1;
-        }
-
-        .search-box {
-            display: flex;
+        .interface-card .icon {
+            font-size: 3em;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #f9f9f9;
-        }
-
-        .search-box input {
-            flex-grow: 1;
-            border: none;
-            padding: 12px 15px;
-            font-size: 1em;
-            outline: none;
-        }
-
-        .search-box button {
-            background-color: #2575fc;
-            color: white;
-            border: none;
-            padding: 0 15px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-box button:hover {
-            background-color: #1a5ac9;
-        }
-
-        .file-list {
-            max-height: 350px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            background-color: #fcfcfc;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 15px;
+            display: inline-flex;
+            justify-content: center;
             align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
         }
 
-        .file-item:last-child {
-            border-bottom: none;
+        .interface-card h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+            margin-bottom: 15px;
         }
 
-        .file-item span {
+        .interface-card p {
             font-size: 0.95em;
-            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            flex-grow: 1; /* Permet au paragraphe de prendre l'espace disponible */
         }
 
-        .file-item .btn-access {
-            background-color: #28a745;
+        .card-buttons {
+            display: flex;
+            flex-direction: column; /* Buttons stacked vertically */
+            gap: 10px; /* Space between buttons */
+            width: 100%;
+        }
+
+        .card-buttons .btn {
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
-        }
-
-        .file-item .btn-access:hover {
-            background-color: #218838;
-        }
-
-        .total-files {
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 15px;
-            text-align: center;
-            color: #6a11cb;
-        }
-
-        .placeholder-message {
-            text-align: center;
-            padding: 50px 20px;
-            color: #777;
-            font-style: italic;
-            background-color: #f7f7f7;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 12px 25px;
             border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer; /* Add cursor pointer for buttons */
+        }
+
+        .card-buttons .btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .vote-section {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
             margin-top: 20px;
         }
 
-        .btn-primary {
-            background-color: #007bff;
+        .vote-section h3 {
+            color: #4a4a4a;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .vote-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .vote-options button {
+            background-color: #6a11cb;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            min-width: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
-            transition: background-color 0.3s ease;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .vote-options button.new-interface {
+            background-color: #FF6B6B; /* Color for New Interface */
         }
 
-        .btn-primary svg {
+        .vote-options button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+        }
+
+        .vote-options button svg {
             margin-right: 10px;
         }
 
-        .vote-card-item {
-            background-color: #f0f0f0;
-            border-radius: 8px;
+        /* Success message styling */
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95em;
-            color: #444;
-        }
-
-        .vote-card-item .btn-access {
-            background-color: #6c757d;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85em;
-            transition: background-color 0.3s ease;
-        }
-
-        .vote-card-item .btn-access:hover {
-            background-color: #5a6268;
-        }
-
-        .stats-display {
+            border-radius: 8px;
             margin-top: 20px;
-            padding: 15px;
-            background-color: #eef;
-            border-radius: 8px;
-            border: 1px solid #ccd;
-        }
-
-        .stats-display h3 {
-            margin-top: 0;
-            color: #3f51b5;
-            font-size: 1.3em;
-            border-bottom: 1px solid #cdd;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stats-display p {
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .progress-bar-container {
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            height: 10px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #4CAF50; /* Green for new interface */
-            width: 0%;
-            border-radius: 5px;
-            transition: width 0.5s ease-out;
-        }
-
-        .progress-bar-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .vote-detail-item {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #e9e9e9;
-        }
-        .vote-detail-item:last-child {
-            border-bottom: none;
-        }
-
-        .section-selector {
-            display: flex;
-            justify-content: space-around;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .section-selector .btn {
-            flex: 1;
-            padding: 15px 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
+            text-align: center;
             font-size: 1.1em;
-            font-weight: bold;
-            color: #555;
-            text-align: center;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            display: none; /* Hidden by default */
         }
 
-        .section-selector .btn.active,
-        .section-selector .btn:hover {
-            background-color: #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .section-selector .btn.active {
-            border-color: #6a11cb;
-            color: #6a11cb;
-        }
-
-        .stats-content-wrapper {
-            background-color: #fcfdff;
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid #e5f0ff;
-            min-height: 250px; /* Minimum height for better layout */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            flex-direction: column;
-        }
-
-        .stats-content-wrapper.hidden {
-            display: none;
-        }
-
-        /* Basic loading spinner for stats */
-        .loading-spinner {
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .no-stats-message {
+        /* Styling for vote progress/step display */
+        .vote-progress {
+            font-size: 1.2em;
             color: #777;
-            font-style: italic;
-            font-size: 1.1em;
+            margin-bottom: 25px;
+            font-weight: bold;
         }
-
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <header>
-        <h1>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.27L18.66 6.05 12 8.5 5.34 6.05 12 3.27zM5 7.07l7 2.5 7-2.5v4.93c0 4.14-2.82 7.99-7 9.09-4.18-1.1-7-4.95-7-9.09V7.07zM12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-            </svg>
-            Dashboard Administration
-        </h1>
-        <p>Gestion des fichiers, votes et statistiques du site</p>
-    </header>
+    <h1>Votez pour votre interface préférée</h1>
+    <p class="subtitle">Découvrez nos deux propositions et choisissez celle qui vous plaît le plus !</p>
 
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 9h-1v-2h1c.55 0 1-.45 1-1V13c0-.55-.45-1-1-1H9.5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm2 0h1v-2h-1v-1h1c.55 0 1-.45 1-1V13c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm3-7h-1v2h-1.5V13h-1V10h-1v-1h3.5c.55 0 1 .45 1 1v1zm-7 0h-1v1h1c.55 0 1-.45 1-1V10c0-.55-.45-1-1-1H9.5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm2 0h1v-1h-1v-1h1c.55 0 1-.45 1-1V10c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1z"/>
-                </svg>
-                <h2>Gestion des Fichiers HTML</h2>
-            </div>
-            <div class="card-content">
-                <div class="search-box">
-                    <input type="text" placeholder="Rechercher un fichier..." onkeyup="filterFiles()">
-                </div>
-                <p class="total-files">Total : <span id="totalFilesCount">19</span> fichiers HTML</p>
-                <div class="file-list">
-                    <div class="file-item">
-                        <span>ArchiveMiseajour.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>blog.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>index.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>nnews.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>ndex.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>snews.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>adex.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>awiki.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>contact.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>about.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                     <div class="file-item">
-                        <span>products.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>services.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>portfolio.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>faq.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>terms.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>privacy.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>sitemap.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    <div class="file-item">
-                        <span>dashboard.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                     <div class="file-item">
-                        <span>profile.html</span>
-                        <a href="#" class="btn-access">Accéder</a>
-                    </div>
-                    </div>
+    <div class="cards-container">
+        <div class="interface-card">
+            <span class="icon">&#x2302;</span> <h2>Page d'accueil Ancienne</h2>
+            <p>Une page d'accueil avec des animations fluides et un design contemporain, qui met l'accent sur l'expérience utilisateur.</p>
+            <div class="card-buttons">
+                <a href="index.html" class="btn">Voir l'interface (index.html)</a>
+                <span class="btn">Cliquez pour explorer</span>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-                </svg>
-                <h2>Statistiques du Serveur</h2>
-            </div>
-            <div class="card-content">
-                <div class="section-selector">
-                    <div class="btn" id="btnStatsSite" onclick="showStatsSection('site')">Statistiques du Site</div>
-                    <div class="btn" id="btnStatsVotes" onclick="showStatsSection('votes')">Statistiques des Votes</div>
-                </div>
-
-                <div class="stats-content-wrapper" id="statsSiteContent">
-                    <p class="no-stats-message">Cette fonctionnalité est en cours de développement.</p>
-                </div>
-
-                <div class="stats-content-wrapper hidden" id="statsVotesContent">
-                    <p class="no-stats-message" id="loadingStatsMessage">Chargement des statistiques...</p>
-                    <div class="loading-spinner" id="statsLoadingSpinner"></div>
-
-                    <div id="globalVoteStats" class="stats-display hidden">
-                        <h3>Résultats en temps réel (Global)</h3>
-                        <p>Interface Ancienne: <span id="globalOldPercent">0%</span> (<span id="globalOldVotes">0</span> votes)</p>
-                        <div class="progress-bar-container"><div id="progressOld" class="progress-bar-fill" style="background-color: #f44336;"></div></div>
-                        <p class="progress-bar-text"><span>Ancienne</span><span>Nouvelle</span></p>
-                        <p>Interface Nouvelle: <span id="globalNewPercent">0%</span> (<span id="globalNewVotes">0</span> votes)</p>
-                        <div class="progress-bar-container"><div id="progressNew" class="progress-bar-fill" style="background-color: #4CAF50;"></div></div>
-                    </div>
-
-                    <div id="detailedVoteStats" class="stats-display hidden" style="margin-top: 25px;">
-                        <h3>Détails par vote</h3>
-                        <div id="vote1Stats" class="vote-detail-item">
-                            <h4>Vote 1 (Page d'accueil):</h4>
-                            <p>Ancienne: <span id="vote1OldPercent">0%</span> (<span id="vote1OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote1NewPercent">0%</span> (<span id="vote1NewVotes">0</span> votes)</p>
-                        </div>
-                        <div id="vote2Stats" class="vote-detail-item">
-                            <h4>Vote 2 (Page actualités):</h4>
-                            <p>Ancienne: <span id="vote2OldPercent">0%</span> (<span id="vote2OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote2NewPercent">0%</span> (<span id="vote2NewVotes">0</span> votes)</p>
-                        </div>
-                        <div id="vote3Stats" class="vote-detail-item">
-                            <h4>Vote 3 (Page wiki):</h4>
-                            <p>Ancienne: <span id="vote3OldPercent">0%</span> (<span id="vote3OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote3NewPercent">0%</span> (<span id="vote3NewVotes">0</span> votes)</p>
-                        </div>
-                         <div id="vote4Stats" class="vote-detail-item">
-                            <h4>Vote 4 (Page Produit):</h4>
-                            <p>Ancienne: <span id="vote4OldPercent">0%</span> (<span id="vote4OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote4NewPercent">0%</span> (<span id="vote4NewVotes">0</span> votes)</p>
-                        </div>
-                         <div id="vote5Stats" class="vote-detail-item">
-                            <h4>Vote 5 (Page Service):</h4>
-                            <p>Ancienne: <span id="vote5OldPercent">0%</span> (<span id="vote5OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote5NewPercent">0%</span> (<span id="vote5NewVotes">0</span> votes)</p>
-                        </div>
-                         <div id="vote6Stats" class="vote-detail-item">
-                            <h4>Vote 6 (Page Portefeuille):</h4>
-                            <p>Ancienne: <span id="vote6OldPercent">0%</span> (<span id="vote6OldVotes">0</span> votes)</p>
-                            <p>Nouvelle: <span id="vote6NewPercent">0%</span> (<span id="vote6NewVotes">0</span> votes)</p>
-                        </div>
-                    </div>
-
-                    <div id="otherVotesList" style="margin-top: 25px; text-align: left;">
-                        <h4>Autres Votes (Cliquez pour voir les détails):</h4>
-                        <div class="vote-card-item">
-                            <span>Vote "Interface Générale"</span>
-                            <button class="btn-access" onclick="showSpecificVoteStats('global')">Voir les stats</button>
-                        </div>
-                        <div class="vote-card-item">
-                            <span>Vote "Nouveautés du Blog"</span>
-                            <button class="btn-access" onclick="showSpecificVoteStats('vote1')">Voir les stats</button>
-                        </div>
-                        </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
-                </svg>
-                <h2>Gestion des Votes</h2>
-            </div>
-            <div class="card-content">
-                <button class="btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-                    </svg>
-                    Créer un Nouveau Vote (Fonctionnalité à venir)
-                </button>
-
-                <div class="search-box">
-                    <input type="text" placeholder="Rechercher un vote...">
-                </div>
-
-                <p class="total-files">Total : 0 Votes Actifs</p>
-                <div class="file-list">
-                    <div class="placeholder-message">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a0a0a0" width="48px" height="48px">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                        </svg>
-                        <p>Cette section affichera la liste des votes actifs et permettra de les gérer.</p>
-                    </div>
-                </div>
+        <div class="interface-card new">
+            <span class="icon">&#x2302;</span> <h2>Page d'accueil Nouvelle</h2>
+            <p>Une approche simplifiée avec un design épuré, des couleurs douces et une navigation intuitive pour une expérience sans distraction.</p>
+            <div class="card-buttons">
+                <a href="ndex.html" class="btn">Voir l'interface (ndex.html)</a>
+                <span class="btn">Cliquez pour explorer</span>
             </div>
         </div>
     </div>
 
+    <div class="vote-section" id="voteSection1">
+        <p class="vote-progress">Vote 1/3</p>
+        <h3>Quelle interface préférez-vous pour la Page d'accueil ?</h3>
+        <div class="vote-options">
+            <button onclick="recordVote('vote1', 'ancienne')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Ancienne
+            </button>
+            <button class="new-interface" onclick="recordVote('vote1', 'nouvelle')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Nouvelle
+            </button>
+        </div>
+        <div class="success-message" id="successMessage1">Merci pour votre vote !</div>
+    </div>
+
+    <div class="vote-section" id="voteSection2" style="display:none;">
+        <p class="vote-progress">Vote 2/3</p>
+        <h3>Quelle interface préférez-vous pour la Page Actualités ?</h3>
+        <div class="vote-options">
+            <button onclick="recordVote('vote2', 'ancienne')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Ancienne
+            </button>
+            <button class="new-interface" onclick="recordVote('vote2', 'nouvelle')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Nouvelle
+            </button>
+        </div>
+        <div class="success-message" id="successMessage2">Merci pour votre vote !</div>
+    </div>
+
+    <div class="vote-section" id="voteSection3" style="display:none;">
+        <p class="vote-progress">Vote 3/3</p>
+        <h3>Quelle interface préférez-vous pour la Page Wiki ?</h3>
+        <div class="vote-options">
+            <button onclick="recordVote('vote3', 'ancienne')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Ancienne
+            </button>
+            <button class="new-interface" onclick="recordVote('vote3', 'nouvelle')">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                Interface Nouvelle
+            </button>
+        </div>
+        <div class="success-message" id="successMessage3">Merci pour votre vote !</div>
+    </div>
+
     <script>
-        // --- Configuration Firebase ---
+        // Configuration Firebase (REMPLACEZ AVEC VOS CLÉS !)
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", // <-- REMPLACEZ PAR VOTRE CLÉ API
+            apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
             projectId: "YOUR_PROJECT_ID",
             storageBucket: "YOUR_STORAGE_BUCKET",
@@ -600,191 +279,88 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
-        // Cible le document 'global' dans la collection 'votes' pour les statistiques
-        // Cela suppose que toutes tes statistiques sont agrégées dans ce document.
+
+        // Référence au document 'global' qui stockera toutes les stats de vote
         const voteRef = db.collection('votes').doc('global');
 
-        // --- Fonctions de gestion de l'affichage des fichiers HTML ---
-        function filterFiles() {
-            let input = document.querySelector('.card:first-child .search-box input');
-            let filter = input.value.toLowerCase();
-            let fileList = document.querySelector('.file-list');
-            let fileItems = fileList.getElementsByClassName('file-item');
-            let visibleFilesCount = 0;
+        let currentVoteStep = 1; // Suivi de l'étape de vote actuelle
 
-            for (let i = 0; i < fileItems.length; i++) {
-                let fileName = fileItems[i].getElementsByTagName('span')[0].textContent;
-                if (fileName.toLowerCase().indexOf(filter) > -1) {
-                    fileItems[i].style.display = "";
-                    visibleFilesCount++;
-                } else {
-                    fileItems[i].style.display = "none";
-                }
+        async function recordVote(voteType, interfaceType) {
+            try {
+                // Utiliser une transaction pour s'assurer de l'atomicité des mises à jour
+                await db.runTransaction(async (transaction) => {
+                    const doc = await transaction.get(voteRef);
+
+                    let data = {};
+                    if (doc.exists) {
+                        data = doc.data();
+                    } else {
+                        // Initialiser toutes les propriétés si le document n'existe pas
+                        data = {
+                            global: { ancienne: 0, nouvelle: 0 },
+                            vote1: { ancienne: 0, nouvelle: 0 },
+                            vote2: { ancienne: 0, nouvelle: 0 },
+                            vote3: { ancienne: 0, nouvelle: 0 }
+                            // Ajoutez d'autres votes ici si nécessaire
+                        };
+                    }
+
+                    // Mettre à jour le vote spécifique
+                    if (!data[voteType]) {
+                        data[voteType] = { ancienne: 0, nouvelle: 0 };
+                    }
+                    data[voteType][interfaceType] = (data[voteType][interfaceType] || 0) + 1;
+
+                    // Mettre à jour le total global basé sur la catégorie votée
+                    // Important : Pour ne pas compter les votes "global" en double,
+                    // le vote global sera la somme des votes des 3 catégories.
+                    // Pour ce modèle simplifié, nous allons juste incrémenter le total global
+                    // à chaque vote d'une sous-catégorie.
+                    // Si un utilisateur vote pour le même voteType plusieurs fois,
+                    // cela incrémentera le global plus d'une fois.
+                    // Pour un système plus robuste, il faudrait suivre les votes par utilisateur (avec Auth Firebase par ex.)
+                    // Pour ce cas simple, on incrémente juste le global.
+                     if (!data.global) {
+                        data.global = { ancienne: 0, nouvelle: 0 };
+                    }
+                    data.global[interfaceType] = (data.global[interfaceType] || 0) + 1;
+
+
+                    transaction.set(voteRef, data);
+                });
+
+                console.log(`Vote enregistré pour ${voteType}: ${interfaceType}`);
+                showSuccessMessage(currentVoteStep);
+                setTimeout(() => {
+                    hideSuccessMessage(currentVoteStep);
+                    nextVoteStep();
+                }, 1500); // Affiche le message de succès pendant 1.5 seconde
+
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement du vote:", error);
+                alert("Une erreur est survenue lors de l'enregistrement de votre vote. Veuillez réessayer.");
             }
-            document.getElementById('totalFilesCount').textContent = visibleFilesCount;
         }
 
-        // --- Fonctions de gestion des sections de statistiques du serveur ---
-        const statsSiteContent = document.getElementById('statsSiteContent');
-        const statsVotesContent = document.getElementById('statsVotesContent');
-        const btnStatsSite = document.getElementById('btnStatsSite');
-        const btnStatsVotes = document.getElementById('btnStatsVotes');
-        const loadingStatsMessage = document.getElementById('loadingStatsMessage');
-        const statsLoadingSpinner = document.getElementById('statsLoadingSpinner');
-        const globalVoteStats = document.getElementById('globalVoteStats');
-        const detailedVoteStats = document.getElementById('detailedVoteStats');
-        const otherVotesList = document.getElementById('otherVotesList');
+        function showSuccessMessage(step) {
+            document.getElementById(`successMessage${step}`).style.display = 'block';
+        }
 
-        /**
-         * Affiche la section de statistiques spécifiée (site ou votes)
-         * et met à jour l'état des boutons.
-         * @param {string} section - 'site' pour les stats du site, 'votes' pour les stats des votes.
-         */
-        function showStatsSection(section) {
-            // Masquer toutes les sections de contenu de stats
-            statsSiteContent.classList.add('hidden');
-            statsVotesContent.classList.add('hidden');
-            // Désactiver tous les boutons de sélection
-            btnStatsSite.classList.remove('active');
-            btnStatsVotes.classList.remove('active');
+        function hideSuccessMessage(step) {
+            document.getElementById(`successMessage${step}`).style.display = 'none';
+        }
 
-            // Afficher la section et activer le bouton correspondant
-            if (section === 'site') {
-                statsSiteContent.classList.remove('hidden');
-                btnStatsSite.classList.add('active');
-            } else if (section === 'votes') {
-                statsVotesContent.classList.remove('hidden');
-                btnStatsVotes.classList.add('active');
-                // Lancer le chargement des stats de vote si l'utilisateur y accède
-                fetchVoteStatistics();
+        function nextVoteStep() {
+            document.getElementById(`voteSection${currentVoteStep}`).style.display = 'none';
+            currentVoteStep++;
+            if (currentVoteStep <= 3) { // Si on a plus de votes internes
+                document.getElementById(`voteSection${currentVoteStep}`).style.display = 'block';
+            } else {
+                alert("Merci d'avoir participé à tous les votes !");
+                // Optionnel: Rediriger ou afficher un message de fin
+                // window.location.href = 'thankyou.html';
             }
         }
-
-        /**
-         * Calcule et met à jour les pourcentages d'une statistique de vote.
-         * @param {number} count - Le nombre de votes pour une option.
-         * @param {number} total - Le nombre total de votes pour cette catégorie.
-         * @returns {string} Le pourcentage formaté en chaîne de caractères (ex: "50.0%").
-         */
-        const calculatePercentage = (count, total) => total === 0 ? 0 : ((count / total) * 100).toFixed(1);
-
-        /**
-         * Met à jour l'interface utilisateur avec les données de vote reçues de Firestore.
-         * @param {Object} votesData - Les données de vote du document Firestore.
-         */
-        function updateVoteStatistics(votesData) {
-            // Cacher le message de chargement et le spinner
-            loadingStatsMessage.classList.add('hidden');
-            statsLoadingSpinner.classList.add('hidden');
-            // Afficher les conteneurs de stats
-            globalVoteStats.classList.remove('hidden');
-            detailedVoteStats.classList.remove('hidden');
-            otherVotesList.classList.remove('hidden'); // S'assurer que la liste des autres votes est visible
-
-            // --- Mise à jour des Statistiques Globales ---
-            const totalGlobalVotes = (votesData.global?.ancienne || 0) + (votesData.global?.nouvelle || 0);
-            const globalOldPercent = calculatePercentage(votesData.global?.ancienne || 0, totalGlobalVotes);
-            const globalNewPercent = calculatePercentage(votesData.global?.nouvelle || 0, totalGlobalVotes);
-
-            document.getElementById('globalOldPercent').textContent = `${globalOldPercent}%`;
-            document.getElementById('globalOldVotes').textContent = votesData.global?.ancienne || 0;
-            document.getElementById('globalNewPercent').textContent = `${globalNewPercent}%`;
-            document.getElementById('globalNewVotes').textContent = votesData.global?.nouvelle || 0;
-
-            // Mettre à jour les barres de progression
-            document.getElementById('progressOld').style.width = `${globalOldPercent}%`;
-            document.getElementById('progressNew').style.width = `${globalNewPercent}%`;
-
-            // --- Mise à jour des Statistiques Détaillées par Vote ---
-            /**
-             * Fonction utilitaire pour mettre à jour les détails d'un vote spécifique.
-             * @param {string} voteId - L'ID du vote dans les données (ex: 'vote1').
-             * @param {string} prefix - Le préfixe des IDs HTML (ex: 'vote1').
-             */
-            const updateDetailedVoteItem = (voteId, prefix) => {
-                const oldVotes = votesData[voteId]?.ancienne || 0;
-                const newVotes = votesData[voteId]?.nouvelle || 0;
-                const totalVote = oldVotes + newVotes;
-                const oldPercent = calculatePercentage(oldVotes, totalVote);
-                const newPercent = calculatePercentage(newVotes, totalVote);
-
-                document.getElementById(`${prefix}OldPercent`).textContent = `${oldPercent}%`;
-                document.getElementById(`${prefix}OldVotes`).textContent = oldVotes;
-                document.getElementById(`${prefix}NewPercent`).textContent = `${newPercent}%`;
-                document.getElementById(`${prefix}NewVotes`).textContent = newVotes;
-            };
-
-            updateDetailedVoteItem('vote1', 'vote1'); // Page d'accueil
-            updateDetailedVoteItem('vote2', 'vote2'); // Page actualités
-            updateDetailedVoteItem('vote3', 'vote3'); // Page wiki
-            updateDetailedVoteItem('vote4', 'vote4'); // Page produit
-            updateDetailedVoteItem('vote5', 'vote5'); // Page service
-            updateDetailedVoteItem('vote6', 'vote6'); // Page portefeuille
-
-            // Si tu as d'autres votes dans ton document 'global' que tu souhaites afficher dynamiquement
-            // tu pourrais itérer sur `votesData` ici pour les ajouter à `otherVotesList`.
-            // Pour l'instant, les éléments dans `otherVotesList` sont statiques.
-        }
-
-        /**
-         * Fonction appelée quand l'utilisateur clique sur "Voir les stats" pour un vote spécifique.
-         * Pour l'instant, comme toutes les stats sont dans 'global', elle redirige vers les stats globales.
-         * Pour des votes séparés, elle chargerait les données spécifiques.
-         * @param {string} voteKey - La clé du vote à afficher (ex: 'global', 'vote1').
-         */
-        function showSpecificVoteStats(voteKey) {
-            // Ici, tu pourrais implémenter une logique plus complexe si tes votes étaient dans des documents Firestore séparés.
-            // Par exemple, tu cacherais `globalVoteStats` et `detailedVoteStats` et afficherais un nouveau conteneur
-            // rempli avec les données du vote `voteKey` après une nouvelle requête Firestore.
-            alert(`Affichage des statistiques pour "${voteKey.toUpperCase()}". \n(Cette fonction est un placeholder. Actuellement, toutes les statistiques sont affichées globalement.)`);
-            // S'assurer que la section des stats de vote est visible
-            showStatsSection('votes');
-        }
-
-        /**
-         * Récupère les statistiques de vote depuis Firestore et met en place une écoute en temps réel.
-         */
-        function fetchVoteStatistics() {
-            // Afficher le message de chargement et le spinner
-            loadingStatsMessage.classList.remove('hidden');
-            statsLoadingSpinner.classList.remove('hidden');
-            // Cacher les conteneurs de stats en attendant les données
-            globalVoteStats.classList.add('hidden');
-            detailedVoteStats.classList.add('hidden');
-            otherVotesList.classList.add('hidden');
-
-
-            // Écoute en temps réel des changements dans le document 'global'
-            voteRef.onSnapshot((doc) => {
-                if (doc.exists && Object.keys(doc.data()).length > 0) {
-                    const data = doc.data();
-                    console.log("Données de vote reçues:", data);
-                    updateVoteStatistics(data);
-                } else {
-                    console.log("Aucune statistique de vote trouvée ou le document est vide.");
-                    loadingStatsMessage.textContent = "Aucune statistique de vote disponible.";
-                    loadingStatsMessage.classList.remove('hidden');
-                    statsLoadingSpinner.classList.add('hidden'); // Cacher le spinner si pas de stats
-                    globalVoteStats.classList.add('hidden');
-                    detailedVoteStats.classList.add('hidden');
-                    otherVotesList.classList.add('hidden');
-                }
-            }, (error) => {
-                console.error("Erreur de récupération des statistiques de vote:", error);
-                loadingStatsMessage.textContent = "Erreur de chargement des statistiques.";
-                loadingStatsMessage.classList.remove('hidden');
-                statsLoadingSpinner.classList.add('hidden');
-                globalVoteStats.classList.add('hidden');
-                detailedVoteStats.classList.add('hidden');
-                otherVotesList.classList.add('hidden');
-            });
-        }
-
-        // Initialisation : Afficher la section "Statistiques du Site" par défaut au chargement de la page
-        document.addEventListener('DOMContentLoaded', () => {
-            showStatsSection('site');
-        });
-
     </script>
 </body>
 </html>
