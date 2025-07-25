@@ -3,270 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote pour votre interface préférée</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Dashboard Administration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f0f2f5;
+            background-color: #f4f7f6;
             color: #333;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
             min-height: 100vh;
         }
 
-        h1 {
-            color: #4a4a4a;
-            margin-bottom: 10px;
+        header {
+            background-image: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+
+        header h1 {
+            margin: 0;
             font-size: 2.5em;
-            text-align: center;
-        }
-
-        p.subtitle {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-            text-align: center;
-        }
-
-        .cards-container {
             display: flex;
-            gap: 30px;
-            margin-bottom: 50px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header h1 svg {
+            margin-right: 15px;
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        header p {
+            font-size: 1.1em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .container {
+            display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            padding: 30px;
+            gap: 25px;
+            flex-grow: 1;
         }
 
-        .interface-card {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            color: white;
-            padding: 30px;
-            width: 350px;
-            text-align: center;
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            width: calc(33% - 25px);
+            min-width: 300px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
-        .interface-card.new {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FFB647 100%); /* New gradient for "Nouvelle" */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .interface-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .interface-card .icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            padding: 15px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .interface-card h2 {
-            margin-top: 0;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-
-        .interface-card p {
-            font-size: 0.95em;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            opacity: 0.9;
-            flex-grow: 1; /* Permet au paragraphe de prendre l'espace disponible */
-        }
-
-        .card-buttons {
+        .card-header {
             display: flex;
-            flex-direction: column; /* Buttons stacked vertically */
-            gap: 10px; /* Space between buttons */
-            width: 100%;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
 
-        .card-buttons .btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            padding: 12px 25px;
+        .card-header svg {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            fill: #6a11cb;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #444;
+        }
+
+        .card-content {
+            flex-grow: 1;
+        }
+
+        .search-box {
+            display: flex;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
             border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            border: none;
+            padding: 12px 15px;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .search-box button {
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-box button:hover {
+            background-color: #1a5ac9;
+        }
+
+        .file-list {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fcfcfc;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item span {
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .file-item .btn-access {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
             text-decoration: none;
-            font-weight: bold;
             font-size: 0.9em;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            cursor: pointer; /* Add cursor pointer for buttons */
+            transition: background-color 0.3s ease;
         }
 
-        .card-buttons .btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-            transform: scale(1.02);
+        .file-item .btn-access:hover {
+            background-color: #218838;
         }
 
-        .vote-section {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+        .total-files {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
             text-align: center;
-            width: 80%;
-            max-width: 600px;
+            color: #6a11cb;
+        }
+
+        .placeholder-message {
+            text-align: center;
+            padding: 50px 20px;
+            color: #777;
+            font-style: italic;
+            background-color: #f7f7f7;
+            border-radius: 8px;
             margin-top: 20px;
         }
 
-        .vote-section h3 {
-            color: #4a4a4a;
-            font-size: 1.6em;
-            margin-bottom: 20px;
-        }
-
-        .vote-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .vote-options button {
-            background-color: #6a11cb;
+        .btn-primary {
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            min-width: 200px;
+            font-size: 1em;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
         }
 
-        .vote-options button.new-interface {
-            background-color: #FF6B6B; /* Color for New Interface */
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
 
-        .vote-options button:hover {
-            opacity: 0.9;
-            transform: translateY(-3px);
-        }
-
-        .vote-options button svg {
+        .btn-primary svg {
             margin-right: 10px;
         }
 
-        /* Success message styling */
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 15px;
-            border-radius: 8px;
+        /* Styles for vote stats (simplified version) */
+        .stats-display {
             margin-top: 20px;
-            text-align: center;
-            font-size: 1.1em;
-            display: none; /* Hidden by default */
+            padding: 15px;
+            background-color: #eef;
+            border-radius: 8px;
+            border: 1px solid #ccd;
         }
 
-        /* Styling for vote progress/step display */
-        .vote-progress {
-            font-size: 1.2em;
-            color: #777;
-            margin-bottom: 25px;
+        .stats-display h3 {
+            margin-top: 0;
+            color: #3f51b5;
+            font-size: 1.3em;
+            border-bottom: 1px solid #cdd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stats-display p {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .progress-bar-container {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            height: 10px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.5s ease-out;
+        }
+        .progress-bar-fill.old { background-color: #f44336; } /* Rouge pour Ancienne */
+        .progress-bar-fill.new { background-color: #4CAF50; } /* Vert pour Nouvelle */
+
+
+        .progress-bar-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .vote-detail-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e9e9e9;
+        }
+        .vote-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .section-selector {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-selector .btn {
+            flex: 1;
+            padding: 15px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
             font-weight: bold;
+            color: #555;
+            text-align: center;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section-selector .btn.active,
+        .section-selector .btn:hover {
+            background-color: #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section-selector .btn.active {
+            border-color: #6a11cb;
+            color: #6a11cb;
+        }
+
+        .stats-content-wrapper {
+            background-color: #fcfdff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e5f0ff;
+            min-height: 250px; /* Minimum height for better layout */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        .stats-content-wrapper.hidden {
+            display: none;
+        }
+
+        /* Basic loading spinner for stats */
+        .loading-spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-stats-message {
+            color: #777;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        /* Styles spécifiques pour l'affichage du gagnant */
+        .overall-winner {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .overall-winner.old-wins {
+            background-image: linear-gradient(45deg, #e53935 0%, #b71c1c 100%); /* Rouge plus foncé */
+        }
+
+        .overall-winner.new-wins {
+            background-image: linear-gradient(45deg, #43a047 0%, #2e7d32 100%); /* Vert plus foncé */
+        }
+
+        .overall-winner.tie {
+            background-image: linear-gradient(45deg, #ffc107 0%, #ff8f00 100%); /* Orange */
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <h1>Votez pour votre interface préférée</h1>
-    <p class="subtitle">Découvrez nos deux propositions et choisissez celle qui vous plaît le plus !</p>
+    <header>
+        <h1>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.27L18.66 6.05 12 8.5 5.34 6.05 12 3.27zM5 7.07l7 2.5 7-2.5v4.93c0 4.14-2.82 7.99-7 9.09-4.18-1.1-7-4.95-7-9.09V7.07zM12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            </svg>
+            Dashboard Administration
+        </h1>
+        <p>Gestion des fichiers, votes et statistiques du site</p>
+    </header>
 
-    <div class="cards-container">
-        <div class="interface-card">
-            <span class="icon">&#x2302;</span> <h2>Page d'accueil Ancienne</h2>
-            <p>Une page d'accueil avec des animations fluides et un design contemporain, qui met l'accent sur l'expérience utilisateur.</p>
-            <div class="card-buttons">
-                <a href="index.html" class="btn">Voir l'interface (index.html)</a>
-                <span class="btn">Cliquez pour explorer</span>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 9h-1v-2h1c.55 0 1-.45 1-1V13c0-.55-.45-1-1-1H9.5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm2 0h1v-2h-1v-1h1c.55 0 1-.45 1-1V13c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm3-7h-1v2h-1.5V13h-1V10h-1v-1h3.5c.55 0 1 .45 1 1v1zm-7 0h-1v1h1c.55 0 1-.45 1-1V10c0-.55-.45-1-1-1H9.5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1zm2 0h1v-1h-1v-1h1c.55 0 1-.45 1-1V10c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1z"/>
+                </svg>
+                <h2>Gestion des Fichiers HTML</h2>
+            </div>
+            <div class="card-content">
+                <div class="search-box">
+                    <input type="text" placeholder="Rechercher un fichier..." onkeyup="filterFiles()">
+                </div>
+                <p class="total-files">Total : <span id="totalFilesCount">19</span> fichiers HTML</p>
+                <div class="file-list">
+                    <div class="file-item">
+                        <span>ArchiveMiseajour.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>blog.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>index.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>nnews.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>ndex.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>snews.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>adex.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>awiki.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>contact.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>about.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                     <div class="file-item">
+                        <span>products.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>services.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>portfolio.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>faq.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>terms.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>privacy.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>sitemap.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    <div class="file-item">
+                        <span>dashboard.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                     <div class="file-item">
+                        <span>profile.html</span>
+                        <a href="#" class="btn-access">Accéder</a>
+                    </div>
+                    </div>
             </div>
         </div>
 
-        <div class="interface-card new">
-            <span class="icon">&#x2302;</span> <h2>Page d'accueil Nouvelle</h2>
-            <p>Une approche simplifiée avec un design épuré, des couleurs douces et une navigation intuitive pour une expérience sans distraction.</p>
-            <div class="card-buttons">
-                <a href="ndex.html" class="btn">Voir l'interface (ndex.html)</a>
-                <span class="btn">Cliquez pour explorer</span>
+        <div class="card">
+            <div class="card-header">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <h2>Statistiques du Serveur</h2>
+            </div>
+            <div class="card-content">
+                <div class="section-selector">
+                    <div class="btn" id="btnStatsSite" onclick="showStatsSection('site')">Statistiques du Site</div>
+                    <div class="btn" id="btnStatsVotes" onclick="showStatsSection('votes')">Statistiques des Votes</div>
+                </div>
+
+                <div class="stats-content-wrapper" id="statsSiteContent">
+                    <p class="no-stats-message">Cette fonctionnalité est en cours de développement.</p>
+                </div>
+
+                <div class="stats-content-wrapper hidden" id="statsVotesContent">
+                    <p class="no-stats-message" id="loadingStatsMessage">Chargement des statistiques...</p>
+                    <div class="loading-spinner" id="statsLoadingSpinner"></div>
+
+                    <div id="overallWinner" class="overall-winner hidden"></div>
+
+                    <div id="detailedVoteStats" class="stats-display hidden" style="margin-top: 25px;">
+                        <h3>Détails par catégorie de vote</h3>
+                        <div id="vote1Stats" class="vote-detail-item">
+                            <h4>Page d'accueil:</h4>
+                            <p>Ancienne: <span id="vote1OldPercent">0%</span> (<span id="vote1OldVotes">0</span> votes)</p>
+                            <p>Nouvelle: <span id="vote1NewPercent">0%</span> (<span id="vote1NewVotes">0</span> votes)</p>
+                        </div>
+                        <div id="vote2Stats" class="vote-detail-item">
+                            <h4>Page Actualités:</h4>
+                            <p>Ancienne: <span id="vote2OldPercent">0%</span> (<span id="vote2OldVotes">0</span> votes)</p>
+                            <p>Nouvelle: <span id="vote2NewPercent">0%</span> (<span id="vote2NewVotes">0</span> votes)</p>
+                        </div>
+                        <div id="vote3Stats" class="vote-detail-item">
+                            <h4>Page Wiki:</h4>
+                            <p>Ancienne: <span id="vote3OldPercent">0%</span> (<span id="vote3OldVotes">0</span> votes)</p>
+                            <p>Nouvelle: <span id="vote3NewPercent">0%</span> (<span id="vote3NewVotes">0</span> votes)</p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="vote-section" id="voteSection1">
-        <p class="vote-progress">Vote 1/3</p>
-        <h3>Quelle interface préférez-vous pour la Page d'accueil ?</h3>
-        <div class="vote-options">
-            <button onclick="recordVote('vote1', 'ancienne')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Ancienne
-            </button>
-            <button class="new-interface" onclick="recordVote('vote1', 'nouvelle')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Nouvelle
-            </button>
-        </div>
-        <div class="success-message" id="successMessage1">Merci pour votre vote !</div>
-    </div>
+        <div class="card">
+            <div class="card-header">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+                </svg>
+                <h2>Gestion des Votes</h2>
+            </div>
+            <div class="card-content">
+                <button class="btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                    </svg>
+                    Créer un Nouveau Vote (Fonctionnalité à venir)
+                </button>
 
-    <div class="vote-section" id="voteSection2" style="display:none;">
-        <p class="vote-progress">Vote 2/3</p>
-        <h3>Quelle interface préférez-vous pour la Page Actualités ?</h3>
-        <div class="vote-options">
-            <button onclick="recordVote('vote2', 'ancienne')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Ancienne
-            </button>
-            <button class="new-interface" onclick="recordVote('vote2', 'nouvelle')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Nouvelle
-            </button>
-        </div>
-        <div class="success-message" id="successMessage2">Merci pour votre vote !</div>
-    </div>
+                <div class="search-box">
+                    <input type="text" placeholder="Rechercher un vote...">
+                </div>
 
-    <div class="vote-section" id="voteSection3" style="display:none;">
-        <p class="vote-progress">Vote 3/3</p>
-        <h3>Quelle interface préférez-vous pour la Page Wiki ?</h3>
-        <div class="vote-options">
-            <button onclick="recordVote('vote3', 'ancienne')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Ancienne
-            </button>
-            <button class="new-interface" onclick="recordVote('vote3', 'nouvelle')">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                Interface Nouvelle
-            </button>
+                <p class="total-files">Total : 0 Votes Actifs</p>
+                <div class="file-list">
+                    <div class="placeholder-message">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#a0a0a0" width="48px" height="48px">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        <p>Cette section affichera la liste des votes actifs et permettra de les gérer.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="success-message" id="successMessage3">Merci pour votre vote !</div>
     </div>
 
     <script>
-        // Configuration Firebase (REMPLACEZ AVEC VOS CLÉS !)
+        // --- Configuration Firebase ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "YOUR_API_KEY", // <-- REMPLACEZ PAR VOTRE CLÉ API
             authDomain: "YOUR_AUTH_DOMAIN",
             projectId: "YOUR_PROJECT_ID",
             storageBucket: "YOUR_STORAGE_BUCKET",
@@ -279,88 +567,158 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
-
-        // Référence au document 'global' qui stockera toutes les stats de vote
+        // Cible le document 'global' dans la collection 'votes' pour les statistiques
         const voteRef = db.collection('votes').doc('global');
 
-        let currentVoteStep = 1; // Suivi de l'étape de vote actuelle
+        // --- Éléments du DOM pour les sections de stats ---
+        const statsSiteContent = document.getElementById('statsSiteContent');
+        const statsVotesContent = document.getElementById('statsVotesContent');
+        const btnStatsSite = document.getElementById('btnStatsSite');
+        const btnStatsVotes = document.getElementById('btnStatsVotes');
+        const loadingStatsMessage = document.getElementById('loadingStatsMessage');
+        const statsLoadingSpinner = document.getElementById('statsLoadingSpinner');
+        // const globalVoteStats = document.getElementById('globalVoteStats'); // Supprimé du HTML, donc commenté ici
+        const detailedVoteStats = document.getElementById('detailedVoteStats');
+        const overallWinnerDisplay = document.getElementById('overallWinner');
 
-        async function recordVote(voteType, interfaceType) {
-            try {
-                // Utiliser une transaction pour s'assurer de l'atomicité des mises à jour
-                await db.runTransaction(async (transaction) => {
-                    const doc = await transaction.get(voteRef);
+        // --- Fonctions de gestion de l'affichage des fichiers HTML ---
+        function filterFiles() {
+            let input = document.querySelector('.card:first-child .search-box input');
+            let filter = input.value.toLowerCase();
+            let fileList = document.querySelector('.file-list');
+            let fileItems = fileList.getElementsByClassName('file-item');
+            let visibleFilesCount = 0;
 
-                    let data = {};
-                    if (doc.exists) {
-                        data = doc.data();
-                    } else {
-                        // Initialiser toutes les propriétés si le document n'existe pas
-                        data = {
-                            global: { ancienne: 0, nouvelle: 0 },
-                            vote1: { ancienne: 0, nouvelle: 0 },
-                            vote2: { ancienne: 0, nouvelle: 0 },
-                            vote3: { ancienne: 0, nouvelle: 0 }
-                            // Ajoutez d'autres votes ici si nécessaire
-                        };
-                    }
+            for (let i = 0; i < fileItems.length; i++) {
+                let fileName = fileItems[i].getElementsByTagName('span')[0].textContent;
+                if (fileName.toLowerCase().indexOf(filter) > -1) {
+                    fileItems[i].style.display = "";
+                    visibleFilesCount++;
+                } else {
+                    fileItems[i].style.display = "none";
+                }
+            }
+            document.getElementById('totalFilesCount').textContent = visibleFilesCount;
+        }
 
-                    // Mettre à jour le vote spécifique
-                    if (!data[voteType]) {
-                        data[voteType] = { ancienne: 0, nouvelle: 0 };
-                    }
-                    data[voteType][interfaceType] = (data[voteType][interfaceType] || 0) + 1;
+        // --- Fonctions de gestion des sections de statistiques du serveur ---
+        function showStatsSection(section) {
+            statsSiteContent.classList.add('hidden');
+            statsVotesContent.classList.add('hidden');
+            btnStatsSite.classList.remove('active');
+            btnStatsVotes.classList.remove('active');
 
-                    // Mettre à jour le total global basé sur la catégorie votée
-                    // Important : Pour ne pas compter les votes "global" en double,
-                    // le vote global sera la somme des votes des 3 catégories.
-                    // Pour ce modèle simplifié, nous allons juste incrémenter le total global
-                    // à chaque vote d'une sous-catégorie.
-                    // Si un utilisateur vote pour le même voteType plusieurs fois,
-                    // cela incrémentera le global plus d'une fois.
-                    // Pour un système plus robuste, il faudrait suivre les votes par utilisateur (avec Auth Firebase par ex.)
-                    // Pour ce cas simple, on incrémente juste le global.
-                     if (!data.global) {
-                        data.global = { ancienne: 0, nouvelle: 0 };
-                    }
-                    data.global[interfaceType] = (data.global[interfaceType] || 0) + 1;
-
-
-                    transaction.set(voteRef, data);
-                });
-
-                console.log(`Vote enregistré pour ${voteType}: ${interfaceType}`);
-                showSuccessMessage(currentVoteStep);
-                setTimeout(() => {
-                    hideSuccessMessage(currentVoteStep);
-                    nextVoteStep();
-                }, 1500); // Affiche le message de succès pendant 1.5 seconde
-
-            } catch (error) {
-                console.error("Erreur lors de l'enregistrement du vote:", error);
-                alert("Une erreur est survenue lors de l'enregistrement de votre vote. Veuillez réessayer.");
+            if (section === 'site') {
+                statsSiteContent.classList.remove('hidden');
+                btnStatsSite.classList.add('active');
+            } else if (section === 'votes') {
+                statsVotesContent.classList.remove('hidden');
+                btnStatsVotes.classList.add('active');
+                fetchVoteStatistics(); // Lance le chargement des stats de vote
             }
         }
 
-        function showSuccessMessage(step) {
-            document.getElementById(`successMessage${step}`).style.display = 'block';
-        }
+        /**
+         * Calcule et met à jour les pourcentages d'une statistique de vote.
+         * @param {number} count - Le nombre de votes pour une option.
+         * @param {number} total - Le nombre total de votes pour cette catégorie.
+         * @returns {string} Le pourcentage formaté en chaîne de caractères (ex: "50.0%").
+         */
+        const calculatePercentage = (count, total) => total === 0 ? 0 : ((count / total) * 100).toFixed(1);
 
-        function hideSuccessMessage(step) {
-            document.getElementById(`successMessage${step}`).style.display = 'none';
-        }
+        /**
+         * Met à jour l'interface utilisateur avec les données de vote reçues de Firestore.
+         * @param {Object} votesData - Les données de vote du document Firestore.
+         */
+        function updateVoteStatistics(votesData) {
+            loadingStatsMessage.classList.add('hidden');
+            statsLoadingSpinner.classList.add('hidden');
+            // globalVoteStats.classList.add('hidden'); // Plus nécessaire, car cet élément est supprimé
+            detailedVoteStats.classList.remove('hidden');
+            overallWinnerDisplay.classList.remove('hidden');
 
-        function nextVoteStep() {
-            document.getElementById(`voteSection${currentVoteStep}`).style.display = 'none';
-            currentVoteStep++;
-            if (currentVoteStep <= 3) { // Si on a plus de votes internes
-                document.getElementById(`voteSection${currentVoteStep}`).style.display = 'block';
+            // --- Calcul et affichage du Gagnant Global ---
+            const globalOldTotal = votesData.global?.ancienne || 0;
+            const globalNewTotal = votesData.global?.nouvelle || 0;
+            const globalOverallTotalVotes = globalOldTotal + globalNewTotal;
+
+            overallWinnerDisplay.className = 'overall-winner'; // Reset classes
+
+            if (globalOverallTotalVotes === 0) {
+                overallWinnerDisplay.textContent = "Aucun vote enregistré pour le moment.";
+                overallWinnerDisplay.classList.add('tie'); // Style neutre
+            } else if (globalOldTotal > globalNewTotal) {
+                overallWinnerDisplay.textContent = `L'Ancienne Interface est préférée avec ${globalOldTotal} votes !`;
+                overallWinnerDisplay.classList.add('old-wins');
+            } else if (globalNewTotal > globalOldTotal) {
+                overallWinnerDisplay.textContent = `La Nouvelle Interface est préférée avec ${globalNewTotal} votes !`;
+                overallWinnerDisplay.classList.add('new-wins');
             } else {
-                alert("Merci d'avoir participé à tous les votes !");
-                // Optionnel: Rediriger ou afficher un message de fin
-                // window.location.href = 'thankyou.html';
+                overallWinnerDisplay.textContent = `Égalité parfaite ! Ancienne et Nouvelle Interfaces ont ${globalOldTotal} votes.`;
+                overallWinnerDisplay.classList.add('tie');
             }
+
+
+            // --- Mise à jour des Statistiques Détaillées par Catégorie de Vote ---
+            const updateDetailedVoteItem = (voteId, oldPercentId, oldVotesId, newPercentId, newVotesId) => {
+                const oldVotes = votesData[voteId]?.ancienne || 0;
+                const newVotes = votesData[voteId]?.nouvelle || 0;
+                const totalVote = oldVotes + newVotes;
+                const oldPercent = calculatePercentage(oldVotes, totalVote);
+                const newPercent = calculatePercentage(newVotes, totalVote);
+
+                document.getElementById(oldPercentId).textContent = `${oldPercent}%`;
+                document.getElementById(oldVotesId).textContent = oldVotes;
+                document.getElementById(newPercentId).textContent = `${newPercent}%`;
+                document.getElementById(newVotesId).textContent = newVotes;
+            };
+
+            updateDetailedVoteItem('vote1', 'vote1OldPercent', 'vote1OldVotes', 'vote1NewPercent', 'vote1NewVotes'); // Page d'accueil
+            updateDetailedVoteItem('vote2', 'vote2OldPercent', 'vote2OldVotes', 'vote2NewPercent', 'vote2NewVotes'); // Page actualités
+            updateDetailedVoteItem('vote3', 'vote3OldPercent', 'vote3OldVotes', 'vote3NewPercent', 'vote3NewVotes'); // Page wiki
         }
+
+
+        /**
+         * Récupère les statistiques de vote depuis Firestore et met en place une écoute en temps réel.
+         */
+        function fetchVoteStatistics() {
+            loadingStatsMessage.classList.remove('hidden');
+            statsLoadingSpinner.classList.remove('hidden');
+            // globalVoteStats.classList.add('hidden'); // Plus nécessaire
+            detailedVoteStats.classList.add('hidden');
+            overallWinnerDisplay.classList.add('hidden');
+
+            voteRef.onSnapshot((doc) => {
+                if (doc.exists && Object.keys(doc.data()).length > 0) {
+                    const data = doc.data();
+                    console.log("Données de vote reçues:", data);
+                    updateVoteStatistics(data);
+                } else {
+                    console.log("Aucune statistique de vote trouvée ou le document est vide.");
+                    loadingStatsMessage.textContent = "Aucune statistique de vote disponible. Votez sur vote.html pour voir les stats.";
+                    loadingStatsMessage.classList.remove('hidden');
+                    statsLoadingSpinner.classList.add('hidden');
+                    // globalVoteStats.classList.add('hidden'); // Plus nécessaire
+                    detailedVoteStats.classList.add('hidden');
+                    overallWinnerDisplay.classList.add('hidden'); // Cacher le gagnant s'il n'y a pas de votes
+                }
+            }, (error) => {
+                console.error("Erreur de récupération des statistiques de vote:", error);
+                loadingStatsMessage.textContent = "Erreur de chargement des statistiques.";
+                loadingStatsMessage.classList.remove('hidden');
+                statsLoadingSpinner.classList.add('hidden');
+                // globalVoteStats.classList.add('hidden'); // Plus nécessaire
+                detailedVoteStats.classList.add('hidden');
+                overallWinnerDisplay.classList.add('hidden');
+            });
+        }
+
+        // Initialisation : Afficher la section "Statistiques du Site" par défaut au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            showStatsSection('site');
+        });
+
     </script>
 </body>
 </html>
