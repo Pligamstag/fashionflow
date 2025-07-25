@@ -48,7 +48,7 @@
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
@@ -95,13 +95,17 @@
             background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
+        .votes-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
         .card-title {
             font-size: 1.5rem;
             font-weight: 600;
             color: #333;
         }
 
-        .file-list {
+        .file-list, .vote-list {
             max-height: 500px;
             overflow-y: auto;
             border: 1px solid #e0e0e0;
@@ -109,7 +113,7 @@
             background: #fafafa;
         }
 
-        .file-item {
+        .file-item, .vote-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -118,27 +122,27 @@
             transition: background-color 0.2s ease;
         }
 
-        .file-item:hover {
+        .file-item:hover, .vote-item:hover {
             background-color: #f0f8ff;
         }
 
-        .file-item:last-child {
+        .file-item:last-child, .vote-item:last-child {
             border-bottom: none;
         }
 
-        .file-name {
+        .file-name, .vote-title {
             font-weight: 500;
             color: #333;
             font-size: 0.95rem;
         }
 
-        .file-info {
+        .file-info, .vote-info {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .file-date {
+        .file-date, .vote-date {
             color: #666;
             font-size: 0.85rem;
             background: #e8f4f8;
@@ -146,7 +150,53 @@
             border-radius: 4px;
         }
 
-        .file-actions {
+        .vote-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-closed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .vote-results {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+
+        .vote-count {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vote-count-number {
+            background: #6c757d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .file-actions, .vote-actions {
             display: flex;
             gap: 8px;
         }
@@ -172,6 +222,24 @@
             background: #229954;
         }
 
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
         .search-bar {
             width: 100%;
             padding: 12px 15px;
@@ -188,7 +256,7 @@
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
-        .total-files {
+        .total-files, .total-votes {
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.1rem;
@@ -224,6 +292,31 @@
             opacity: 0.6;
         }
 
+        .add-vote-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .add-vote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 173, 0.3);
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -243,7 +336,7 @@
     <div class="container">
         <div class="header">
             <h1>🔧 Dashboard Administration</h1>
-            <p>Gestion des fichiers et statistiques du site</p>
+            <p>Gestion des fichiers, votes et statistiques du site</p>
         </div>
 
         <div class="dashboard-grid">
@@ -259,6 +352,8 @@
                 <div class="total-files">
                     <strong>Total : <span id="fileCount">19</span> fichiers HTML</strong>
                 </div>
+
+                <div class="file-list">
                     <div class="file-item">
                         <span class="file-name">ArchiveMiseajour.html</span>
                         <div class="file-info">
@@ -414,6 +509,128 @@
                 </div>
             </div>
 
+            <!-- Section Gestion des Votes -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon votes-icon">🗳️</div>
+                    <h2 class="card-title">Gestion des Votes</h2>
+                </div>
+                
+                <button class="add-vote-btn" onclick="addNewVote()">➕ Créer un nouveau vote</button>
+                
+                <input type="text" class="search-bar" id="searchVotes" placeholder="🔍 Rechercher un vote...">
+                
+                <div class="total-votes">
+                    <strong>Total : <span id="voteCount">4</span> votes</strong>
+                </div>
+
+                <div class="vote-list">
+                    <div class="vote-item">
+                        <div style="flex: 1;">
+                            <div class="vote-title">Nouveau design du site</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
+                                <span class="vote-status status-active">Actif</span>
+                                <span class="vote-date">15/07/2025</span>
+                            </div>
+                        </div>
+                        <div class="vote-info">
+                            <div class="vote-results">
+                                <div class="vote-count">
+                                    <span>👍 Pour:</span>
+                                    <span class="vote-count-number">23</span>
+                                </div>
+                                <div class="vote-count">
+                                    <span>👎 Contre:</span>
+                                    <span class="vote-count-number">7</span>
+                                </div>
+                            </div>
+                            <div class="vote-actions">
+                                <button class="btn btn-edit">✏️ Modifier</button>
+                                <button class="btn btn-delete">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vote-item">
+                        <div style="flex: 1;">
+                            <div class="vote-title">Mise à jour des conditions d'utilisation</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
+                                <span class="vote-status status-closed">Fermé</span>
+                                <span class="vote-date">10/07/2025</span>
+                            </div>
+                        </div>
+                        <div class="vote-info">
+                            <div class="vote-results">
+                                <div class="vote-count">
+                                    <span>👍 Pour:</span>
+                                    <span class="vote-count-number">45</span>
+                                </div>
+                                <div class="vote-count">
+                                    <span>👎 Contre:</span>
+                                    <span class="vote-count-number">12</span>
+                                </div>
+                            </div>
+                            <div class="vote-actions">
+                                <button class="btn btn-access">📊 Résultats</button>
+                                <button class="btn btn-delete">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vote-item">
+                        <div style="flex: 1;">
+                            <div class="vote-title">Nouvelle fonctionnalité de chat</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
+                                <span class="vote-status status-draft">Brouillon</span>
+                                <span class="vote-date">20/07/2025</span>
+                            </div>
+                        </div>
+                        <div class="vote-info">
+                            <div class="vote-results">
+                                <div class="vote-count">
+                                    <span>👍 Pour:</span>
+                                    <span class="vote-count-number">0</span>
+                                </div>
+                                <div class="vote-count">
+                                    <span>👎 Contre:</span>
+                                    <span class="vote-count-number">0</span>
+                                </div>
+                            </div>
+                            <div class="vote-actions">
+                                <button class="btn btn-edit">✏️ Modifier</button>
+                                <button class="btn btn-access">🚀 Publier</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vote-item">
+                        <div style="flex: 1;">
+                            <div class="vote-title">Changement d'hébergeur</div>
+                            <div style="display: flex; gap: 10px; margin-top: 8px; align-items: center;">
+                                <span class="vote-status status-active">Actif</span>
+                                <span class="vote-date">22/07/2025</span>
+                            </div>
+                        </div>
+                        <div class="vote-info">
+                            <div class="vote-results">
+                                <div class="vote-count">
+                                    <span>👍 Pour:</span>
+                                    <span class="vote-count-number">18</span>
+                                </div>
+                                <div class="vote-count">
+                                    <span>👎 Contre:</span>
+                                    <span class="vote-count-number">25</span>
+                                </div>
+                            </div>
+                            <div class="vote-actions">
+                                <button class="btn btn-edit">✏️ Modifier</button>
+                                <button class="btn btn-delete">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Section Statistiques -->
             <div class="card">
                 <div class="card-header">
@@ -451,16 +668,67 @@
             document.getElementById('fileCount').textContent = visibleCount;
         });
 
+        // Fonctionnalité de recherche des votes
+        document.getElementById('searchVotes').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const voteItems = document.querySelectorAll('.vote-item');
+            let visibleCount = 0;
+            
+            voteItems.forEach(item => {
+                const voteTitle = item.querySelector('.vote-title').textContent.toLowerCase();
+                if (voteTitle.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('voteCount').textContent = visibleCount;
+        });
+
         // Gestionnaire pour les boutons de suppression
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const fileName = this.closest('.file-item').querySelector('.file-name').textContent;
-                if (confirm(`Êtes-vous sûr de vouloir supprimer ${fileName} ?`)) {
-                    this.closest('.file-item').remove();
-                    // Mettre à jour le compteur
-                    const currentCount = parseInt(document.getElementById('fileCount').textContent);
-                    document.getElementById('fileCount').textContent = currentCount - 1;
+                const item = this.closest('.file-item, .vote-item');
+                const name = item.querySelector('.file-name, .vote-title').textContent;
+                const type = item.classList.contains('file-item') ? 'fichier' : 'vote';
+                
+                if (confirm(`Êtes-vous sûr de vouloir supprimer ce ${type} : ${name} ?`)) {
+                    item.remove();
+                    // Mettre à jour le compteur approprié
+                    if (type === 'fichier') {
+                        const currentCount = parseInt(document.getElementById('fileCount').textContent);
+                        document.getElementById('fileCount').textContent = currentCount - 1;
+                    } else {
+                        const currentCount = parseInt(document.getElementById('voteCount').textContent);
+                        document.getElementById('voteCount').textContent = currentCount - 1;
+                    }
+                }
+            });
+        });
+
+        // Fonction pour ajouter un nouveau vote
+        function addNewVote() {
+            alert('Fonctionnalité en développement - Interface de création de vote à venir');
+        }
+
+        // Gestionnaires pour les boutons d'édition et de publication
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Interface d\'édition en développement');
+            });
+        });
+
+        document.querySelectorAll('.vote-actions .btn-access').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (this.textContent.includes('Résultats')) {
+                    alert('Interface de visualisation des résultats en développement');
+                } else if (this.textContent.includes('Publier')) {
+                    alert('Fonctionnalité de publication en développement');
                 }
             });
         });
