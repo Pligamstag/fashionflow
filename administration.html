@@ -649,6 +649,26 @@
     </div>
 
     <script>
+        <!-- Firebase App (core) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+    authDomain: "fashionflow-3db6b.firebaseapp.com",
+    projectId: "fashionflow-3db6b",
+    storageBucket: "fashionflow-3db6b.appspot.com",
+    messagingSenderId: "1073693995934",
+    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+    measurementId: "G-P4DP02HQ75"
+  };
+
+  // Initialiser Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
         // Fonctionnalité de recherche des fichiers
         document.getElementById('searchFiles').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
