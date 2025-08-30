@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FashionFlow - En Maintenance</title>
+    <title>FashionFlow - Blog</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
         :root {
             --primary: #6366f1;
             --secondary: #8b5cf6;
             --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
             --dark: #0f172a;
             --dark-secondary: #1e293b;
             --text-light: #f8fafc;
@@ -26,11 +30,8 @@
             background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 100%);
             color: var(--text-light);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .background-effects {
@@ -46,84 +47,69 @@
         .bg-circle {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
-            filter: blur(60px);
-            animation: float 8s ease-in-out infinite;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            filter: blur(40px);
+            animation: float 6s ease-in-out infinite;
         }
 
         .bg-circle:nth-child(1) {
-            width: 600px;
-            height: 600px;
-            top: -300px;
-            right: -300px;
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -200px;
             animation-delay: 0s;
         }
 
         .bg-circle:nth-child(2) {
-            width: 400px;
-            height: 400px;
-            bottom: -200px;
-            left: -200px;
-            animation-delay: 3s;
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            left: -150px;
+            animation-delay: 2s;
         }
 
         .bg-circle:nth-child(3) {
-            width: 500px;
-            height: 500px;
+            width: 200px;
+            height: 200px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            animation-delay: 6s;
+            animation-delay: 4s;
         }
 
         @keyframes float {
             0%, 100% {
-                transform: translateY(0px) scale(1) rotate(0deg);
-                opacity: 0.7;
+                transform: translateY(0px) rotate(0deg);
             }
-            33% {
-                transform: translateY(-30px) scale(1.1) rotate(120deg);
-                opacity: 0.9;
-            }
-            66% {
-                transform: translateY(20px) scale(0.9) rotate(240deg);
-                opacity: 0.8;
+            50% {
+                transform: translateY(-20px) rotate(180deg);
             }
         }
 
-        .maintenance-container {
-            text-align: center;
-            max-width: 800px;
-            padding: 60px 40px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
 
-        .maintenance-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-            border-radius: 30px 30px 0 0;
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
         }
 
         .logo {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: var(--primary);
-            margin-bottom: 40px;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .logo i {
@@ -131,26 +117,501 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% {
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .posts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .posts-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 12px 50px 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            width: 300px;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .post-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .author-avatar, .comment-avatar, .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            object-fit: cover; /* Ensure image covers the circle */
+            flex-shrink: 0; /* Prevent avatar from shrinking */
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .post-date {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .post-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .post-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .like-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .like-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .like-btn.liked {
+            animation: likeAnimation 0.6s ease;
+            color: var(--danger); /* Change color when liked */
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes likeAnimation {
+            0% {
                 transform: scale(1);
             }
             50% {
-                transform: scale(1.1);
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
             }
         }
 
-        .maintenance-icon {
-            font-size: 6rem;
-            color: var(--accent);
-            margin-bottom: 30px;
-            animation: rotate 4s linear infinite;
+        .btn-info {
+            background: rgba(6, 182, 212, 0.1);
+            color: #67e8f9;
+            border: 1px solid rgba(6, 182, 212, 0.3);
         }
 
-        @keyframes rotate {
+        .btn-info:hover {
+            background: rgba(6, 182, 212, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .comments-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+
+        .comments-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .comment-form-main-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            font-size: 0.95rem;
+        }
+
+        .comment-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .comment-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .comment-submit-btn {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .comment-submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .comment-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 3px solid var(--accent);
+            backdrop-filter: blur(10px);
+        }
+
+        .comment-item.reply {
+            margin-left: 30px;
+            border-left: 3px solid var(--secondary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .comment-meta {
+            flex: 1;
+        }
+
+        .comment-author-name {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reply-to-text {
+            font-weight: normal;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .comment-date {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+        }
+
+        .comment-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-actions .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .comment-actions .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .comment-actions .delete-comment-btn {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .comment-actions .delete-comment-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .reply-form-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            animation: slideDown 0.3s ease;
+        }
+
+        .reply-form-actual {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reply-form-actual .comment-textarea {
+            min-height: 60px;
+            padding: 10px;
+        }
+
+        .reply-form-actual .btn {
+            align-self: flex-end;
+        }
+
+        .replies-list-nested {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .empty-state, .info-message {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .loading i {
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
             from {
                 transform: rotate(0deg);
             }
@@ -159,399 +620,1505 @@
             }
         }
 
-        .maintenance-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-
-        .maintenance-subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .maintenance-description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 50px;
-            line-height: 1.7;
-        }
-
-        .features-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-light);
-        }
-
-        .feature-desc {
+        /* Styles for the notification popup */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeInOut 3s forwards;
             font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.5;
-        }
-
-        .progress-container {
-            margin-bottom: 40px;
-        }
-
-        .progress-label {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text-light);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-            border-radius: 20px;
-            width: 75%;
-            animation: progressAnimation 3s ease-in-out infinite;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shine 2s ease-in-out infinite;
-        }
-
-        @keyframes progressAnimation {
-            0%, 100% {
-                width: 75%;
-            }
-            50% {
-                width: 85%;
-            }
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        .progress-text {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .contact-info {
-            margin-top: 40px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .contact-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--accent);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .social-link {
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+            gap: 10px;
         }
 
-        .social-link:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5);
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            10% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            90% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
         }
 
-        .countdown {
+        .user-info {
             display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        /* Modal styles */
+        #loginModal, #editProfileModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
-            gap: 20px;
-            margin: 40px 0;
+            align-items: center;
+            z-index: 999;
         }
 
-        .countdown-item {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+        #loginModal > div, #editProfileModal > div {
+            background: var(--dark-secondary);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            min-width: 80px;
+            color: var(--text-light);
         }
 
-        .countdown-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 5px;
+        #loginModal h2, #editProfileModal h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
         }
 
-        .countdown-label {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        #loginForm, #editProfileForm {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
+
+        #loginForm input, #editProfileForm input {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        #loginForm input::placeholder, #editProfileForm input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        #loginForm input:focus, #editProfileForm input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+        }
+
+        #loginModal .btn, #editProfileModal .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 5px; /* Adjust margin for buttons in modal */
+        }
+
+        #loginModal #cancelLogin, #editProfileModal #cancelEditProfile {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: auto;
+            padding: 8px 12px;
+            font-size: 1rem;
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 50%; /* Make it circular */
+        }
+
+        #loginModal #cancelLogin:hover, #editProfileModal #cancelEditProfile:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        #editProfileForm label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        #editProfileForm input[type="file"] {
+            padding: 8px;
+        }
+
 
         @media (max-width: 768px) {
-            .maintenance-container {
-                padding: 40px 25px;
-                margin: 20px;
+            .container {
+                padding: 0 15px;
             }
 
-            .maintenance-title {
-                font-size: 2.2rem;
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
             }
 
-            .maintenance-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .maintenance-icon {
-                font-size: 4rem;
-            }
-
-            .features-preview {
+            .posts-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
-            .countdown {
-                flex-wrap: wrap;
-                gap: 15px;
+            .post-card {
+                padding: 24px;
             }
 
-            .social-links {
-                gap: 15px;
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .posts-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .post-actions {
+                justify-content: stretch;
+            }
+
+            .btn-small {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .comment-item.reply {
+                margin-left: 15px; /* Adjust for smaller screens */
+            }
+
+            #loginModal > div, #editProfileModal > div {
+                padding: 25px;
             }
         }
-    </style>
+        /* ✅ Styles Mon Profil */
+#profileModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#profileModal .profile-content {
+    background: var(--dark-secondary);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    color: var(--text-light);
+}
+
+#profileModal .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#profileModal .tab-link {
+    flex: 1;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+#profileModal .tab-link.active {
+    background: var(--primary);
+}
+
+#profileModal .tab-content {
+    display: none;
+}
+
+#profileModal .tab-content.active {
+    display: block;
+}
+   </style>
 </head>
 <body>
-    <div class="background-effects">
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
+<!-- ✅ Modal Connexion -->
+<div id="loginModal">
+    <div>
+        <h2>Connexion</h2>
+        <form id="loginForm">
+            <input id="email" type="email" placeholder="Email" required>
+            <input id="password" type="password" placeholder="Mot de passe" required>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </form>
+        <button id="registerBtn" class="btn btn-secondary">Créer un compte</button>
+        <button id="googleLoginBtn" class="btn btn-info">Se connecter avec Google</button>
+        <button id="cancelLogin" class="btn btn-danger">X</button>
     </div>
+</div>
 
-    <div class="maintenance-container">
-        <div class="logo">
+<!-- ✅ Modal Modifier Profil -->
+<div id="editProfileModal">
+    <div>
+        <h3>Modifier le profil</h3>
+        <form id="editProfileForm">
+            <input id="displayNameInput" type="text" placeholder="Nouveau nom">
+            <label for="photoFileInput">Importer une photo de profil :</label>
+            <input id="photoFileInput" type="file" accept="image/*">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+            <button type="button" id="cancelEditProfile" class="btn btn-danger">X</button>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ ✅ Nouveau Modal Mon Profil -->
+<div id="profileModal">
+    <div class="profile-content">
+        <button id="closeProfileModal" class="btn btn-danger" style="position: absolute; top: 15px; right: 15px;">X</button>
+        <h2>Mon Profil</h2>
+        <div class="tabs">
+            <button class="tab-link active" data-tab="postsTab">Mes Posts</button>
+            <button class="tab-link" data-tab="likesTab">Mes Likes</button>
+            <button class="tab-link" data-tab="editTab">Modifier Profil</button>
+        </div>
+        <div id="postsTab" class="tab-content active">
+            <p>Vos posts apparaîtront ici...</p>
+        </div>
+        <div id="likesTab" class="tab-content">
+            <p>Vos likes apparaîtront ici...</p>
+        </div>
+        <div id="editTab" class="tab-content">
+            <form id="profileEditForm">
+                <input type="text" placeholder="Votre bio">
+                <input type="text" placeholder="Changer de nom">
+                <input type="file" accept="image/*">
+                <button type="submit" class="btn btn-success">Sauvegarder</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Fond d'effets -->
+<div class="background-effects">
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+    <div class="bg-circle"></div>
+</div>
+
+<!-- ✅ Conteneur principal -->
+<div class="container">
+    <nav class="navbar">
+        <a href="#" class="logo">
             <i class="fas fa-blog"></i>
             FashionFlow
+        </a>
+        <div class="nav-actions">
+            <a href="creerunposte.html" class="btn btn-primary" id="newPostBtn" style="display: none;">
+                <i class="fas fa-plus"></i>
+                Nouveau post
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i>
+                Accueil
+            </a>
+        </div>
+        <div id="userProfile" style="color: white; display: flex; align-items: center; gap: 10px;">
         </div>
 
-        <div class="maintenance-icon">
-            <i class="fas fa-tools"></i>
-        </div>
+        <!-- ✅ Bouton Se connecter -->
+        <button id="loginBtn" class="btn btn-secondary">Se connecter</button>
+        <!-- ✅ Nouveau bouton Mon Profil -->
+        <button id="profileBtn" class="btn btn-secondary" style="display: none;">Mon Profil</button>
+    </nav>
 
-        <h1 class="maintenance-title">Blog en Rénovation</h1>
-        <p class="maintenance-subtitle">Nous travaillons dur pour vous offrir une meilleure expérience !</p>
-        
-        <p class="maintenance-description">
-            Notre équipe met tout en œuvre pour améliorer le blog avec de nouvelles fonctionnalités passionnantes. 
-            Nous serons bientôt de retour avec une interface plus moderne et des outils plus performants.
-        </p>
+    <section class="hero">
+        <h1>Blog de Développement</h1>
+        <p>Partagez vos idées, découvertes et projets avec la communauté</p>
+    </section>
 
-        <div class="features-preview">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <div class="feature-title">Design Moderne</div>
-                <div class="feature-desc">Interface utilisateur repensée avec des animations fluides et un design contemporain</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <div class="feature-title">Performance Optimisée</div>
-                <div class="feature-desc">Temps de chargement améliorés et navigation plus fluide pour tous les appareils</div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="feature-title">Fonctionnalités Sociales</div>
-                <div class="feature-desc">Nouveaux outils de commentaires, partages et interactions entre utilisateurs</div>
-            </div>
-        </div>
-
-        <div class="progress-container">
-            <div class="progress-label">Progression des travaux</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="progress-text">75% terminé - Lancement prévu très bientôt !</div>
-        </div>
-
-        <div class="countdown">
-            <div class="countdown-item">
-                <div class="countdown-number" id="days">--</div>
-                <div class="countdown-label">Jours</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="hours">--</div>
-                <div class="countdown-label">Heures</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="minutes">--</div>
-                <div class="countdown-label">Minutes</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="seconds">--</div>
-                <div class="countdown-label">Secondes</div>
-            </div>
-        </div>
-
-        <div class="contact-info">
-            <div class="contact-title">Restez Connectés</div>
-            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">
-                Suivez-nous sur nos réseaux sociaux pour être informé dès la réouverture du blog !
-            </p>
-
-            <div class="social-links">
-                <a href="#" class="social-link" title="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-link" title="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#" class="social-link" title="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-link" title="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="mailto:contact@fashionflow.com" class="social-link" title="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
+    <div class="posts-header">
+        <h2 class="posts-title">Publications récentes</h2>
+        <div class="search-filter">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Rechercher des posts...">
+                <i class="fas fa-search search-icon"></i>
             </div>
         </div>
     </div>
 
-    <script>
-        // Countdown timer (set to 7 days from now as example)
-        function updateCountdown() {
-            const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7); // 7 days from now
-            
-            const now = new Date().getTime();
-            const distance = targetDate.getTime() - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("days").textContent = days.toString().padStart(2, '0');
-            document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
-            
-            if (distance < 0) {
-                document.getElementById("days").textContent = "00";
-                document.getElementById("hours").textContent = "00";
-                document.getElementById("minutes").textContent = "00";
-                document.getElementById("seconds").textContent = "00";
+    <div id="postsContainer" class="posts-grid">
+        <div class="loading">
+            <i class="fas fa-spinner"></i>
+            Chargement des publications...
+        </div>
+    </div>
+</div>
+
+<script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDoc,
+    updateDoc,
+    addDoc,
+    deleteDoc,
+    query,
+    where,
+    orderBy,
+    getDocs,
+    serverTimestamp,
+    arrayUnion,
+    arrayRemove,
+    onSnapshot,
+    setDoc // Needed for setDoc to create user profiles
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+// Configuration Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAtjlyHBlRQy_C3HomDXLB39j9lGbLAY_Q",
+    authDomain: "fashionflow-3db6b.firebaseapp.com",
+    projectId: "fashionflow-3db6b",
+    storageBucket: "fashionflow-3db6b.firebasestorage.app",
+    messagingSenderId: "1073693995934",
+    appId: "1:1073693995934:web:9eb28e8f5176faf41edc8f",
+    measurementId: "G-P4DP02HQ75"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const postsCol = collection(db, "devloppement"); // Collection pour les posts
+const commentsCol = collection(db, "comments"); // Collection pour les commentaires
+const usersCol = collection(db, "users"); // Nouvelle collection pour les profils utilisateurs (bio, etc.)
+const storage = getStorage(app);
+
+const auth = getAuth();
+let currentUser = null;
+
+// ATTENTION : Ce mot de passe ADMIN_PASSWORD NE DOIT JAMAIS être codé en dur en production côté client.
+// Utilisez Firebase Cloud Functions ou un service backend sécurisé pour gérer les rôles administrateur.
+// Ceci est UNIQUEMENT pour le développement local et les tests.
+const ADMIN_PASSWORD = "FFLFKSprod"; // Remplacez par votre mot de passe admin pour le développement, mais sécurisez-le !
+
+// Références aux éléments du DOM
+const postsContainer = document.getElementById("postsContainer");
+const loginModal = document.getElementById("loginModal");
+const loginBtn = document.getElementById("loginBtn");
+const userProfile = document.getElementById("userProfile");
+const googleLoginBtn = document.getElementById('googleLoginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const cancelLogin = document.getElementById('cancelLogin');
+const loginForm = document.getElementById('loginForm');
+const newPostBtn = document.getElementById('newPostBtn');
+
+// Éléments pour le nouveau Modal d'affichage de profil
+const profileViewerModal = document.getElementById('profileViewerModal');
+const cancelProfileViewer = document.getElementById('cancelProfileViewer');
+const myPostsTab = document.getElementById('myPostsTab');
+const myLikesTab = document.getElementById('myLikesTab');
+const myPostsContent = document.getElementById('myPostsContent');
+const myLikesContent = document.getElementById('myLikesContent');
+const userPostsContainer = document.getElementById('userPostsContainer');
+const userLikesContainer = document.getElementById('userLikesContainer');
+const openEditProfileFromViewer = document.getElementById('openEditProfileFromViewer');
+
+// Éléments pour le Modal de modification de profil
+const editProfileModal = document.getElementById('editProfileModal');
+const editProfileForm = document.getElementById('editProfileForm');
+const cancelEditProfile = document.getElementById('cancelEditProfile');
+const displayNameInput = document.getElementById('displayNameInput');
+const bioInput = document.getElementById('bioInput');
+const photoFileInput = document.getElementById('photoFileInput');
+
+const provider = new GoogleAuthProvider();
+
+// Stocke les fonctions de désabonnement pour les listeners en temps réel
+const commentListeners = {};
+const userPostListeners = {};
+const userLikedPostListeners = {};
+let mainPostsListenerUnsubscribe = null; // Listener pour le fil principal
+
+// --- Authentification et gestion des utilisateurs ---
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUser = user;
+        updateUserProfileUI(user);
+        newPostBtn.style.display = 'inline-flex';
+        loadPosts(); // Recharger les posts pour l'utilisateur connecté (pour les likes, etc.)
+        // Optionnel: Persister l'état de connexion. Par défaut Firebase gère une session.
+        // setPersistence(auth, browserSessionPersistence); // Pour une session basée sur l'onglet
+        // ou setPersistence(auth, browserLocalPersistence); // Pour une session persistante entre les fermetures du navigateur
+    } else {
+        // Nettoyage des listeners actifs lors de la déconnexion
+        for (const postId in commentListeners) {
+            if (typeof commentListeners[postId] === 'function') {
+                commentListeners[postId]();
+                delete commentListeners[postId];
             }
         }
-        
-        // Update countdown every second
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        for (const listenerKey in userPostListeners) {
+            if (typeof userPostListeners[listenerKey] === 'function') {
+                userPostListeners[listenerKey]();
+                delete userPostListeners[listenerKey];
+            }
+        }
+        for (const listenerKey in userLikedPostListeners) {
+            if (typeof userLikedPostListeners[listenerKey] === 'function') {
+                userLikedPostListeners[listenerKey]();
+                delete userLikedPostListeners[listenerKey];
+            }
+        }
+        // Désabonner le listener du fil principal si l'utilisateur se déconnecte et qu'il était abonné
+        if (mainPostsListenerUnsubscribe) {
+            mainPostsListenerUnsubscribe();
+            mainPostsListenerUnsubscribe = null;
+        }
 
-        // Add some interactive elements
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
+        currentUser = null;
+        newPostBtn.style.display = 'none';
+        updateUserProfileUI(null);
+        loadPosts(); // Recharger les posts pour les invités (sans options de like/commenter)
+    }
+});
+
+// Connexion Google
+googleLoginBtn.addEventListener('click', async () => {
+    try {
+        await signInWithPopup(auth, provider);
+        loginModal.style.display = 'none';
+        showNotification("✅ Connexion réussie avec Google !");
+    } catch (error) {
+        console.error("Erreur de connexion Google:", error);
+        showNotification("🚫 Erreur de connexion : " + error.message);
+    }
+});
+
+// Connexion Email/Mot de passe
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        loginModal.style.display = 'none';
+        showNotification("✅ Connexion réussie !");
+    } catch (error) {
+        console.error("Erreur de connexion email/mdp:", error);
+        showNotification("🚫 Erreur de connexion : " + error.message);
+    }
+});
+
+// Inscription Email/Mot de passe
+registerBtn.addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        // Créer un document utilisateur dans Firestore pour la bio, etc.
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+            email: email,
+            bio: "" // Initialiser la bio vide
+        }, { merge: true });
+
+        showNotification("✅ Inscription réussie !");
+        loginModal.style.display = 'none';
+    } catch (error) {
+        console.error("Erreur d'inscription:", error);
+        showNotification("🚫 Erreur d'inscription : " + error.message);
+    }
+});
+
+// Ouvrir le Modal de Connexion
+loginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex';
+});
+
+// Fermer le Modal de Connexion
+cancelLogin.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+});
+
+// Mettre à jour l'interface utilisateur de l'en-tête en fonction du statut de connexion
+function updateUserProfileUI(user) {
+    if (user) {
+        loginBtn.style.display = 'none';
+        const userDisplayName = user.displayName || user.email.split('@')[0];
+        const userInitial = getInitials(userDisplayName);
+        const userPhoto = (user.photoURL && user.photoURL !== 'null') ? user.photoURL : `https://via.placeholder.com/40?text=${userInitial}`;
+
+        userProfile.innerHTML = `
+            <div class="user-info">
+                <strong>${userDisplayName}</strong>
+                <img src="${userPhoto}" alt="Avatar" class="user-avatar">
+            </div>
+            <div class="profile-actions">
+                <button id="viewProfileBtn" class="btn btn-info btn-small">Mon Profil</button>
+                <button id="logoutBtn" class="btn btn-danger btn-small">Déconnexion</button>
+            </div>
+        `;
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showNotification("✅ Déconnexion réussie.");
+            } catch (error) {
+                console.error("Erreur de déconnexion:", error);
+                showNotification("🚫 Erreur de déconnexion : " + error.message);
+            }
         });
 
-        // Progress bar animation on load
-        window.addEventListener('load', () => {
-            const progressFill = document.querySelector('.progress-fill');
-            progressFill.style.width = '0%';
-            setTimeout(() => {
-                progressFill.style.transition = 'width 2s ease-in-out';
-                progressFill.style.width = '75%';
-            }, 500);
+        document.getElementById('viewProfileBtn').addEventListener('click', () => {
+            openProfileViewer(user);
         });
-    </script>
-</body>
-</html>
+    } else {
+        userProfile.innerHTML = '';
+        loginBtn.style.display = 'inline-flex';
+    }
+}
+
+// Fonction utilitaire pour obtenir les initiales pour l'avatar par défaut
+function getInitials(name) {
+    if (!name) return 'A';
+    const parts = name.split(' ');
+    if (parts.length === 1 && parts[0].length > 0) {
+        return parts[0][0].toUpperCase();
+    }
+    if (parts.length > 1) {
+        const firstInitial = parts[0][0] || '';
+        const lastInitial = parts[parts.length - 1][0] || '';
+        return (firstInitial + lastInitial).toUpperCase();
+    }
+    return 'A';
+}
+
+// Afficher une notification temporaire
+function showNotification(message, duration = 3000) {
+    const notificationDiv = document.createElement('div');
+    notificationDiv.className = 'notification';
+    notificationDiv.textContent = message;
+    document.body.appendChild(notificationDiv);
+    setTimeout(() => {
+        notificationDiv.remove();
+    }, duration);
+}
+
+// --- Fonctions du Modal d'affichage de profil ---
+async function openProfileViewer(user) {
+    profileViewerModal.style.display = 'flex';
+
+    // Remplir les informations utilisateur dans l'afficheur
+    const viewerProfileAvatar = document.getElementById('viewer-profile-avatar');
+    const viewerProfileDisplayName = document.getElementById('viewer-profile-displayname');
+    const viewerProfileEmail = document.getElementById('viewer-profile-email');
+    const viewerProfileBio = document.getElementById('viewer-profile-bio');
+
+    const userDisplayName = user.displayName || user.email.split('@')[0];
+    const userInitial = getInitials(userDisplayName);
+    const userPhoto = (user.photoURL && user.photoURL !== 'null') ? user.photoURL : `https://via.placeholder.com/120?text=${userInitial}`;
+
+    viewerProfileAvatar.src = userPhoto;
+    viewerProfileDisplayName.textContent = userDisplayName;
+    viewerProfileEmail.textContent = user.email;
+
+    // Récupérer la bio depuis Firestore
+    try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            viewerProfileBio.textContent = userData.bio || "Pas de bio pour le moment.";
+        } else {
+            viewerProfileBio.textContent = "Pas de bio pour le moment.";
+            // Si le document utilisateur n'existe pas, le créer (pour les utilisateurs inscrits avant cette fonctionnalité)
+            await setDoc(userDocRef, { bio: "" }, { merge: true });
+        }
+    } catch (error) {
+        console.error("Erreur lors du chargement de la bio:", error);
+        viewerProfileBio.textContent = "Erreur de chargement de la bio.";
+    }
+
+    // Activer l'onglet "Mes Publications" par défaut
+    myPostsTab.classList.add('active');
+    myLikesTab.classList.remove('active');
+    myPostsContent.classList.add('active');
+    myLikesContent.classList.remove('active');
+
+    // Charger le contenu pour "Mes Publications" et "Mes J'aime"
+    loadUserPosts(user.uid);
+    loadUserLikedPosts(user.uid);
+}
+
+// Fermer le Modal d'affichage de profil
+cancelProfileViewer.addEventListener('click', () => {
+    profileViewerModal.style.display = 'none';
+    // Se désabonner de tous les listeners de posts/posts aimés du profile viewer lors de la fermeture pour éviter les fuites de mémoire
+    for (const listenerKey in userPostListeners) {
+        if (typeof userPostListeners[listenerKey] === 'function') {
+            userPostListeners[listenerKey]();
+            delete userPostListeners[listenerKey];
+        }
+    }
+    for (const listenerKey in userLikedPostListeners) {
+        if (typeof userLikedPostListeners[listenerKey] === 'function') {
+            userLikedPostListeners[listenerKey]();
+            delete userLikedPostListeners[listenerKey];
+        }
+    }
+});
+
+// Changement d'onglet dans l'afficheur de profil
+myPostsTab.addEventListener('click', () => {
+    myPostsTab.classList.add('active');
+    myLikesTab.classList.remove('active');
+    myPostsContent.classList.add('active');
+    myLikesContent.classList.remove('active');
+});
+
+myLikesTab.addEventListener('click', () => {
+    myLikesTab.classList.add('active');
+    myPostsTab.classList.remove('active');
+    myLikesContent.classList.add('active');
+    myPostsContent.classList.remove('active');
+});
+
+// Bouton pour ouvrir le Modal de modification de profil depuis l'afficheur
+openEditProfileFromViewer.addEventListener('click', () => {
+    profileViewerModal.style.display = 'none'; // Fermer l'afficheur
+    editProfileModal.style.display = 'flex'; // Ouvrir le modal d'édition
+    // Pré-remplir le formulaire d'édition de profil avec les données de l'utilisateur actuel
+    if (currentUser) {
+        displayNameInput.value = currentUser.displayName || '';
+        // Récupérer la bio depuis Firestore à nouveau pour le formulaire d'édition afin de s'assurer qu'elle est à jour
+        getDoc(doc(db, "users", currentUser.uid)).then(docSnap => {
+            if (docSnap.exists()) {
+                bioInput.value = docSnap.data().bio || '';
+            } else {
+                bioInput.value = '';
+            }
+        }).catch(error => {
+            console.error("Erreur lors du chargement de la bio pour édition:", error);
+            bioInput.value = '';
+        });
+        photoFileInput.value = ''; // Effacer l'entrée de fichier pour des raisons de sécurité
+    }
+});
+
+// --- Fonctions du Modal de modification de profil ---
+editProfileForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!auth.currentUser) {
+        showNotification("🚫 Vous devez être connecté pour modifier votre profil.");
+        return;
+    }
+
+    const displayName = displayNameInput.value.trim();
+    const bio = bioInput.value.trim();
+    const file = photoFileInput.files[0];
+
+    try {
+        let photoURL = auth.currentUser.photoURL;
+        if (file) {
+            const storageRef = ref(storage, `profilePictures/${auth.currentUser.uid}/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, file);
+            photoURL = await getDownloadURL(storageRef);
+        }
+
+        // Mettre à jour le profil d'authentification Firebase
+        await updateProfile(auth.currentUser, {
+            displayName: displayName || null,
+            photoURL: photoURL
+        });
+
+        // Mettre à jour la bio dans le document utilisateur Firestore
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userDocRef, {
+            bio: bio
+        }, { merge: true });
+
+        showNotification('✅ Profil mis à jour !');
+        editProfileModal.style.display = 'none';
+        updateUserProfileUI(auth.currentUser); // Mettre à jour l'UI immédiatement après la mise à jour réussie
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour du profil :", error);
+        showNotification("🚫 Erreur lors de la mise à jour du profil : " + error.message);
+    }
+});
+
+// Fermer le Modal de modification de profil
+cancelEditProfile.addEventListener('click', () => {
+    editProfileModal.style.display = 'none';
+});
+
+// --- Fonctionnalités des posts et commentaires ---
+
+// Fonctionnalité de like/dislike
+async function toggleLike(postId) {
+    if (!currentUser) {
+        showNotification("🚫 Vous devez être connecté pour liker.");
+        return;
+    }
+    try {
+        const postRef = doc(db, "devloppement", postId);
+        const postDoc = await getDoc(postRef);
+        if (!postDoc.exists()) {
+            showNotification("🚫 Post introuvable !");
+            return;
+        }
+        const postData = postDoc.data();
+        const currentLikes = postData.likes || [];
+        const hasLiked = currentLikes.includes(currentUser.uid);
+        if (hasLiked) {
+            await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
+        } else {
+            await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
+        }
+    } catch (error) {
+        console.error("Erreur lors du like:", error);
+        showNotification("🚫 Erreur lors du like : " + error.message);
+    }
+}
+
+// Fonctionnalité de suppression de post
+async function deletePost(postId, postAuthorUid) {
+    if (!currentUser) {
+        showNotification("🚫 Vous devez être connecté pour supprimer un post.");
+        return;
+    }
+    // Vérification côté client pour le mot de passe admin (INSÉCURISÉ POUR LA PRODUCTION - NE PAS UTILISER AINSI)
+    // Pour une solution sécurisée, implémentez un système de rôles via Firestore et utilisez les Security Rules
+    // ou une fonction Cloud Functions pour vérifier les privilèges administrateur.
+    if (postAuthorUid !== currentUser.uid) {
+        const pass = prompt("Mot de passe administrateur requis pour supprimer le post d'un autre utilisateur :");
+        if (pass !== ADMIN_PASSWORD) { // TRÈS INSÉCURISÉ EN PRODUCTION
+            showNotification("🚫 Mot de passe incorrect. Accès refusé.");
+            return;
+        }
+    }
+    if (!confirm("Confirmer la suppression de ce post et de tous ses commentaires ?")) return;
+
+    try {
+        await deleteDoc(doc(db, "devloppement", postId));
+
+        // Supprimer les commentaires associés.
+        // NOTE IMPORTANTE: Pour une suppression en cascade robuste et sécurisée de tous les commentaires
+        // (y compris les réponses imbriquées), l'utilisation d'une Firebase Cloud Function déclenchée
+        // par la suppression du post est FORTEMENT RECOMMANDÉE.
+        // La méthode ci-dessous ne supprime que les commentaires de premier niveau et leurs réponses directes,
+        // mais pas les réponses de réponses imbriquées.
+        const commentsQuery = query(commentsCol, where("postId", "==", postId));
+        const commentsSnapshot = await getDocs(commentsQuery);
+        const deletePromises = commentsSnapshot.docs.map(doc => deleteDoc(doc.ref));
+        await Promise.all(deletePromises);
+
+        showNotification("✅ Post et commentaires associés supprimés avec succès !");
+    } catch (error) {
+        console.error("Erreur lors de la suppression du post:", error);
+        showNotification("🚫 Erreur lors de la suppression : " + error.message);
+    }
+}
+
+// Mettre en place un listener en temps réel pour les commentaires sur un post spécifique
+function setupCommentsListener(postId) {
+    // Se désabonner du listener précédent s'il existe pour éviter les doublons
+    if (commentListeners[postId]) {
+        commentListeners[postId]();
+        delete commentListeners[postId];
+    }
+
+    const commentsListContainer = document.getElementById(`comments-list-${postId}`);
+    const commentCountSpan = document.getElementById(`comment-count-${postId}`);
+    const mainButtonCountSpan = document.getElementById(`comment-count-display-${postId}`);
+
+    if (!commentsListContainer || !commentCountSpan || !mainButtonCountSpan) return;
+
+    commentsListContainer.innerHTML = ''; // Effacer les commentaires existants
+
+    const q = query(
+        commentsCol,
+        where("postId", "==", postId),
+        orderBy("createdAt", "asc")
+    );
+
+    // Stocker la fonction de désabonnement pour la gérer plus tard
+    commentListeners[postId] = onSnapshot(q, (snapshot) => {
+        const allComments = {};
+        const rootComments = [];
+
+        snapshot.forEach(doc => {
+            const comment = { id: doc.id, ...doc.data() };
+            allComments[comment.id] = comment;
+            if (!comment.parentId) {
+                rootComments.push(comment);
+            }
+        });
+
+        // Construire récursivement l'arbre de commentaires pour les réponses
+        function buildCommentTree(comments) {
+            const tree = [];
+            // Trier par heure de création
+            comments.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0);
+
+            comments.forEach(comment => {
+                const children = Object.values(allComments).filter(c => c.parentId === comment.id);
+                comment.replies = buildCommentTree(children);
+                tree.push(comment);
+            });
+            return tree;
+        }
+
+        const commentTree = buildCommentTree(rootComments);
+        commentTree.sort((a, b) => (a.createdAt && b.createdAt) ? a.createdAt.toMillis() - b.createdAt.toMillis() : 0); // Re-trier les commentaires racine
+
+        commentsListContainer.innerHTML = ''; // Effacer avant de repeupler
+
+        if (commentTree.length === 0) {
+            commentsListContainer.innerHTML = '<p class="no-comments">Aucun commentaire pour le moment.</p>';
+        } else {
+            commentTree.forEach(comment => {
+                displayComment(comment, commentsListContainer);
+            });
+        }
+
+        // Mettre à jour les comptes de commentaires
+        commentCountSpan.textContent = snapshot.size;
+        mainButtonCountSpan.textContent = snapshot.size;
+
+    }, (error) => {
+        console.error("Erreur lors de la récupération des commentaires:", error);
+        showNotification("🚫 Erreur lors du chargement des commentaires.");
+    });
+}
+
+// Afficher un seul commentaire (et ses réponses)
+function displayComment(comment, parentContainer) {
+    const commentItem = document.createElement("div");
+    commentItem.className = `comment-item ${comment.parentId ? 'reply' : ''}`;
+    commentItem.id = `comment-${comment.id}`;
+
+    const formattedDate = comment.createdAt ?
+        new Date(comment.createdAt.toDate()).toLocaleString('fr-FR', {
+            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : 'Date inconnue';
+
+    let actionButtonsHTML = ``;
+    if (currentUser) {
+        actionButtonsHTML += `
+            <button class="action-btn reply-comment-btn" data-comment-id="${comment.id}" data-post-id="${comment.postId}">
+                Répondre
+            </button>
+        `;
+    }
+    // Autoriser l'auteur ou l'admin à supprimer le commentaire
+    // ATTENTION: La vérification ADMIN_PASSWORD côté client est INSÉCURISÉE pour la production.
+    // Utilisez des Firebase Security Rules ou une Cloud Function pour la gestion des rôles.
+    if (currentUser && (currentUser.uid === comment.authorUid || (currentUser.email && ADMIN_PASSWORD === "FFLFKSprod"))) { // Exemple très basique d'admin check
+        actionButtonsHTML += `
+            <button class="action-btn delete-comment-btn" data-comment-id="${comment.id}">
+                Supprimer
+            </button>
+        `;
+    }
+
+    const authorDisplayName = comment.author || 'Anonyme';
+    const authorInitial = getInitials(authorDisplayName);
+    const authorPhotoURL = (comment.authorPhotoURL && comment.authorPhotoURL !== 'null') ? comment.authorPhotoURL : `https://via.placeholder.com/40?text=${authorInitial}`;
+
+    let replyToHtml = '';
+    if (comment.parentId && comment.parentCommentAuthor) {
+        replyToHtml = `<span class="reply-to-text">a répondu à ${comment.parentCommentAuthor}</span>`;
+    }
+
+    commentItem.innerHTML = `
+        <div class="comment-header">
+            <img src="${authorPhotoURL}" alt="Avatar de ${authorDisplayName}" class="comment-avatar">
+            <div class="comment-meta">
+                <div class="comment-author-name">${authorDisplayName} ${replyToHtml}</div>
+                <div class="comment-date">${formattedDate}</div>
+            </div>
+        </div>
+        <div class="comment-content">${comment.content}</div>
+        <div class="comment-actions">
+            ${actionButtonsHTML}
+        </div>
+        <div class="reply-form-container" id="reply-form-container-${comment.id}" style="display: none;">
+        </div>
+        <div class="replies-list-nested" id="replies-list-nested-${comment.id}">
+        </div>
+    `;
+    parentContainer.appendChild(commentItem);
+
+    // Attacher les écouteurs d'événements pour les boutons créés dynamiquement
+    commentItem.querySelector('.reply-comment-btn')?.addEventListener('click', toggleReplyForm);
+    commentItem.querySelector('.delete-comment-btn')?.addEventListener('click', deleteComment);
+
+    const nestedRepliesList = commentItem.querySelector('.replies-list-nested');
+    if (comment.replies && comment.replies.length > 0) {
+        comment.replies.forEach(reply => displayComment(reply, nestedRepliesList));
+    }
+}
+
+// Soumettre un nouveau commentaire ou une réponse
+async function submitComment(event) {
+    event.preventDefault();
+
+    if (!currentUser) {
+        showNotification("🚫 Vous devez être connecté pour commenter.");
+        return;
+    }
+
+    const form = event.target;
+    const postId = form.dataset.postId;
+    const parentId = form.dataset.parentId || null;
+    const parentAuthor = form.dataset.parentAuthor || null;
+
+    const textarea = form.querySelector('.comment-textarea');
+    const commentContent = textarea.value.trim();
+
+    if (!commentContent) {
+        showNotification("🚫 Veuillez écrire votre commentaire.");
+        return;
+    }
+
+    const newComment = {
+        postId: postId,
+        content: commentContent,
+        author: currentUser.displayName || currentUser.email.split('@')[0] || 'Anonyme',
+        authorUid: currentUser.uid,
+        authorPhotoURL: currentUser.photoURL || null,
+        createdAt: serverTimestamp(),
+        parentId: parentId
+    };
+
+    if (parentId && parentAuthor) {
+        newComment.parentCommentAuthor = parentAuthor;
+    }
+
+    try {
+        await addDoc(commentsCol, newComment);
+        showNotification("✅ Commentaire posté !");
+        textarea.value = '';
+        if (parentId) {
+            // Fermer le formulaire de réponse après la soumission
+            document.getElementById(`reply-form-container-${parentId}`).style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du commentaire:", error);
+        showNotification("🚫 Erreur lors de l'ajout du commentaire : " + error.message);
+    }
+}
+
+// Basculer la visibilité du formulaire de réponse
+function toggleReplyForm(event) {
+    if (!currentUser) {
+        showNotification("🚫 Vous devez être connecté pour répondre.");
+        return;
+    }
+
+    const commentId = event.target.dataset.commentId;
+    const postId = event.target.dataset.postId;
+    const parentCommentAuthorElement = event.target.closest('.comment-item').querySelector('.comment-author-name');
+    const parentAuthor = parentCommentAuthorElement ? parentCommentAuthorElement.textContent.split(' ')[0] : 'cet utilisateur';
+
+    const replyFormContainer = document.getElementById(`reply-form-container-${commentId}`);
+
+    // Cacher tous les autres formulaires de réponse si un est ouvert
+    document.querySelectorAll('.reply-form-container').forEach(container => {
+        if (container.id !== `reply-form-container-${commentId}`) {
+            container.style.display = 'none';
+            container.innerHTML = ''; // Effacer le contenu lors de la fermeture
+        }
+    });
+
+    if (replyFormContainer.style.display === 'block') {
+        replyFormContainer.style.display = 'none';
+        replyFormContainer.innerHTML = '';
+    } else {
+        replyFormContainer.innerHTML = `
+            <form class="comment-form reply-form-actual" data-post-id="${postId}" data-parent-id="${commentId}" data-parent-author="${parentAuthor}">
+                <textarea class="comment-textarea" placeholder="Votre réponse à ${parentAuthor}..." required></textarea>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary btn-small">Répondre</button>
+                    <button type="button" class="btn btn-secondary btn-small cancel-reply-btn">Annuler</button>
+                </div>
+            </form>
+        `;
+        replyFormContainer.style.display = 'block';
+
+        const newReplyForm = replyFormContainer.querySelector('.reply-form-actual');
+        newReplyForm.addEventListener('submit', submitComment);
+
+        newReplyForm.querySelector('.cancel-reply-btn').addEventListener('click', () => {
+            replyFormContainer.style.display = 'none';
+            replyFormContainer.innerHTML = '';
+        });
+
+        newReplyForm.querySelector('.comment-textarea').focus();
+    }
+}
+
+// Supprimer un commentaire (et ses réponses directes)
+async function deleteComment(event) {
+    const commentId = event.target.dataset.commentId;
+
+    if (!currentUser) {
+        showNotification("🚫 Vous devez être connecté pour supprimer un commentaire.");
+        return;
+    }
+
+    try {
+        const commentRef = doc(db, "comments", commentId);
+        const commentDoc = await getDoc(commentRef);
+
+        if (!commentDoc.exists()) {
+            showNotification("🚫 Commentaire introuvable.");
+            return;
+        }
+
+        const commentData = commentDoc.data();
+
+        // Vérification admin côté client (INSÉCURISÉ POUR LA PRODUCTION - NE PAS UTILISER AINSI)
+        if (commentData.authorUid !== currentUser.uid) {
+            const pass = prompt("Mot de passe administrateur requis pour supprimer ce commentaire :");
+            if (pass !== ADMIN_PASSWORD) { // TRÈS INSÉCURISÉ EN PRODUCTION
+                showNotification("🚫 Mot de passe incorrect. Accès refusé.");
+                return;
+            }
+        }
+
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce commentaire et toutes ses réponses ?")) {
+            return;
+        }
+
+        await deleteDoc(commentRef);
+
+        // Supprimer les réponses directes à ce commentaire.
+        // NOTE IMPORTANTE: Pour une suppression en cascade robuste de toutes les réponses imbriquées,
+        // l'utilisation d'une Firebase Cloud Function est FORTEMENT RECOMMANDÉE.
+        const repliesToDeleteQuery = query(commentsCol, where("parentId", "==", commentId));
+        const repliesSnapshot = await getDocs(repliesToDeleteQuery);
+        const deleteRepliesPromises = repliesSnapshot.docs.map(doc => deleteDoc(doc.ref));
+        await Promise.all(deleteRepliesPromises);
+
+        showNotification("✅ Commentaire supprimé avec succès !");
+    } catch (error) {
+        console.error("Erreur lors de la suppression du commentaire:", error);
+        showNotification("🚫 Erreur lors de la suppression : " + error.message);
+    }
+}
+
+// Fonction pour rendre une seule carte de post (utilisée pour le fil principal et l'afficheur de profil)
+function renderPostCard(post, containerElement) {
+    const postId = post.id;
+    let postElement = containerElement.querySelector(`.post-card[data-post-id="${postId}"]`);
+
+    const postDate = post.createdAt ?
+        new Date(post.createdAt.toDate()).toLocaleString('fr-FR', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : (post.date ? new Date(post.date).toLocaleString('fr-FR', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : 'Date inconnue');
+
+    const isAuthor = currentUser && post.authorUid === currentUser.uid;
+    const likesCount = (post.likes && post.likes.length) ? post.likes.length : 0;
+    const hasLiked = currentUser && post.likes && post.likes.includes(currentUser.uid);
+    const likeButtonClass = `btn-small like-btn ${hasLiked ? 'liked' : ''}`;
+    const likeButtonDisabled = !currentUser ? 'disabled' : '';
+
+    const authorDisplayName = post.author || 'Anonyme';
+    const authorInitial = getInitials(authorDisplayName);
+    const authorPhoto = (post.authorPhotoURL && post.authorPhotoURL !== 'null') ? post.authorPhotoURL : `https://via.placeholder.com/55?text=${authorInitial}`;
+
+    // Vérification de l'admin par email est également INSÉCURISÉE en production,
+    // Utilisez des Firebase Security Rules ou Cloud Functions pour une gestion de rôles.
+    const isAdmin = currentUser && currentUser.email === 'votre_email_admin@exemple.com'; // REMPLACER CET EMAIL
+    const deleteButton = (isAuthor || isAdmin) ?
+        `<button class="btn-small btn-danger delete-post-btn">
+            <i class="fas fa-trash"></i> Supprimer
+        </button>` : '';
+
+    const commentButtonDisabled = !currentUser ? 'disabled' : '';
+
+    // Si le post existe déjà, le mettre à jour (utile pour onSnapshot pour minimiser les changements DOM)
+    if (postElement) {
+        // Mettre à jour seulement les parties dynamiques (likes, counts, etc.)
+        const likeButton = postElement.querySelector('.like-toggle-btn');
+        if (likeButton) {
+            likeButton.className = `${likeButtonClass}`; // Mise à jour de la classe pour le 'liked'
+            likeButton.innerHTML = `<i class="fas fa-heart"></i> ${likesCount} J'aime`;
+        }
+        // Le reste du contenu statique (titre, contenu, auteur) ne change pas, donc pas besoin de le recréer
+        // On pourrait aussi vouloir mettre à jour les boutons d'action (suppression) si le statut de l'utilisateur change (ex: devient admin)
+        const currentDeleteButton = postElement.querySelector('.delete-post-btn');
+        if (isAuthor || isAdmin) {
+            if (!currentDeleteButton) { // Si le bouton de suppression n'existe pas mais devrait exister
+                const postActionsDiv = postElement.querySelector('.post-actions');
+                if (postActionsDiv) {
+                    postActionsDiv.insertAdjacentHTML('beforeend', deleteButton);
+                    postElement.querySelector('.delete-post-btn')?.addEventListener('click', () => deletePost(postId, post.authorUid));
+                }
+            }
+        } else {
+            if (currentDeleteButton) { // Si le bouton existe mais ne devrait plus
+                currentDeleteButton.remove();
+            }
+        }
+
+        // Re-setup du listener de commentaires pour s'assurer que les compteurs sont à jour
+        // La fonction setupCommentsListener gère déjà la désinscription/réinscription
+        setupCommentsListener(postId);
+        return; // Sortir après la mise à jour
+    }
+
+    // Si le post n'existe pas, créer un nouvel élément
+    postElement = document.createElement("div");
+    postElement.className = "post-card";
+    postElement.dataset.postId = postId;
+
+    postElement.innerHTML = `
+        <div class="post-header">
+            <img src="${authorPhoto}" alt="Avatar de ${authorDisplayName}" class="author-avatar">
+            <div class="post-meta">
+                <div class="post-author">${authorDisplayName}</div>
+                <div class="post-date">${postDate}</div>
+            </div>
+        </div>
+        <h3 class="post-title">${post.title}</h3>
+        <p class="post-content">${post.content}</p>
+
+        <div class="post-actions">
+            <button class="${likeButtonClass} like-toggle-btn" ${likeButtonDisabled}>
+                <i class="fas fa-heart"></i> ${likesCount} J'aime
+            </button>
+            <button class="btn-small btn-info toggle-comments-section-btn" data-post-id="${postId}" ${commentButtonDisabled}>
+                <i class="fas fa-comment"></i> Commenter (<span id="comment-count-display-${postId}">0</span>)
+            </button>
+            ${deleteButton}
+        </div>
+
+        <div class="comments-section" id="comments-section-${postId}" style="display: none;">
+            <h4 class="comments-title">Commentaires (<span id="comment-count-${postId}">0</span>)</h4>
+            <div class="comment-form-main-container">
+                <form class="comment-form main-comment-form" data-post-id="${postId}">
+                    <textarea class="comment-textarea" placeholder="Ajouter un commentaire..." required ${commentButtonDisabled ? 'disabled' : ''}></textarea>
+                    <button type="submit" class="btn comment-submit-btn" ${commentButtonDisabled ? 'disabled' : ''}>Poster</button>
+                </form>
+            </div>
+            <div class="comments-list" id="comments-list-${postId}">
+            </div>
+        </div>
+    `;
+
+    // Ajouter le nouveau post en haut de la liste (ordre chronologique inverse)
+    containerElement.prepend(postElement);
+
+    // Attacher les écouteurs d'événements
+    postElement.querySelector('.like-toggle-btn')?.addEventListener('click', () => toggleLike(postId));
+    postElement.querySelector('.delete-post-btn')?.addEventListener('click', () => deletePost(postId, post.authorUid));
+
+    const toggleCommentsBtn = postElement.querySelector('.toggle-comments-section-btn');
+    if (toggleCommentsBtn) {
+        toggleCommentsBtn.addEventListener('click', () => {
+            const commentsSection = document.getElementById(`comments-section-${postId}`);
+            const commentCountOnButton = document.getElementById(`comment-count-display-${postId}`).textContent;
+            if (commentsSection.style.display === 'none') {
+                commentsSection.style.display = 'block';
+                toggleCommentsBtn.innerHTML = `<i class="fas fa-comment"></i> Masquer les commentaires (<span id="comment-count-display-${postId}">${commentCountOnButton}</span>)`;
+                commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                commentsSection.querySelector('.comment-textarea')?.focus();
+            } else {
+                commentsSection.style.display = 'none';
+                toggleCommentsBtn.innerHTML = `<i class="fas fa-comment"></i> Commenter (<span id="comment-count-display-${postId}">${commentCountOnButton}</span>)`;
+            }
+        });
+    }
+
+    postElement.querySelector('.main-comment-form')?.addEventListener('submit', submitComment);
+
+    // Initialiser le listener de commentaires pour ce post
+    setupCommentsListener(postId);
+}
+
+// Charger les posts créés par l'utilisateur actuel pour l'afficheur de profil
+function loadUserPosts(uid) {
+    userPostsContainer.innerHTML = `<p class="loading-message">Chargement de vos publications...</p>`;
+
+    // Se désabonner du listener existant pour cet UID si il y en a un
+    if (userPostListeners[uid]) {
+        userPostListeners[uid]();
+        delete userPostListeners[uid];
+    }
+
+    const q = query(postsCol, where("authorUid", "==", uid), orderBy("createdAt", "desc"));
+
+    userPostListeners[uid] = onSnapshot(q, (snapshot) => {
+        // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
+        const currentPostIds = Array.from(userPostsContainer.children)
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
+
+        const newPostIds = new Set();
+        const postsToAdd = [];
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToAdd.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = userPostsContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToAdd.length === 0) {
+            userPostsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open empty-icon"></i>
+                    <p>Vous n'avez pas encore publié de posts.</p>
+                    <p>Partagez votre première publication !</p>
+                </div>
+            `;
+        } else {
+            // Effacer l'état vide si des posts arrivent
+            const emptyState = userPostsContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            postsToAdd.forEach(post => {
+                renderPostCard(post, userPostsContainer);
+            });
+        }
+    }, (error) => {
+        console.error("Erreur lors du chargement des posts de l'utilisateur:", error);
+        userPostsContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle empty-icon"></i>
+                <p>Erreur lors du chargement de vos posts.</p>
+                <p>Veuillez réessayer plus tard.</p>
+            </div>
+        `;
+    });
+}
+
+// Charger les posts aimés par l'utilisateur actuel pour l'afficheur de profil
+function loadUserLikedPosts(uid) {
+    userLikesContainer.innerHTML = `<p class="loading-message">Chargement des posts aimés...</p>`;
+
+    // Se désabonner du listener existant pour cet UID si il y en a un
+    if (userLikedPostListeners[uid]) {
+        userLikedPostListeners[uid]();
+        delete userLikedPostListeners[uid];
+    }
+
+    const q = query(postsCol, where("likes", "array-contains", uid), orderBy("createdAt", "desc"));
+
+    userLikedPostListeners[uid] = onSnapshot(q, (snapshot) => {
+        // Obtenir les IDs des posts actuellement affichés pour cet utilisateur
+        const currentPostIds = Array.from(userLikesContainer.children)
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
+
+        const newPostIds = new Set();
+        const postsToAdd = [];
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToAdd.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = userLikesContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToAdd.length === 0) {
+            userLikesContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-heart-broken empty-icon"></i>
+                    <p>Vous n'avez pas encore liké de posts.</p>
+                    <p>Explorez et aimez des publications !</p>
+                </div>
+            `;
+        } else {
+            // Effacer l'état vide si des posts arrivent
+            const emptyState = userLikesContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            postsToAdd.forEach(post => {
+                renderPostCard(post, userLikesContainer);
+            });
+        }
+    }, (error) => {
+        console.error("Erreur lors du chargement des posts aimés:", error);
+        userLikesContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle empty-icon"></i>
+                <p>Erreur lors du chargement des posts aimés.</p>
+                <p>Veuillez réessayer plus tard.</p>
+            </div>
+        `;
+    });
+}
+
+
+// Charger tous les posts pour le fil principal (MAINTENANT AVEC ON SNAPSHOT)
+function loadPosts() {
+    postsContainer.innerHTML = `
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            Chargement des publications...
+        </div>
+    `;
+
+    // Désabonner l'ancien listener si présent
+    if (mainPostsListenerUnsubscribe) {
+        mainPostsListenerUnsubscribe();
+        mainPostsListenerUnsubscribe = null;
+    }
+
+    const q = query(postsCol, orderBy("createdAt", "desc"));
+
+    mainPostsListenerUnsubscribe = onSnapshot(q, (snapshot) => {
+        // Obtenir les IDs des posts actuellement affichés
+        const currentPostIds = Array.from(postsContainer.children)
+                                         .filter(el => el.classList.contains('post-card'))
+                                         .map(el => el.dataset.postId);
+
+        const newPostIds = new Set();
+        const postsToProcess = []; // Stocke les posts pour un traitement ordonné
+
+        snapshot.forEach(doc => {
+            const postData = Object.assign({ id: doc.id }, doc.data());
+            newPostIds.add(doc.id);
+            postsToProcess.push(postData);
+        });
+
+        // Supprimer les posts qui ne sont plus dans le snapshot
+        currentPostIds.forEach(id => {
+            if (!newPostIds.has(id)) {
+                const elementToRemove = postsContainer.querySelector(`.post-card[data-post-id="${id}"]`);
+                if (elementToRemove) {
+                    elementToRemove.remove();
+                    // Désabonner le listener de commentaires pour le post supprimé
+                    if (commentListeners[id]) {
+                        commentListeners[id]();
+                        delete commentListeners[id];
+                    }
+                }
+            }
+        });
+
+        // Ajouter ou mettre à jour les posts du snapshot
+        if (postsToProcess.length === 0) {
+            postsContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-box-open empty-icon"></i>
+                    <p>Aucun post trouvé pour le moment.</p>
+                    <p>${currentUser ? 'Soyez le premier à partager une publication !' : 'Connectez-vous pour pouvoir créer des publications !'}</p>
+                </div>
+            `;
+        } else {
+            // Effacer l'état vide ou le message de chargement si des posts arrivent
+            const emptyState = postsContainer.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+            const loadingMessage = postsContainer.querySelector('.loading');
+            if (loadingMessage) loadingMessage.remove();
+
+            // Rendre ou mettre à jour les posts. Utiliser une approche qui préserve l'ordre et le DOM existant.
+            postsToProcess.forEach(post => {
+                renderPostCard(post, postsContainer);
+            });
+        }
+    }, (error) => {
+        console.error("Erreur lors du chargement des posts :", error);
+        postsContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle empty-icon"></i>
+                <p>Erreur lors du chargement des posts : ${error.message}</p>
+                <p>Veuillez réessayer plus tard.</p>
+            </div>
+        `;
+    });
+}
+
+// Chargement initial des posts lorsque le script s'exécute
+loadPosts();
+
+// --- Fonctionnalités supplémentaires (si vous les aviez) ---
+newPostBtn.addEventListener('click', () => {
+    if (currentUser) {
+        // Ici, vous devrez ouvrir un modal ou rediriger vers une page pour créer un nouveau post.
+        // Exemple basique:
+        const postTitle = prompt("Titre de votre nouveau post :");
+        const postContent = prompt("Contenu de votre nouveau post :");
+
+        if (postTitle && postContent) {
+            addDoc(postsCol, {
+                title: postTitle,
+                content: postContent,
+                author: currentUser.displayName || currentUser.email.split('@')[0],
+                authorUid: currentUser.uid,
+                authorPhotoURL: currentUser.photoURL || null,
+                createdAt: serverTimestamp(),
+                likes: []
+            }).then(() => {
+                showNotification("✅ Post créé avec succès !");
+            }).catch(error => {
+                console.error("Erreur lors de la création du post:", error);
+                showNotification("🚫 Erreur lors de la création du post : " + error.message);
+            });
+        } else {
+            showNotification("ℹ️ Création de post annulée.");
+        }
+
+    } else {
+        showNotification("🚫 Connectez-vous pour créer un nouveau post.");
+        loginModal.style.display = 'flex';
+    }
+});
+</script>
