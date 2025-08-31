@@ -1,309 +1,361 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conclusion - FashionFlow</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Styles globaux */
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 20px;
-      padding: 40px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-      position: relative;
-    }
-    
-    header::before {
-      content: '';
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      border-radius: 2px;
-    }
-    
-    header h1 {
-      color: #667eea;
-      margin-bottom: 10px;
-      font-size: 2.5em;
-      font-weight: 300;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .highlight-box {
-      background: linear-gradient(135deg, #667eea15, #764ba215);
-      padding: 30px;
-      border-radius: 15px;
-      margin: 30px 0;
-      border-left: 5px solid #667eea;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .highlight-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      transform: translate(30px, -30px);
-    }
-    
-    p {
-      font-size: 1.2em;
-      text-align: justify;
-      margin-bottom: 20px;
-      color: #555;
-      line-height: 1.8;
-    }
-    
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 30px 0;
-    }
-    
-    li {
-      font-size: 1.1em;
-      margin-bottom: 20px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 12px;
-      border-left: 4px solid #667eea;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      position: relative;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    li:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    }
-    
-    li::before {
-      content: '✨';
-      position: absolute;
-      left: -2px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2em;
-      background: #667eea;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .conclusion-visual {
-      text-align: center;
-      margin: 40px 0;
-      position: relative;
-    }
-    
-    .innovation-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-size: 1.1em;
-      font-weight: bold;
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin: 30px 0;
-    }
-    
-    .stat-card {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 25px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      border: 1px solid rgba(102, 126, 234, 0.2);
-    }
-    
-    .stat-number {
-      font-size: 2em;
-      font-weight: bold;
-      color: #667eea;
-      display: block;
-    }
-    
-    .stat-label {
-      color: #666;
-      font-size: 0.9em;
-      margin-top: 5px;
-    }
-    
-    .back {
-      display: inline-block;
-      text-align: center;
-      margin: 40px auto 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
-      padding: 15px 30px;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-    }
-    
-    .back:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 40px;
-    }
-    
-    .footer-decoration {
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
-      margin: 20px 0;
-    }
-    
-    /* Animations d'entrée */
-    .container {
-      animation: slideIn 0.8s ease-out;
-    }
-    
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container {
-        margin: 10px;
-        padding: 20px;
-      }
-      
-      header h1 {
-        font-size: 2em;
-      }
-      
-      p, li {
-        font-size: 1em;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionFlow - Réinventons la Mode Ensemble</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-section {
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(1px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .content-section {
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px 20px;
+            border-radius: 16px;
+            color: white;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card:nth-child(2) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .feature-card:nth-child(3) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            min-width: 280px;
+            text-align: center;
+        }
+
+        .cta-button.primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .cta-button.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            background: #f8f9fa;
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-button.secondary:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .decorative-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 20px;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cta-section {
+                padding: 40px 20px;
+            }
+
+            .cta-title {
+                font-size: 1.8rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-button {
+                min-width: 250px;
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>✅ Conclusion</h1>
-    </header>
-    
-    <main>
-      <div class="highlight-box">
-        <p>
-          <strong>FashionFlow</strong> représente une révolution dans l'univers du shopping en ligne, fusionnant innovation technologique et expérience utilisateur exceptionnelle.
-        </p>
-      </div>
-      
-      <p>
-        Voici un rappel des éléments principaux du projet FashionFlow :
-      </p>
-      
-      <ul>
-        <li>L'application réunit l'expérience de swipe, la personnalisation et une interface intuitive pour révolutionner le shopping en ligne.</li>
-        <li>FashionFlow intègre un algorithme intelligent inspiré de TikTok pour proposer des articles parfaitement adaptés aux préférences des utilisateurs.</li>
-        <li>Le projet se distingue par son approche innovante et sa capacité à répondre à un besoin réel en simplifiant et modernisant l'expérience d'achat.</li>
-      </ul>
-      
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-number">🎯</span>
-          <div class="stat-label">Personnalisation Avancée</div>
+    <div class="container">
+        <div class="decorative-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
         </div>
-        <div class="stat-card">
-          <span class="stat-number">⚡</span>
-          <div class="stat-label">Interface Intuitive</div>
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="logo">FashionFlow</h1>
+                <p class="tagline">L'avenir de la mode digitale</p>
+            </div>
         </div>
-        <div class="stat-card">
-          <span class="stat-number">🚀</span>
-          <div class="stat-label">Technologie Innovante</div>
+
+        <div class="content-section">
+            <h2 class="main-title">Conclusion</h2>
+            <p class="description">
+                <span class="highlight">FashionFlow</span> n'est pas qu'une application : c'est une nouvelle façon de découvrir, aimer et acheter la mode. Nous voulons transformer le shopping en une expérience <span class="highlight">rapide, fun et adaptée à chacun</span>.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Rapide</div>
+                    <div class="feature-text">Trouvez instantanément ce que vous cherchez</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎉</div>
+                    <div class="feature-title">Fun</div>
+                    <div class="feature-text">Une expérience shopping ludique et engageante</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <div class="feature-title">Personnalisé</div>
+                    <div class="feature-text">Adapté à votre style unique</div>
+                </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="highlight-box">
-        <p>
-          Ce projet est <strong>innovant, utile et prometteur</strong> car il combine technologie, créativité et efficacité pour transformer la façon dont nous faisons du shopping en ligne. Il reste encore des fonctionnalités à peaufiner, mais la vision et les premiers résultats démontrent un fort potentiel de succès.
-        </p>
-      </div>
-      
-      <div class="conclusion-visual">
-        <div class="innovation-badge">
-          🌟 Projet Innovant & Prometteur 🌟
+
+        <div class="cta-section">
+            <h3 class="cta-title">Rejoignez-nous pour réinventer la mode !</h3>
+            <div class="cta-buttons">
+                <a href="https://chat.whatsapp.com/HDXeLQPQmgGG5axKyA3hFf" class="cta-button primary">Rejoindre le groupe WhatsApp</a>
+                <a href="wiki.html" class="cta-button secondary">Retourner sur le wiki</a>
+            </div>
         </div>
-      </div>
-      
-      <div class="footer-decoration"></div>
-    </main>
-    
-    <footer>
-      <a href="wiki.html" class="back">⬅️ Retour au Sommaire</a>
-    </footer>
-  </div>
+    </div>
 </body>
 </html>

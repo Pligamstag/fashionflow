@@ -1,796 +1,494 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>6. Technologie et Plan de Développement - FashionFlow</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Technologie - HeartSync</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Variables CSS */
-    :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --tech-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      --fashion-gradient: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
-      --accent-color: #d14b6d;
-      --tech-color: #00d4ff;
-      --success-color: #10b981;
-      --text-primary: #1f2937;
-      --text-secondary: #6b7280;
-      --bg-glass: rgba(255, 255, 255, 0.95);
-      --shadow-soft: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 40px rgba(209, 75, 109, 0.3);
-      --shadow-tech: 0 0 40px rgba(0, 212, 255, 0.3);
-    }
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
 
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.2s forwards;
+        }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+        }
 
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
 
-    @keyframes gradientFlow {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
 
-    @keyframes codeFloat {
-      0% { transform: translateX(-100%) translateY(0px); opacity: 0; }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
-      100% { transform: translateX(100vw) translateY(-20px); opacity: 0; }
-    }
+        .tech-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Styles globaux */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        .tech-card:nth-child(1) { animation-delay: 0.3s; }
+        .tech-card:nth-child(2) { animation-delay: 0.5s; }
+        .tech-card:nth-child(3) { animation-delay: 0.7s; }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-      background-size: 400% 400%;
-      animation: gradientFlow 15s ease infinite;
-      color: white;
-      margin: 0;
-      padding: 0;
-      line-height: 1.7;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        .tech-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
 
-    /* Particules de code flottantes */
-    .code-particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24, #ffa726);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    .code-element {
-      position: absolute;
-      color: var(--tech-color);
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      opacity: 0.4;
-      font-weight: 600;
-      animation: codeFloat 12s linear infinite;
-    }
+        .tech-card:hover::before {
+            opacity: 1;
+        }
 
-    .code-element:nth-child(1) { top: 15%; animation-delay: 0s; }
-    .code-element:nth-child(2) { top: 35%; animation-delay: 3s; }
-    .code-element:nth-child(3) { top: 55%; animation-delay: 6s; }
-    .code-element:nth-child(4) { top: 75%; animation-delay: 9s; }
-    .code-element:nth-child(5) { top: 25%; animation-delay: 1.5s; }
-    .code-element:nth-child(6) { top: 65%; animation-delay: 4.5s; }
+        .tech-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            transition: transform 0.3s ease;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      position: relative;
-      z-index: 10;
-    }
+        .tech-card:hover .tech-icon {
+            transform: rotate(5deg) scale(1.1);
+        }
 
-    /* Header moderne */
-    header {
-      text-align: center;
-      margin-bottom: 50px;
-      animation: fadeInUp 1s ease-out;
-    }
+        .tech-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
 
-    .header-card {
-      background: rgba(15, 15, 35, 0.9);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 212, 255, 0.3);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: var(--shadow-tech);
-      position: relative;
-      overflow: hidden;
-    }
+        .tech-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
 
-    .header-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-      animation: shimmer 3s infinite;
-    }
+        .main-description {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 32px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.9s forwards;
+            position: relative;
+            overflow: hidden;
+        }
 
-    header h1 {
-      background: var(--tech-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      letter-spacing: -0.02em;
-    }
+        .main-description::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 107, 107, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
 
-    .subtitle {
-      color: var(--tech-color);
-      font-size: 1.2rem;
-      font-weight: 400;
-      opacity: 0.9;
-    }
+        .main-description h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+        }
 
-    /* Sections principales */
-    .main-section {
-      background: rgba(15, 15, 35, 0.9);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 20px;
-      padding: 35px;
-      margin: 30px 0;
-      transition: all 0.3s ease;
-      animation: fadeInUp 0.8s ease-out both;
-      position: relative;
-      overflow: hidden;
-    }
+        .main-description p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #555;
+            max-width: 900px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
 
-    .main-section:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-tech);
-      border-color: var(--tech-color);
-    }
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-    .section-title {
-      background: var(--tech-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
 
-    .section-icon {
-      font-size: 1.5rem;
-      background: var(--tech-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+        .floating-element:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
 
-    .section-content {
-      color: rgba(255, 255, 255, 0.9);
-      line-height: 1.8;
-    }
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
 
-    .tech-list {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0;
-    }
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
 
-    .tech-list li {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 12px;
-      padding: 15px 20px;
-      margin: 12px 0;
-      position: relative;
-      padding-left: 50px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1.1s forwards;
+        }
 
-    .tech-list li:hover {
-      background: rgba(0, 212, 255, 0.2);
-      transform: translateX(10px);
-      border-color: var(--tech-color);
-    }
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
 
-    .tech-list li::before {
-      content: '⚡';
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.2rem;
-      color: var(--tech-color);
-    }
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
 
-    .tech-name {
-      color: var(--tech-color);
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            display: block;
+            margin-bottom: 10px;
+        }
 
-    .tech-description {
-      color: rgba(255, 255, 255, 0.8);
-      margin-top: 5px;
-      font-size: 0.95rem;
-    }
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
 
-    /* Timeline pour le planning */
-    .timeline {
-      position: relative;
-      max-width: 800px;
-      margin: 30px auto;
-    }
+        .conclusion-section {
+            text-align: center;
+            margin-top: 80px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1.3s forwards;
+        }
 
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 30px;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--tech-gradient);
-      border-radius: 2px;
-    }
+        .conclusion-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .timeline-item {
-      position: relative;
-      margin: 30px 0;
-      padding-left: 80px;
-      opacity: 0;
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
+        .conclusion-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
 
-    .timeline-item:nth-child(1) { animation-delay: 0.2s; }
-    .timeline-item:nth-child(2) { animation-delay: 0.4s; }
-    .timeline-item:nth-child(3) { animation-delay: 0.6s; }
-    .timeline-item:nth-child(4) { animation-delay: 0.8s; }
-    .timeline-item:nth-child(5) { animation-delay: 1s; }
+        .conclusion-btn:hover::before {
+            left: 100%;
+        }
 
-    .timeline-marker {
-      position: absolute;
-      left: 20px;
-      top: 10px;
-      width: 20px;
-      height: 20px;
-      background: var(--tech-gradient);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 0.8rem;
-    }
+        .conclusion-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+        }
 
-    .timeline-content {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 15px;
-      padding: 20px;
-      transition: all 0.3s ease;
-    }
+        .conclusion-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
 
-    .timeline-content:hover {
-      background: rgba(0, 212, 255, 0.15);
-      transform: translateY(-3px);
-    }
+        .conclusion-icon {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
 
-    .timeline-title {
-      color: var(--tech-color);
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 8px;
-    }
+        .conclusion-btn:hover .conclusion-icon {
+            transform: translateX(5px);
+        }
 
-    .timeline-description {
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.6;
-    }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    /* Stack technologique - Grid */
-    .tech-stack-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      margin: 30px 0;
-    }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
 
-    .stack-card {
-      background: rgba(15, 15, 35, 0.9);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 18px;
-      padding: 25px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%);
+            }
+        }
 
-    .stack-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: var(--shadow-tech);
-      border-color: var(--tech-color);
-    }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-description {
+                padding: 40px 30px;
+            }
+            
+            .main-description h2 {
+                font-size: 2rem;
+            }
+            
+            .main-description p {
+                font-size: 1.1rem;
+            }
 
-    .stack-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .stack-card:hover::before {
-      left: 100%;
-    }
-
-    .stack-icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      display: block;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .stack-title {
-      color: var(--tech-color);
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .stack-description {
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    /* Plateformes section */
-    .platforms {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 30px 0;
-      flex-wrap: wrap;
-    }
-
-    .platform-item {
-      background: rgba(0, 212, 255, 0.1);
-      border: 2px solid rgba(0, 212, 255, 0.3);
-      border-radius: 20px;
-      padding: 25px 35px;
-      text-align: center;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      min-width: 150px;
-    }
-
-    .platform-item:hover {
-      background: rgba(0, 212, 255, 0.2);
-      transform: scale(1.1);
-      border-color: var(--tech-color);
-    }
-
-    .platform-icon {
-      font-size: 3rem;
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .platform-name {
-      color: var(--tech-color);
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-
-    /* Footer avec bouton retour stylisé */
-    footer {
-      text-align: center;
-      margin-top: 60px;
-      animation: fadeInUp 1s ease-out 1.5s both;
-    }
-
-    .back {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--tech-gradient);
-      color: white;
-      padding: 16px 32px;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-tech);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .back::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .back:hover::before {
-      left: 100%;
-    }
-
-    .back:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.6);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px 15px;
-      }
-      
-      header h1 {
-        font-size: 2.2rem;
-      }
-      
-      .tech-stack-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .timeline::before {
-        left: 15px;
-      }
-      
-      .timeline-item {
-        padding-left: 50px;
-      }
-      
-      .timeline-marker {
-        left: 6px;
-      }
-      
-      .platforms {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 1.9rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .main-section {
-        padding: 25px;
-      }
-      
-      .section-title {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
+            .conclusion-btn {
+                font-size: 1.1rem;
+                padding: 18px 35px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Particules de code flottantes -->
-  <div class="code-particles">
-    <div class="code-element">React Native</div>
-    <div class="code-element">Firebase</div>
-    <div class="code-element">JavaScript</div>
-    <div class="code-element">Node.js</div>
-    <div class="code-element">Expo</div>
-    <div class="code-element">GitHub</div>
-  </div>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
 
-  <div class="container">
-    <header>
-      <div class="header-card">
-        <h1>6. Technologie et Plan de Développement</h1>
-        <p class="subtitle">Architecture moderne pour une expérience mobile optimale</p>
-      </div>
-    </header>
-
-    <main>
-      <!-- Stack Technologique -->
-      <section class="main-section" style="animation-delay: 0.2s;">
-        <h2 class="section-title">
-          <span class="section-icon">🛠️</span>
-          Stack Technologique
-        </h2>
-        <div class="tech-stack-grid">
-          <div class="stack-card">
-            <span class="stack-icon">⚛️</span>
-            <h3 class="stack-title">React Native</h3>
-            <p class="stack-description">
-              Framework pour développer une application mobile multiplateforme avec une seule base de code, 
-              garantissant une performance native sur Android et iOS.
-            </p>
-          </div>
-          <div class="stack-card">
-            <span class="stack-icon">🔥</span>
-            <h3 class="stack-title">Firebase</h3>
-            <p class="stack-description">
-              Backend-as-a-Service pour l'authentification, le stockage des données utilisateur, 
-              et la gestion en temps réel des interactions.
-            </p>
-          </div>
-          <div class="stack-card">
-            <span class="stack-icon">🟢</span>
-            <h3 class="stack-title">Node.js</h3>
-            <p class="stack-description">
-              Runtime JavaScript pour la gestion des requêtes API et la logique serveur, 
-              avec Express pour une architecture robuste.
-            </p>
-          </div>
+    <div class="container">
+        <div class="hero">
+            <h1>La Technologie</h1>
+            <p class="subtitle">Une architecture moderne au service de l'amour authentique</p>
         </div>
-      </section>
 
-      <!-- Langages de Programmation -->
-      <section class="main-section" style="animation-delay: 0.4s;">
-        <h2 class="section-title">
-          <span class="section-icon">💻</span>
-          Langages de Programmation
-        </h2>
-        <ul class="tech-list">
-          <li>
-            <div class="tech-name">JavaScript</div>
-            <div class="tech-description">Pour la logique globale de l'application et les interactions utilisateur</div>
-          </li>
-          <li>
-            <div class="tech-name">React Native</div>
-            <div class="tech-description">Pour développer une application mobile multiplateforme (Android et iOS)</div>
-          </li>
-        </ul>
-      </section>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-icon">📱</div>
+                <h3>React Native</h3>
+                <p>Application mobile cross-platform développée avec React Native, offrant une expérience native fluide sur Android et iOS. Performance optimisée et interface utilisateur intuitive pour un swiping sans compromis.</p>
+            </div>
 
-      <!-- Outils et Infrastructure -->
-      <section class="main-section" style="animation-delay: 0.6s;">
-        <h2 class="section-title">
-          <span class="section-icon">⚙️</span>
-          Outils et Infrastructure
-        </h2>
-        <ul class="tech-list">
-          <li>
-            <div class="tech-name">Expo</div>
-            <div class="tech-description">Pour simplifier le développement et le déploiement mobile</div>
-          </li>
-          <li>
-            <div class="tech-name">Git/GitHub</div>
-            <div class="tech-description">Pour la gestion du code source et la collaboration en équipe</div>
-          </li>
-        </ul>
-      </section>
+            <div class="tech-card">
+                <div class="tech-icon">🔥</div>
+                <h3>Firebase</h3>
+                <p>Système de données en temps réel avec Firebase pour des profils personnalisés et sécurisés. Synchronisation instantanée, authentification robuste et stockage cloud pour une expérience sans interruption.</p>
+            </div>
 
-      <!-- Plateformes Cibles -->
-      <section class="main-section" style="animation-delay: 0.8s;">
-        <h2 class="section-title">
-          <span class="section-icon">📱</span>
-          Plateformes Visées
-        </h2>
-        <div class="platforms">
-          <div class="platform-item">
-            <span class="platform-icon">🤖</span>
-            <div class="platform-name">Android</div>
-          </div>
-          <div class="platform-item">
-            <span class="platform-icon">🍎</span>
-            <div class="platform-name">iOS</div>
-          </div>
+            <div class="tech-card">
+                <div class="tech-icon">🤖</div>
+                <h3>IA Avancée</h3>
+                <p>Algorithme intelligent qui apprend de vos préférences et affine ses recommandations à chaque swipe. Machine learning adaptatif pour des suggestions toujours plus pertinentes et personnalisées.</p>
+            </div>
         </div>
-        <div class="section-content">
-          <p style="text-align: center; margin-top: 20px; font-size: 1.1rem;">
-            Grâce à <strong style="color: var(--tech-color);">React Native</strong>, une seule base de code sera utilisée 
-            pour cibler les deux systèmes d'exploitation mobiles, optimisant ainsi le temps de développement et la maintenance.
-          </p>
+
+        <div class="main-description">
+            <h2>Excellence Technologique</h2>
+            <p>Derrière une expérience fluide se cache une technologie moderne et performante : une application mobile développée en React Native pour être disponible sur Android et iOS, et un système de données en temps réel avec Firebase pour des profils personnalisés et sécurisés. Notre algorithme intelligent affine ses recommandations à chaque swipe, pour rendre l'expérience toujours plus pertinente.</p>
         </div>
-      </section>
 
-      <!-- Planning de Développement -->
-      <section class="main-section" style="animation-delay: 1s;">
-        <h2 class="section-title">
-          <span class="section-icon">🚀</span>
-          Planning de Développement
-        </h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-marker">1</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Phase 1 (Semaine 1-2) : Design & Maquettes</h3>
-              <p class="timeline-description">
-                Design de l'interface utilisateur et création des maquettes détaillées. 
-                Définition de l'expérience utilisateur et validation des concepts visuels.
-              </p>
+        <div class="stats-section">
+            <div class="stat-item">
+                <span class="stat-number">99.9%</span>
+                <span class="stat-label">Disponibilité</span>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-marker">2</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Phase 2 (Semaine 3-4) : Développement Front-end</h3>
-              <p class="timeline-description">
-                Développement de l'interface utilisateur avec React Native. 
-                Implémentation des composants, navigation et interactions.
-              </p>
+            <div class="stat-item">
+                <span class="stat-number">&lt;100ms</span>
+                <span class="stat-label">Temps de réponse</span>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-marker">3</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Phase 3 (Semaine 5-6) : Intégration Backend</h3>
-              <p class="timeline-description">
-                Intégration de Firebase pour l'authentification, la base de données 
-                et la synchronisation des données utilisateur.
-              </p>
+            <div class="stat-item">
+                <span class="stat-number">256-bit</span>
+                <span class="stat-label">Chiffrement</span>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-marker">4</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Phase 4 (Semaine 7) : Tests & Optimisation</h3>
-              <p class="timeline-description">
-                Tests utilisateurs approfondis, correction des bugs identifiés 
-                et optimisation des performances.
-              </p>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Monitoring</span>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-marker">5</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Phase 5 (Semaine 8) : Déploiement</h3>
-              <p class="timeline-description">
-                Déploiement final et publication sur les stores officiels 
-                (Google Play Store et Apple App Store).
-              </p>
-            </div>
-          </div>
         </div>
-      </section>
-    </main>
 
-    <footer>
-      <a href="index.html" class="back">
-        <span>⬅️</span>
-        Retour au sommaire
-      </a>
-    </footer>
-  </div>
+        <div class="conclusion-section">
+            <button class="conclusion-btn" onclick="handleConclusionClick()">
+                Conclusion
+                <span class="conclusion-icon">→</span>
+            </button>
+        </div>
+    </div>
 
-  <script>
-    // Animation d'apparition au scroll
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.animationPlayState = 'running';
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments animés
+        document.querySelectorAll('.tech-card, .main-description, .stats-section, .conclusion-section').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Effet de parallaxe léger sur les éléments flottants
+        let ticking = false;
+        
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelectorAll('.floating-element');
+            
+            parallax.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+            
+            ticking = false;
         }
-      });
-    }, observerOptions);
 
-    // Observer tous les éléments avec animation
-    document.querySelectorAll('.main-section, .stack-card, .timeline-item').forEach(el => {
-      observer.observe(el);
-    });
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
 
-    // Effet de hover dynamique pour les cartes tech
-    document.querySelectorAll('.tech-list li').forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        item.style.transform = 'translateX(15px) scale(1.02)';
-      });
-      
-      item.addEventListener('mouseleave', () => {
-        item.style.transform = 'translateX(0) scale(1)';
-      });
-    });
+        window.addEventListener('scroll', requestTick);
 
-    // Animation des icônes de stack
-    document.querySelectorAll('.stack-icon').forEach(icon => {
-      icon.addEventListener('mouseenter', () => {
-        icon.style.transform = 'scale(1.2) rotateY(180deg)';
-        icon.style.transition = 'transform 0.4s ease';
-      });
-      
-      icon.addEventListener('mouseleave', () => {
-        icon.style.transform = 'scale(1) rotateY(0deg)';
-      });
-    });
-
-    // Effet parallaxe léger pour les sections
-    let ticking = false;
-    
-    function updateParallax() {
-      const scrolled = window.pageYOffset;
-      const sections = document.querySelectorAll('.main-section');
-      
-      sections.forEach((section, index) => {
-        const rate = scrolled * -0.5 * (index + 1) * 0.1;
-        section.style.transform = `translateY(${rate}px)`;
-      });
-      
-      ticking = false;
-    }
-
-    function requestParallaxUpdate() {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', requestParallaxUpdate);
-
-    // Animation de typing pour les éléments de code
-    const codeElements = document.querySelectorAll('.code-element');
-    codeElements.forEach((element, index) => {
-      element.style.animationDelay = `${index * 2}s`;
-    });
-
-    // Interaction avec les plateformes
-    document.querySelectorAll('.platform-item').forEach(platform => {
-      platform.addEventListener('click', () => {
-        platform.style.animation = 'pulse 0.6s ease-in-out';
-        setTimeout(() => {
-          platform.style.animation = '';
-        }, 600);
-      });
-    });
-  </script>
+        // Fonction pour gérer le clic sur le bouton conclusion
+        function handleConclusionClick() {
+            window.location.href = 'conclusion.html';
+        }
+    </script>
 </body>
 </html>

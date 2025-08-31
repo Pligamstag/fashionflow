@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionFlow - L'avenir de la mode connectée</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.1" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(238, 90, 36, 0.4);
+        }
+
+        .why-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+        }
+
+        .benefit-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .benefit-card p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .features-list li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+
+
+        .objectives-section {
+            background: #2c3e50;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .objective-item {
+            text-align: center;
+        }
+
+        .objective-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .objective-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .ambition-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
+            margin-top: 30px;
+        }
+
+        .ambition-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4);
+        }
+
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefit-card {
+                padding: 30px 20px;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>FashionFlow</h1>
+                <p>L'avenir de la mode connectée - Simplicité, rapidité et personnalisation</p>
+                <a href="#why" class="cta-button">Découvrir pourquoi</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="why" class="why-section">
+        <div class="container">
+            <h2 class="section-title">Pourquoi FashionFlow ?</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3>
+                        <div class="icon">👤</div>
+                        Pour l'utilisateur
+                    </h3>
+                    <p>
+                        <strong>L'expérience est synonyme de simplicité, rapidité et personnalisation.</strong> 
+                        En quelques minutes, vous trouvez la tenue idéale sans passer des heures à chercher.
+                    </p>
+                    <ul class="features-list">
+                        <li>Expérience ultra-rapide et intuitive</li>
+                        <li>Personnalisation intelligente selon vos goûts</li>
+                        <li>Fonction "J'aime" pour sauvegarder vos coups de cœur</li>
+                        <li>Achat direct en un clic</li>
+                        <li>Gain de temps considérable dans vos recherches</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-card">
+                    <h3>
+                        <div class="icon">🏢</div>
+                        Pour les marques
+                    </h3>
+                    <p>
+                        <strong>FashionFlow est une opportunité unique de toucher une nouvelle audience,</strong> 
+                        plus jeune, connectée et avide de nouveautés. Notre modèle économique, basé sur des commissions et des partenariats, garantit un écosystème gagnant-gagnant.
+                    </p>
+                    <ul class="features-list">
+                        <li>Accès à une audience jeune et connectée</li>
+                        <li>Visibilité accrue pour vos produits</li>
+                        <li>Modèle économique équitable basé sur la performance</li>
+                        <li>Partenariats stratégiques durables</li>
+                        <li>Analytics détaillées pour optimiser vos ventes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="objectives-section">
+        <div class="container">
+            <h2>Nos Objectifs</h2>
+            <div class="objectives-grid">
+                <div class="objective-item">
+                    <div class="objective-number">1000</div>
+                    <div class="objective-label">Utilisateurs actifs visés</div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">10+</div>
+                    <div class="objective-label">Marques partenaires</div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">5min</div>
+                    <div class="objective-label">Temps de recherche moyen</div>
+                </div>
+                <div class="objective-item">
+                    <div class="objective-number">4★</div>
+                    <div class="objective-label">Objectif expérience utilisateur</div>
+                </div>
+            </div>
+            <a href="ambition.html" class="ambition-button">Découvrir nos ambitions</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 FashionFlow. Révolutionner la mode, une tenue à la fois.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes
+        document.querySelectorAll('.benefit-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            observer.observe(card);
+        });
+
+        // Animation des objectifs
+        const animateObjectives = () => {
+            const objectiveNumbers = document.querySelectorAll('.objective-number');
+            objectiveNumbers.forEach(objective => {
+                const finalNumber = objective.textContent;
+                let currentNumber = 0;
+                
+                if (finalNumber.includes('K')) {
+                    const targetNum = parseInt(finalNumber) * 1000;
+                    const increment = targetNum / 50;
+                    
+                    const updateNumber = () => {
+                        if (currentNumber < targetNum) {
+                            currentNumber += increment;
+                            objective.textContent = Math.floor(currentNumber / 1000) + 'K';
+                            requestAnimationFrame(updateNumber);
+                        } else {
+                            objective.textContent = finalNumber;
+                        }
+                    };
+                    updateNumber();
+                } else if (finalNumber.includes('+')) {
+                    const targetNum = parseInt(finalNumber);
+                    const increment = targetNum / 50;
+                    
+                    const updateNumber = () => {
+                        if (currentNumber < targetNum) {
+                            currentNumber += increment;
+                            objective.textContent = Math.floor(currentNumber) + '+';
+                            requestAnimationFrame(updateNumber);
+                        } else {
+                            objective.textContent = finalNumber;
+                        }
+                    };
+                    updateNumber();
+                } else if (finalNumber.includes('min')) {
+                    objective.textContent = finalNumber; // Pas d'animation pour "2min"
+                } else if (finalNumber.includes('★')) {
+                    objective.textContent = finalNumber; // Pas d'animation pour "5★"
+                }
+            });
+        };
+
+        // Observer la section objectifs
+        const objectivesObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateObjectives();
+                    objectivesObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        const objectivesSection = document.querySelector('.objectives-section');
+        if (objectivesSection) {
+            objectivesObserver.observe(objectivesSection);
+        }
+
+        // Smooth scroll pour le bouton CTA
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('#why').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
