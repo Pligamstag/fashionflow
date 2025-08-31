@@ -3,399 +3,774 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance en cours</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Site en Maintenance - Mise à jour en cours</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
-        
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            padding: 1rem;
+            overflow-x: hidden;
         }
-        
-        @keyframes progressMove {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+
+        .container {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-            50% { transform: translateY(-100px) rotate(180deg); opacity: 0.8; }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        
-        .gear-icon {
-            animation: rotate 3s linear infinite;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
-        }
-        
-        .progress-fill {
-            animation: progressMove 2s ease-in-out infinite, gradientMove 3s ease-in-out infinite;
-            width: 0;
-        }
-        
-        .particle {
+
+        .container::before {
+            content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.1);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .maintenance-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .status-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .status-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-icon {
+            color: var(--warning-color);
+            font-size: 1.1rem;
+        }
+
+        .timeline-text {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .progress-section {
+            margin: 2rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            animation: progressAnimation 3s ease-in-out infinite alternate;
+            width: 75%;
+        }
+
+        @keyframes progressAnimation {
+            0% { width: 70%; }
+            100% { width: 85%; }
+        }
+
+        /* Section WhatsApp optimisée */
+        .whatsapp-section {
+            background: linear-gradient(135deg, #25d366, #20b954);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .whatsapp-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .whatsapp-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
         }
-        
-        .pulse-animation {
-            animation: pulse 2s ease-in-out infinite alternate;
+
+        .whatsapp-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            text-align: center;
         }
-        
-        .fade-in-up {
-            animation: fadeInUp 0.5s ease-out;
+
+        .whatsapp-description {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            line-height: 1.5;
+            opacity: 0.95;
         }
-        
-        .shake-animation {
-            animation: shake 0.5s ease-in-out;
+
+        .whatsapp-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        
-        .vote-option:hover .vote-icon {
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .feature-emoji {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #25d366;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin: 0 auto;
+            gap: 0.5rem;
+            min-width: 250px;
+        }
+
+        .whatsapp-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: #f0fff4;
+        }
+
+        .whatsapp-button-icon {
+            flex-shrink: 0;
+        }
+
+        .whatsapp-arrow {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .whatsapp-goal {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0;
+            opacity: 0.85;
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-section {
+                padding: 1.5rem;
+                margin-top: 1.5rem;
+            }
+
+            .whatsapp-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .whatsapp-title {
+                font-size: 1.5rem;
+            }
+
+            .whatsapp-features {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .whatsapp-button {
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
+                min-width: auto;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .whatsapp-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .whatsapp-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        .admin-access {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .admin-access:hover {
+            opacity: 1;
+        }
+
+        .admin-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--text-secondary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-color);
             transform: scale(1.1);
         }
-        
-        .vote-option.selected {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ffd700;
+
+        /* Modal pour l'admin */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
         }
-        
-        .vote-option.selected .vote-icon {
-            color: #ffd700;
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            background: var(--bg-secondary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: var(--error-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: var(--success-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+            border: 1px solid #bbf7d0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+                margin: 0.5rem;
+                max-width: calc(100vw - 1rem);
+            }
+            
+            .title {
+                font-size: 1.75rem;
+                line-height: 1.3;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .status-card {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .status-title {
+                font-size: 1.1rem;
+            }
+
+            .timeline {
+                padding: 0.75rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 0.25rem;
+            }
+            
+            .admin-access {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .admin-btn {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .maintenance-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .status-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .status-icon {
+                margin-right: 0;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex justify-center items-center overflow-y-auto relative">
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="particle w-5 h-5 left-[10%]"></div>
-        <div class="particle w-4 h-4 left-[20%] animation-delay-1000"></div>
-        <div class="particle w-6 h-6 left-[70%] animation-delay-2000"></div>
-        <div class="particle w-5 h-5 left-[80%] animation-delay-3000"></div>
-        <div class="particle w-5 h-5 left-[50%] animation-delay-4000"></div>
-    </div>
-
-    <div id="maintenancePage" class="text-center text-white z-10 relative max-w-2xl w-full mx-4 p-10 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
-        <i class="fas fa-cog gear-icon text-6xl mb-8"></i>
-        <h1 class="text-5xl font-light mb-6 text-shadow-md pulse-animation">Maintenance en cours</h1>
-        <p class="text-xl opacity-90 font-light mb-10 leading-relaxed">
-            Notre site est actuellement en maintenance pour une importante mise à jour.
-            <br>Nous travaillons sur des améliorations majeures qui seront déployées prochainement.
+<body>
+    <div class="container">
+        <div class="maintenance-icon">
+            <i class="fas fa-wrench"></i>
+        </div>
+        
+        <h1 class="title">Site en Maintenance</h1>
+        <p class="subtitle">
+            Nous effectuons actuellement une maintenance programmée pour améliorer nos services. 
+            Nous serons de retour sous peu avec de nouvelles fonctionnalités.
         </p>
         
-        <div id="eventSection" class="bg-white/10 p-8 rounded-xl border-2 border-yellow-400/50 mb-8 fade-in-up shadow-lg">
-            <h3 class="text-3xl font-bold mb-4 text-yellow-400 animate-pulse">Événements !</h3>
-            <p class="mb-6 text-lg">
-                <span class="text-yellow-300 font-bold">Une importante mise à jour</span> sera déployée entre le <span class="font-bold">1er et le 20 août</span> !
-                <br><br>Nous vous invitons à participer à notre <span class="underline">sondage exclusif disponible du 25 au 31 juillet</span> pour influencer les prochaines améliorations.
-            </p>
-            <button id="voterMaintenantEventBtn" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:translate-y-[-2px] hover:shadow-xl transition-all transform hover:scale-105 inline-block">
-                <i class="fas fa-vote-yea mr-3"></i>Voter maintenant !
-            </button>
+        <div class="status-card">
+            <div class="status-header">
+                <div class="status-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="status-title">Mise à jour en cours</div>
+            </div>
+            <div class="status-description">
+                Le wiki arrive soyez patient !
+            </div>
+            <div class="timeline">
+                <i class="fas fa-clock timeline-icon"></i>
+                <span class="timeline-text">Retour prévu : 15h30 (heure parisienne)</span>
+            </div>
         </div>
         
-        <div id="nextVoteMessage" class="hidden bg-white/10 p-8 rounded-xl border-2 border-yellow-400/50 mb-8 fade-in-up shadow-lg">
-            <h3 class="text-3xl font-bold mb-4 text-yellow-400">Prochainement !</h3>
-            <p class="mb-6 text-lg">
-                Merci pour votre participation ! <br><br>
-                Une deuxième vague de vote arrivera avant septembre prochain !
+        <div class="whatsapp-section">
+            <div class="whatsapp-header">
+                <div class="whatsapp-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516" fill="#25D366"></path>
+                    </svg>
+                </div>
+                <h3 class="whatsapp-title">Actualités en Direct</h3>
+            </div>
+            <p class="whatsapp-description">
+                🚀 Rejoignez notre communauté WhatsApp et soyez les premiers informés !
             </p>
-        </div>
-        
-        <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden my-8">
-            <div class="progress-fill h-full bg-gradient-to-r from-red-400 via-teal-400 to-blue-400 rounded-full"></div>
+            <div class="whatsapp-features">
+                <div class="feature-item">
+                    <span class="feature-emoji">⚡</span>
+                    <span class="feature-text">Mises à jour instantanées</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-emoji">🔔</span>
+                    <span class="feature-text">Notifications exclusives</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-emoji">👥</span>
+                    <span class="feature-text">Communauté active</span>
+                </div>
+            </div>
+            <a href="https://chat.whatsapp.com/E3H2dr47fcS8A9v9W2E48i" target="_blank" class="whatsapp-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="whatsapp-button-icon">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.516"></path>
+                </svg>
+                Rejoindre le Groupe
+                <span class="whatsapp-arrow">→</span>
+            </a>
+            <p class="whatsapp-goal">
+                Objectif : atteindre les 50 membres avant la fin de l'année ✨
+            </p>
         </div>
     </div>
-
-    <div id="adminLogin" class="hidden text-center text-white z-10 relative max-w-md w-full mx-4 p-8 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
-        <i class="fas fa-lock text-5xl mb-6 filter drop-shadow-lg"></i>
-        <h2 class="text-3xl font-light mb-6 text-shadow-md">Accès Administrateur</h2>
-        <p class="text-lg opacity-90 font-light mb-8">Entrez le mot de passe pour accéder au site</p>
-        
-        <div class="mb-6">
-            <input type="password" id="passwordInput" class="w-full px-5 py-4 text-lg border-none rounded-xl bg-white/20 text-white text-center placeholder-white/70 backdrop-blur-sm border border-white/30 focus:outline-none focus:bg-white/30 focus:border-yellow-400 focus:ring-0 transition-all" placeholder="Mot de passe..." onkeypress="handleKeyPress(event)">
-            <button id="submitBtn" class="mt-4 px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-200 text-gray-800 uppercase tracking-wider hover:translate-y-[-2px] hover:shadow-lg transition-all" onclick="checkPassword()">Accéder</button>
-            <div id="errorMessage" class="mt-4 text-red-400 hidden shake-animation"><i class="fas fa-times-circle mr-2"></i>Mot de passe incorrect</div>
-            <div id="successMessage" class="mt-4 text-teal-300 hidden fade-in-up"><i class="fas fa-check-circle mr-2"></i>Accès autorisé, redirection...</div>
-            <div id="loadingSpinner" class="mt-4 w-8 h-8 border-4 border-white/30 border-t-yellow-400 rounded-full animate-spin mx-auto hidden"></div>
-        </div>
-        
-        <a href="#" onclick="showMaintenance()" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-arrow-left mr-2"></i>Retour</a>
-    </div>
-
-    <div id="votePage" class="hidden text-center text-white z-10 relative max-w-2xl w-full mx-4 p-10 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl fade-in-up">
-        <h2 class="text-4xl font-light mb-6 text-shadow-md">Système de Vote</h2>
-        <p class="text-xl opacity-90 font-light mb-10 leading-relaxed">
-            Veuillez sélectionner votre option préférée.
-            <br>Votre vote est important pour nous !
-        </p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(1)">
-                <div class="vote-icon text-5xl mb-4 text-pink-400 transition-transform duration-300">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h3 class="text-xl font-medium mb-2">Option 1</h3>
-                <p class="text-white/80">Description de l'option 1</p>
-            </div>
-            
-            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(2)">
-                <div class="vote-icon text-5xl mb-4 text-blue-400 transition-transform duration-300">
-                    <i class="fas fa-star"></i>
-                </div>
-                <h3 class="text-xl font-medium mb-2">Option 2</h3>
-                <p class="text-white/80">Description de l'option 2</p>
-            </div>
-            
-            <div class="vote-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:bg-white/10 transition-all duration-300" onclick="selectOption(3)">
-                <div class="vote-icon text-5xl mb-4 text-green-400 transition-transform duration-300">
-                    <i class="fas fa-thumbs-up"></i>
-                </div>
-                <h3 class="text-xl font-medium mb-2">Option 3</h3>
-                <p class="text-white/80">Description de l'option 3</p>
-            </div>
-        </div>
-        
-        <button id="voteButton" class="px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-purple-400 to-pink-400 text-white uppercase tracking-wider hover:translate-y-[-2px] hover:shadow-lg transition-all opacity-50 cursor-not-allowed" disabled onclick="submitVote()">
-            Voter
+    
+    <!-- Bouton d'accès admin -->
+    <div class="admin-access">
+        <button class="admin-btn" onclick="openAdminModal()">
+            <i class="fas fa-key"></i>
         </button>
-        
-        <div id="voteSuccess" class="hidden mt-6 p-4 bg-green-500/20 rounded-xl border border-green-400/50 fade-in-up">
-            <i class="fas fa-check-circle mr-2"></i>Votre vote a été enregistré avec succès !
-        </div>
-        
-        <div class="mt-8">
-            <a href="#" onclick="returnToMaintenance()" class="text-white/70 hover:text-white transition-colors"><i class="fas fa-arrow-left mr-2"></i>Retour à l'accueil</a>
+    </div>
+    
+    <!-- Modal Admin -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 class="modal-title">Accès Administrateur</h2>
+                <p class="modal-subtitle">Identifiez-vous pour accéder au panneau d'administration</p>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="adminPassword" class="form-input" placeholder="Mot de passe administrateur" onkeypress="handleKeyPress(event)">
+            </div>
+            
+            <button class="btn btn-primary" onclick="checkAdminPassword()">
+                <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem;"></i>
+                Se connecter
+            </button>
+            
+            <button class="btn btn-secondary" onclick="closeAdminModal()">
+                Annuler
+            </button>
+            
+            <div id="errorMessage" class="error-message">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                <span id="errorText">Mot de passe incorrect</span>
+            </div>
+            
+            <div id="successMessage" class="success-message">
+                <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                Connexion réussie, redirection en cours...
+            </div>
         </div>
     </div>
 
     <script>
-        // Configuration - Modifiez ces valeurs selon vos besoins
-        const ADMIN_PASSWORD = "LucieKaraoui"; // Changez ce mot de passe
-        const REDIRECT_URL = "blog.html"; // Changez cette URL vers votre page
-        let selectedOption = null;
-
-        // Clé pour le localStorage afin de savoir si le bouton a été cliqué
-        const EVENT_BUTTON_CLICKED_KEY = 'eventButtonClicked';
-
-        // --- Fonctions d'affichage des pages (déjà présentes) ---
-        function showAdminLogin() {
-            document.getElementById('maintenancePage').classList.add('hidden');
-            document.getElementById('adminLogin').classList.remove('hidden');
-            document.getElementById('passwordInput').focus();
-        }
-
-        function showMaintenance() {
-            document.getElementById('adminLogin').classList.add('hidden');
-            document.getElementById('votePage').classList.add('hidden');
-            document.getElementById('maintenancePage').classList.remove('hidden');
-            clearMessages();
-            document.getElementById('passwordInput').value = '';
-        }
-
-        function showVotePage() {
-            document.getElementById('adminLogin').classList.add('hidden');
-            document.getElementById('maintenancePage').classList.add('hidden');
-            document.getElementById('votePage').classList.remove('hidden');
+        // Configuration
+        const ADMIN_PASSWORD = "LucieKaraoui";
+        const REDIRECT_URL = "blog.html";
+        
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'block';
+            document.getElementById('adminPassword').focus();
             clearMessages();
         }
-
-        function returnToMaintenance() {
-            document.getElementById('votePage').classList.add('hidden');
-            document.getElementById('maintenancePage').classList.remove('hidden');
-            resetVotePage();
+        
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            clearMessages();
         }
-
+        
         function clearMessages() {
-            document.getElementById('errorMessage').classList.add('hidden');
-            document.getElementById('successMessage').classList.add('hidden');
-            document.getElementById('loadingSpinner').classList.add('hidden');
-            document.getElementById('voteSuccess').classList.add('hidden');
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
         }
-
-        // --- Fonctions de connexion admin (déjà présentes) ---
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            const submitBtn = document.getElementById('submitBtn');
+        
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            
+            clearMessages();
             
             if (!password) {
-                showError("Veuillez entrer un mot de passe");
+                document.getElementById('errorText').textContent = 'Veuillez saisir un mot de passe';
+                errorMsg.style.display = 'block';
                 return;
             }
-
-            // Désactiver le bouton et afficher le spinner
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Vérification...";
-            clearMessages();
-            document.getElementById('loadingSpinner').classList.remove('hidden');
-
-            // Simuler un délai de vérification
-            setTimeout(() => {
-                if (password === ADMIN_PASSWORD) {
-                    // Mot de passe correct
-                    document.getElementById('loadingSpinner').classList.add('hidden');
-                    document.getElementById('successMessage').classList.remove('hidden');
-                    
-                    // Ici on affiche la page de vote au lieu de rediriger
-                    setTimeout(() => {
-                        showVotePage();
-                    }, 1500);
-                } else {
-                    // Mot de passe incorrect
-                    document.getElementById('loadingSpinner').classList.add('hidden');
-                    showError("Mot de passe incorrect");
-                    
-                    // Réactiver le bouton
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Accéder";
-                    
-                    // Vider le champ de mot de passe
-                    document.getElementById('passwordInput').value = '';
-                    document.getElementById('passwordInput').focus();
-                }
-            }, 1000);
+            
+            if (password === ADMIN_PASSWORD) {
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = REDIRECT_URL;
+                }, 1500);
+            } else {
+                document.getElementById('errorText').textContent = 'Mot de passe incorrect';
+                errorMsg.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
         }
-
-        function showError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.innerHTML = `<i class="fas fa-times-circle mr-2"></i>${message}`;
-            errorElement.classList.remove('hidden');
-        }
-
+        
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
-                checkPassword();
+                checkAdminPassword();
             }
         }
-
-        // --- Fonctions de vote (déjà présentes) ---
-        function selectOption(option) {
-            // Réinitialiser toutes les options
-            const options = document.querySelectorAll('.vote-option');
-            options.forEach(opt => {
-                opt.classList.remove('selected');
-                opt.querySelector('.vote-icon').classList.remove('text-yellow-400');
-            });
-            
-            // Sélectionner l'option choisie
-            selectedOption = option;
-            const selectedElement = options[option-1];
-            selectedElement.classList.add('selected');
-            selectedElement.querySelector('.vote-icon').classList.add('text-yellow-400');
-            
-            // Activer le bouton de vote
-            document.getElementById('voteButton').disabled = false;
-            document.getElementById('voteButton').classList.remove('opacity-50', 'cursor-not-allowed');
-            document.getElementById('voteButton').classList.add('opacity-100', 'cursor-pointer');
-        }
-
-        function submitVote() {
-            if (!selectedOption) return;
-            
-            const voteButton = document.getElementById('voteButton');
-            voteButton.disabled = true;
-            voteButton.textContent = "Redirection...";
-            
-            // Rediriger vers vote.html après un court délai
-            setTimeout(() => {
-                window.location.href = "vote.html";
-            }, 1000);
-        }
-
-        function resetVotePage() {
-            selectedOption = null;
-            const options = document.querySelectorAll('.vote-option');
-            options.forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            const voteButton = document.getElementById('voteButton');
-            voteButton.disabled = true;
-            voteButton.classList.remove('opacity-100', 'cursor-pointer');
-            voteButton.classList.add('opacity-50', 'cursor-not-allowed');
-            voteButton.textContent = "Voter";
-        }
-
-        // Empêcher l'envoi du formulaire par défaut
-        document.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && event.target.id === 'passwordInput') {
-                event.preventDefault();
-                checkPassword();
+        
+        // Fermer le modal en cliquant à l'extérieur
+        document.getElementById('adminModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeAdminModal();
             }
         });
-
-        // --- NOUVEAU CODE POUR LA PERSISTANCE DE L'ÉVÉNEMENT ---
-        document.addEventListener('DOMContentLoaded', function() {
-            const voterMaintenantEventBtn = document.getElementById('voterMaintenantEventBtn');
-            const eventSection = document.getElementById('eventSection'); 
-            const nextVoteMessage = document.getElementById('nextVoteMessage');
-
-            // 1. Vérifier l'état dans localStorage au chargement de la page
-            const hasEventBeenDismissed = localStorage.getItem(EVENT_BUTTON_CLICKED_KEY);
-
-            if (hasEventBeenDismissed === 'true') {
-                // Si l'événement a déjà été "disparu" (bouton cliqué), afficher directement le message de la seconde vague
-                if (eventSection && nextVoteMessage) {
-                    eventSection.classList.add('hidden');
-                    nextVoteMessage.classList.remove('hidden');
-                }
-            } else {
-                // Sinon, s'assurer que la section d'événement est visible et le message caché
-                if (eventSection && nextVoteMessage) {
-                    eventSection.classList.remove('hidden');
-                    nextVoteMessage.classList.add('hidden');
-                }
-            }
-
-            // 2. Ajouter l'écouteur d'événements pour le clic sur le bouton "Voter maintenant !"
-            if (voterMaintenantEventBtn && eventSection && nextVoteMessage) {
-                voterMaintenantEventBtn.addEventListener('click', function(event) {
-                    event.preventDefault(); // Empêche le comportement par défaut (redirection immédiate du lien)
-
-                    // Masque la section événement actuelle
-                    eventSection.classList.add('hidden');
-
-                    // Affiche le nouveau message
-                    nextVoteMessage.classList.remove('hidden');
-
-                    // Sauvegarde l'état dans localStorage pour que le changement persiste
-                    localStorage.setItem(EVENT_BUTTON_CLICKED_KEY, 'true');
-
-                    // OPTIONNEL : Redirige vers vote.html après un court délai
-                    // L'utilisateur verra le nouveau message pendant ce délai
-                    setTimeout(() => {
-                        window.location.href = 'vote.html';
-                    }, 2000); // Redirige après 2 secondes
-                });
-            }
+        
+        // Animation de la barre de progression au chargement
+        window.addEventListener('load', function() {
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '0%';
+            setTimeout(() => {
+                progressFill.style.transition = 'width 2s ease-in-out';
+                progressFill.style.width = '75%';
+            }, 500);
         });
     </script>
 </body>
