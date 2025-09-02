@@ -407,6 +407,67 @@
         .slide-1 .slide-icon { color: #2ecc71; }
         .slide-2 .slide-icon { color: #f39c12; }
         .slide-3 .slide-icon { color: #e74c3c; }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: white;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .back-home-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .copyright {
+            color: #ccc;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .back-home-btn {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -512,6 +573,18 @@
             💬
         </a>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <a href="index.html" class="back-home-btn">
+                🏠 Retour à l'accueil
+            </a>
+            <div class="copyright">
+                © 2025 FashionFlow. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
 
     <script>
         class NewsCarousel {
