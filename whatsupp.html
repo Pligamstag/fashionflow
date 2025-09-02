@@ -76,14 +76,39 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
             border-radius: 20px;
-            padding: 3rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
             position: relative;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
         }
 
-        .news-container::before {
+        .carousel-container {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .carousel-slide {
+            width: 33.333%;
+            height: 100%;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-slide::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -99,12 +124,12 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
 
-        .no-news {
+        .slide-content {
             position: relative;
             z-index: 1;
         }
 
-        .no-news-icon {
+        .slide-icon {
             font-size: 4rem;
             margin-bottom: 1.5rem;
             opacity: 0.7;
@@ -116,17 +141,18 @@
             50% { transform: scale(1.05); }
         }
 
-        .no-news h2 {
+        .slide-content h2 {
             font-size: 1.8rem;
             color: #2c3e50;
             margin-bottom: 1rem;
             font-weight: 600;
         }
 
-        .no-news p {
+        .slide-content p {
             color: #6c757d;
             font-size: 1.1rem;
             margin-bottom: 2rem;
+            line-height: 1.6;
         }
 
         .coming-soon {
@@ -140,11 +166,68 @@
             display: inline-block;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .coming-soon:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Navigation Controls */
+        .navigation {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: scale(1.2);
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            color: rgba(102, 126, 234, 0.5);
+            font-size: 1.5rem;
+            animation: swipeHint 2s infinite;
+            z-index: 5;
+        }
+
+        @keyframes swipeHint {
+            0%, 100% { transform: translateY(-50%) translateX(0); opacity: 0.5; }
+            50% { transform: translateY(-50%) translateX(10px); opacity: 1; }
+        }
+
+        /* Touch indicators */
+        .touch-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .touch-area:active {
+            cursor: grabbing;
         }
 
         /* Widget WhatsApp */
@@ -245,16 +328,20 @@
                 font-size: 2.2rem;
             }
             
-            .news-container {
-                padding: 2rem;
+            .carousel-slide {
+                padding: 2rem 1.5rem;
             }
             
-            .no-news-icon {
+            .slide-icon {
                 font-size: 3rem;
             }
             
-            .no-news h2 {
+            .slide-content h2 {
                 font-size: 1.5rem;
+            }
+            
+            .slide-content p {
+                font-size: 1rem;
             }
             
             .whatsapp-widget {
@@ -266,6 +353,11 @@
                 width: 55px;
                 height: 55px;
                 font-size: 20px;
+            }
+            
+            .swipe-indicator {
+                right: 15px;
+                font-size: 1.2rem;
             }
         }
 
@@ -310,6 +402,11 @@
                 transform: translateY(0vh) scale(0);
             }
         }
+
+        /* Slide-specific styling */
+        .slide-1 .slide-icon { color: #2ecc71; }
+        .slide-2 .slide-icon { color: #f39c12; }
+        .slide-3 .slide-icon { color: #e74c3c; }
     </style>
 </head>
 <body>
@@ -333,20 +430,82 @@
             <p>Restez connecté avec les dernières nouvelles</p>
         </header>
 
-        <!-- Container des actualités -->
+        <!-- Container des actualités avec carousel -->
         <div class="news-container fade-in">
-            <div class="no-news">
-                <div class="no-news-icon">📰</div>
-                <h2>Aucune actualité pour le moment</h2>
-                <p>Les dernières nouvelles apparaîtront bientôt ici. Revenez régulièrement pour ne rien manquer !</p>
-                <div class="coming-soon">Bientôt disponible</div>
+            <div class="carousel-wrapper">
+                <div class="carousel-container" id="carousel">
+                    <!-- Slide 1: Mises à jour réalisées -->
+                    <div class="carousel-slide slide-1">
+                        <div class="slide-content">
+                            <div class="slide-icon">✅</div>
+                            <h2>Mises à jour réalisées</h2>
+                            
+                            <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+                                <ul style="color: #6c757d; font-size: 1rem; line-height: 1.6; padding-left: 1rem;">
+                                    <li style="margin-bottom: 0.5rem;">✨ Ajout du système de navigation par swipe</li>
+                                    <li style="margin-bottom: 0.5rem;">🎨 Amélioration de l'interface utilisateur</li>
+                                    <li style="margin-bottom: 0.5rem;">⚡ Optimisation des performances</li>
+                                    <li style="margin-bottom: 0.5rem;">💬 Widget WhatsApp intégré</li>
+                                    <li style="margin-bottom: 0.5rem;">📱 Design responsive perfectionné</li>
+                                    <li style="margin-bottom: 0.5rem;">🎭 Animations et transitions fluides</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="coming-soon" style="margin-top: 1.5rem;">Dernière MAJ: Aujourd'hui</div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Prochaines mises à jour -->
+                    <div class="carousel-slide slide-2">
+                        <div class="slide-content">
+                            <div class="slide-icon">🚧</div>
+                            <h2>Prochaines mises à jour</h2>
+                            
+                            <div style="text-align: left; max-width: 400px; margin: 0 auto;">
+                                <ul style="color: #6c757d; font-size: 1rem; line-height: 1.6; padding-left: 1rem;">
+                                    <li style="margin-bottom: 0.5rem;">🔔 Système de notifications push</li>
+                                    <li style="margin-bottom: 0.5rem;">🌙 Mode sombre / clair</li>
+                                    <li style="margin-bottom: 0.5rem;">🔍 Recherche avancée d'actualités</li>
+                                    <li style="margin-bottom: 0.5rem;">⚙️ Personnalisation des catégories</li>
+                                    <li style="margin-bottom: 0.5rem;">📱 Application mobile native</li>
+                                    <li style="margin-bottom: 0.5rem;">📊 Tableau de bord personnalisé</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="coming-soon" style="margin-top: 1.5rem; background: linear-gradient(135deg, #f39c12, #e67e22);">Bientôt disponible</div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Actualités -->
+                    <div class="carousel-slide slide-3">
+                        <div class="slide-content">
+                            <div class="slide-icon">📰</div>
+                            <h2>Aucune actualité pour le moment</h2>
+                            <p>Les dernières nouvelles apparaîtront bientôt ici. Revenez régulièrement pour ne rien manquer !</p>
+                            <div class="coming-soon">Actualités à venir</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indicateur de swipe -->
+                <div class="swipe-indicator">👉</div>
+
+                <!-- Navigation dots -->
+                <div class="navigation">
+                    <div class="nav-dot active" data-slide="0"></div>
+                    <div class="nav-dot" data-slide="1"></div>
+                    <div class="nav-dot" data-slide="2"></div>
+                </div>
+
+                <!-- Zone tactile pour le swipe -->
+                <div class="touch-area" id="touchArea"></div>
             </div>
         </div>
     </div>
 
     <!-- Widget WhatsApp -->
     <div class="whatsapp-widget">
-        <a href="https://wa.me/1234567890?text=Bonjour,%20j'aimerais%20avoir%20plus%20d'informations" 
+        <a href="https://chat.whatsapp.com/HDXeLQPQmgGG5axKyA3hFf" 
            target="_blank" 
            class="whatsapp-button">
             <span class="whatsapp-tooltip">Actualité en direct ! </span>
@@ -355,20 +514,151 @@
     </div>
 
     <script>
-        // Animation d'entrée progressive
+        class NewsCarousel {
+            constructor() {
+                this.carousel = document.getElementById('carousel');
+                this.touchArea = document.getElementById('touchArea');
+                this.dots = document.querySelectorAll('.nav-dot');
+                this.currentSlide = 0;
+                this.totalSlides = 3;
+                this.isTransitioning = false;
+                
+                this.initEvents();
+                this.autoSlide();
+            }
+
+            initEvents() {
+                // Touch/Mouse events
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+
+                // Mouse events
+                this.touchArea.addEventListener('mousedown', (e) => {
+                    startX = e.clientX;
+                    isDragging = true;
+                    this.carousel.style.cursor = 'grabbing';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    currentX = e.clientX;
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (!isDragging) return;
+                    this.handleSwipe(startX, currentX);
+                    isDragging = false;
+                    this.carousel.style.cursor = 'grab';
+                });
+
+                // Touch events
+                this.touchArea.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                this.touchArea.addEventListener('touchend', (e) => {
+                    currentX = e.changedTouches[0].clientX;
+                    this.handleSwipe(startX, currentX);
+                });
+
+                // Navigation dots
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        this.goToSlide(index);
+                    });
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+            }
+
+            handleSwipe(startX, endX) {
+                if (this.isTransitioning) return;
+                
+                const diff = startX - endX;
+                const threshold = 50;
+
+                if (Math.abs(diff) < threshold) return;
+
+                if (diff > 0) {
+                    this.nextSlide();
+                } else {
+                    this.prevSlide();
+                }
+            }
+
+            nextSlide() {
+                if (this.isTransitioning) return;
+                this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+                this.updateSlide();
+            }
+
+            prevSlide() {
+                if (this.isTransitioning) return;
+                this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+                this.updateSlide();
+            }
+
+            goToSlide(slideIndex) {
+                if (this.isTransitioning || slideIndex === this.currentSlide) return;
+                this.currentSlide = slideIndex;
+                this.updateSlide();
+            }
+
+            updateSlide() {
+                this.isTransitioning = true;
+                const translateX = -this.currentSlide * 33.333; // 33.333% per slide (3 slides)
+                this.carousel.style.transform = `translateX(${translateX}%)`;
+
+                // Update navigation dots
+                this.dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentSlide);
+                });
+
+                // Hide swipe indicator after first interaction
+                const indicator = document.querySelector('.swipe-indicator');
+                if (this.currentSlide > 0) {
+                    indicator.style.opacity = '0';
+                }
+
+                // Reset transition flag
+                setTimeout(() => {
+                    this.isTransitioning = false;
+                }, 400);
+            }
+
+            autoSlide() {
+                setInterval(() => {
+                    if (!this.isTransitioning) {
+                        this.nextSlide();
+                    }
+                }, 8000); // Auto-slide every 8 seconds
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             const elements = document.querySelectorAll('.fade-in');
             elements.forEach((element, index) => {
                 element.style.animationDelay = `${index * 0.3}s`;
             });
+
+            // Initialize carousel
+            new NewsCarousel();
         });
 
         // Effet de parallaxe léger
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
             const parallax = document.querySelector('.floating-particles');
-            const speed = scrolled * 0.5;
-            parallax.style.transform = `translateY(${speed}px)`;
+            if (parallax) {
+                const speed = scrolled * 0.5;
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
         });
     </script>
 </body>
